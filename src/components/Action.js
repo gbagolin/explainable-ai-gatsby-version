@@ -1,5 +1,5 @@
 import React from "react"
-import bearManagament from "./bearManagement"
+import bearManagament from "../states/bearManagement"
 
 export default function Action() {
   const bears = bearManagament(state => state.bears)

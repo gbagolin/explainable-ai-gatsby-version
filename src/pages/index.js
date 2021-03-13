@@ -1,16 +1,9 @@
 import React from "react"
 import add from "../images/plus.png"
-import Action from "../components/Action"
-import bearManagament from "../components/bearManagement"
 
 export default function Home() {
-  const bears = bearManagament(state => state.bears)
-  const increas = bearManagament(state => state.increasePopulation)
   return (
     <>
-      <Action></Action>
-      <button onClick={increas}>Add</button>
-      <p>{bears}</p>
       <p className="text-center font-bold text-5xl underline text-color-yellow">Explainable AI</p>
       <div className="flex justify-around flex-row flex-wrap mt-5">
         {/**
