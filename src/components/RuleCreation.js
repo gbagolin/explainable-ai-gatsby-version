@@ -1,20 +1,16 @@
 import React from "react"
 import add from "../images/plus.png"
-import modalActionState from "../states/modalActionState"
 
-export default function Action() {
-  const setModalActionVisible = modalActionState(state => state.setVisible)
-
+export default function RuleCreation() {
   return (
     <div className="border-2 rounded-lg shadow-lg w-96 h-full  m-5 p-5 text-lg">
       <div className="flex flex-col flex-initial justify-items-start">
         <div className="flex flex-row justify-between">
           <div>
-            <p className="inline text-center font-bold text-2xl "> Rule templates:</p>
+            <p className="inline text-center font-bold text-2xl "> Rule creation:</p>
           </div>
           <div>
-            <input className="w-9 h-9" type="image" src={add} alt="Add Action"
-                   onClick={() => setModalActionVisible({ visible: true })} />
+            <input className="w-9 h-9" type="image" src={add} alt="Add Action" />
           </div>
         </div>
         <div className="m-3"></div>
