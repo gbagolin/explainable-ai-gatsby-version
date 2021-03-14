@@ -2,6 +2,7 @@ import React from "react"
 
 import ModalProblemSelectionState from "../states/ModalProblemSelectionState"
 import DropdownProblemChoose from "./DropdownProblemChoose"
+import DropdownTraceChoose from "./DropdownTraceChoose"
 
 export default function ModalProblemSelection() {
   const visible = ModalProblemSelectionState(state => state.visible)
@@ -33,8 +34,9 @@ export default function ModalProblemSelection() {
                   </button>
                 </div>
                 {/*body*/}
-                <div className="relative p-6 flex-auto">
+                <div className="relative p-6 flex flex-row justify-around">
                   <DropdownProblemChoose></DropdownProblemChoose>
+                  <DropdownTraceChoose></DropdownTraceChoose>
                 </div>
                 {/*footer*/}
                 <div className="flex items-center justify-end p-6 border-t border-solid border-gray-300 rounded-b">
@@ -43,8 +45,7 @@ export default function ModalProblemSelection() {
                     type="button"
                     style={{ transition: "all 0.9s ease" }}
                     onClick={() => setVisible({ visible: false })}
-                  >
-                    Close
+                  >Close
                   </button>
                   <button
                     className="bg-yellow-300 active:bg-yellow-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1"
@@ -52,7 +53,7 @@ export default function ModalProblemSelection() {
                     style={{ transition: "all 0.9s ease" }}
                     onClick={() => setVisible({ visible: false })}
                   >
-                    Add Action
+                    Select
                   </button>
                 </div>
               </div>
