@@ -1,10 +1,13 @@
 import React from "react"
 import ModalActionSelectionState from "../states/ModalActionSelectionState"
 import DropdownActionChoose from "./DropdownActionChoose"
+import ActionMangament from "../states/ActionState"
 
 export default function ModalAddAction() {
   const visible = ModalActionSelectionState(state => state.visible)
   const setVisible = ModalActionSelectionState(state => state.setVisible)
+  const actionToAdd = ActionMangament(state => state.actionToAdd)
+  const pushAction = ActionMangament(state => state.setActionList)
 
   return (
     <>
@@ -49,7 +52,10 @@ export default function ModalAddAction() {
                     className="bg-yellow-300 active:bg-yellow-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1"
                     type="button"
                     style={{ transition: "all 0.9s ease" }}
-                    onClick={() => setVisible({ visible: false })}
+                    onClick={() => {
+                      setVisible({ visible: false })
+                      pushAction(actionToAdd)
+                    }}
                   >
                     Add Action
                   </button>

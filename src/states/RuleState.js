@@ -8,7 +8,7 @@ const RuleState = create(set => ({
   problemName: "",
   traceName: "",
   setProblemName: state => set(() => ({ problemName: state.problemName })),
-  setTraceName: state => set(() => ({ traceName: state.traceName }))
+  setTraceName: state => set(() => ({ traceName: state.traceName })),
 }))
 
 export default RuleState
