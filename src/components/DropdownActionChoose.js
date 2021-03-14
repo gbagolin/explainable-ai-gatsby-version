@@ -1,5 +1,5 @@
 import React from "react"
-import "./DropdownActionChoose.css"
+import "./dropdown.css"
 
 export default function DropdownActionChoose() {
 
@@ -13,12 +13,21 @@ export default function DropdownActionChoose() {
           </svg>
         </button>
         <ul className="dropdown-menu absolute hidden pt-1">
-          <li className=""><a className="rounded-t bg-white hover:bg-yellow-200 py-2 px-4 block whitespace-no-wrap"
-                              href="#">One</a></li>
-          <li className=""><a className="bg-white hover:bg-yellow-200 py-2 px-4 block whitespace-no-wrap"
-                              href="#">Two</a></li>
-          <li className=""><a className="bg-white rounded-b hover:bg-yellow-200 py-2 px-4 block whitespace-no-wrap"
-                              href="#">Three is the magic number</a></li>
+          <li className="">
+            <button className="w-full rounded-t bg-white hover:bg-yellow-200 py-2 px-4 block whitespace-no-wrap"
+            >One
+            </button>
+          </li>
+          <li className="">
+            <button className="w-full bg-white hover:bg-yellow-200 py-2 px-4 block whitespace-no-wrap"
+            >Two
+            </button>
+          </li>
+          <li className="">
+            <button className="w-full bg-white rounded-b hover:bg-yellow-200 py-2 px-4 block whitespace-no-wrap"
+            >Three is the magic number
+            </button>
+          </li>
         </ul>
       </div>
     </div>

@@ -1,10 +1,11 @@
 import React from "react"
-import ModalActionSelectionState from "../states/ModalActionSelectionState"
-import DropdownActionChoose from "./DropdownActionChoose"
 
-export default function ModalAddAction() {
-  const visible = ModalActionSelectionState(state => state.visible)
-  const setVisible = ModalActionSelectionState(state => state.setVisible)
+import ModalProblemSelectionState from "../states/ModalProblemSelectionState"
+import DropdownProblemChoose from "./DropdownProblemChoose"
+
+export default function ModalProblemSelection() {
+  const visible = ModalProblemSelectionState(state => state.visible)
+  const setVisible = ModalProblemSelectionState(state => state.setVisible)
 
   return (
     <>
@@ -19,7 +20,7 @@ export default function ModalAddAction() {
                 {/*header*/}
                 <div className="flex items-start justify-between p-5 border-b border-solid border-gray-300 rounded-t">
                   <h3 className="text-3xl font-semibold">
-                    Add Action
+                    Select problem and trace
                   </h3>
                   <button
                     className="p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
@@ -33,7 +34,7 @@ export default function ModalAddAction() {
                 </div>
                 {/*body*/}
                 <div className="relative p-6 flex-auto">
-                  <DropdownActionChoose></DropdownActionChoose>
+                  <DropdownProblemChoose></DropdownProblemChoose>
                 </div>
                 {/*footer*/}
                 <div className="flex items-center justify-end p-6 border-t border-solid border-gray-300 rounded-b">

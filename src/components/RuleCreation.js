@@ -10,15 +10,15 @@ export default function RuleCreation() {
             <p className="inline text-center font-bold text-2xl "> Rule creation:</p>
           </div>
           <div>
-            <input className="w-9 h-9" type="image" src={add} alt="Add Action" />
+            <input className="w-9 h-9" type="image" src={add} alt="Add ActionSelection" />
           </div>
         </div>
         <div className="m-3"></div>
         <div className="w-auto h-auto">
-          <button className="font-semibold  yellow-color rounded-lg p-3"> Action: Listen</button>
+          <button className="font-semibold  yellow-color rounded-lg p-3"> ActionSelection: Listen</button>
         </div>
         <div className="w-auto h-auto mt-5">
-          <button className="font-semibold  yellow-color rounded-lg p-3"> Action: Open left</button>
+          <button className="font-semibold  yellow-color rounded-lg p-3"> ActionSelection: Open left</button>
         </div>
       </div>
       <div className="mb-5"></div>
