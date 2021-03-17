@@ -6,7 +6,7 @@ import create from "zustand"
  */
 const ActionMangament = create(set => ({
   actionToAdd: "",
-  actionSelected: "",
+  actionSelected: -1,
   actionList: [],
   setActionSelected: action => set(() => ({ actionSelected: action.actionSelected })),
   setActionList: action => set((state) => ({ actionList: state.actionList.concat([action]) })),
