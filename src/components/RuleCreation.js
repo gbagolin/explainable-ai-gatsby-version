@@ -10,7 +10,7 @@ export default function RuleCreation() {
       <div className="flex flex-col flex-initial justify-items-start">
         <div className="flex flex-row justify-between">
           <div>
-            <p className="inline text-center font-bold text-2xl "> Rule creation dai: </p>
+            <p className="inline text-center font-bold text-2xl "> Rule creation:</p>
           </div>
           <div>
             <input className="w-9 h-9" type="image" src={add} alt="Add ActionSelection"
@@ -18,12 +18,6 @@ export default function RuleCreation() {
           </div>
         </div>
         <div className="m-3"></div>
-        <div className="w-auto h-auto">
-          <button className="font-semibold  yellow-color rounded-lg p-3">Prova</button>
-        </div>
-        <div className="w-auto h-auto mt-5">
-          <button className="font-semibold  yellow-color rounded-lg p-3">Dai</button>
-        </div>
       </div>
       <div className="mb-5"></div>
     </div>

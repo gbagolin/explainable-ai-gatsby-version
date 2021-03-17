@@ -1,12 +1,18 @@
-import React from "react"
+import React, { useEffect } from "react"
 import ModalRuleCreationState from "../states/ModalRuleCreationState"
-import ModalRuleCreationComponentsName from "../states/ModalRuleCreationComponentsName"
+import ButtonsName from "../states/ButtonsName"
+import RuleState from "../states/RuleState"
 
 export default function ModalRuleCreation() {
   const visible = ModalRuleCreationState(state => state.visible)
   const setVisible = ModalRuleCreationState(state => state.setVisible)
-  const buttonsName = ModalRuleCreationComponentsName(state => state.buttonsName)
-  const setButtonsName = ModalRuleCreationComponentsName(state => state.setButtonsName)
+  const attributes = RuleState(state => state.attributes)
+  const goToNextState = ButtonsName(state => state.goToNextState)
+  const buttons = ButtonsName(state => state.buttonsName)
+  //force buttonName to initialize.
+  useEffect(() => {
+    goToNextState(attributes)
+  }, [attributes, goToNextState])
 
   return (
     <>
@@ -21,7 +27,7 @@ export default function ModalRuleCreation() {
                 {/*header*/}
                 <div className="flex items-start justify-between p-5 border-b border-solid border-gray-300 rounded-t">
                   <h3 className="text-3xl font-semibold">
-                    Add Action
+                    Rule creation
                   </h3>
                   <button
                     className="p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
@@ -29,13 +35,28 @@ export default function ModalRuleCreation() {
                   >
                     <span
                       className="bg-transparent text-black opacity-5 h-6 w-6 text-2xl block outline-none focus:outline-none">
-                      ×
                     </span>
                   </button>
                 </div>
                 {/*body*/}
-                <div className="relative p-6 flex-auto">
-
+                <div className="relative p-6 flex flex-row justify-center">
+                  {
+                    buttons.map((button, index) => {
+                      return (
+                        <button
+                          key={index}
+                          className="text-yellow-300 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1"
+                          type="button"
+                          style={{ transition: "all 0.9s ease" }}
+                          onClick={
+                            () => goToNextState(attributes)
+                          }
+                        >
+                          {button.name}
+                        </button>
+                      )
+                    })
+                  }
                 </div>
                 {/*footer*/}
                 <div className="flex items-center justify-end p-6 border-t border-solid border-gray-300 rounded-b">
@@ -46,16 +67,6 @@ export default function ModalRuleCreation() {
                     onClick={() => setVisible({ visible: false })}
                   >
                     Close
-                  </button>
-                  <button
-                    className="bg-yellow-300 active:bg-yellow-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1"
-                    type="button"
-                    style={{ transition: "all 0.9s ease" }}
-                    onClick={() => {
-                      setVisible({ visible: false })
-                    }}
-                  >
-                    Add Action
                   </button>
                 </div>
               </div>
