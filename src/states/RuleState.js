@@ -1,4 +1,5 @@
 import create from "zustand"
+import axios from "axios"
 
 /**
  * State mangament of the rule.
@@ -7,8 +8,14 @@ import create from "zustand"
 const RuleState = create(set => ({
   problemName: "",
   traceName: "",
-  setProblemName: state => set(() => ({ problemName: state.problemName })),
-  setTraceName: state => set(() => ({ traceName: state.traceName })),
+  attributes: "prova",
+  setProblemName: state => set(() => {
+    return {
+      attributes: state.attributes,
+      problemName: state.problemName
+    }
+  }),
+  setTraceName: state => set(() => ({ traceName: state.traceName }))
 }))
 
 export default RuleState

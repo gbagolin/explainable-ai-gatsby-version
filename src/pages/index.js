@@ -6,6 +6,7 @@ import Anomalies from "../components/Anomalies"
 import ModalAddAction from "../components/ModalAddAction"
 import ProblemSelection from "../components/ProblemSelection"
 import ModalProblemSelection from "../components/ModalProblemSelection"
+import ModalRuleCreation from "../components/ModalRuleCreation"
 
 export default function Home() {
   return (
@@ -25,6 +26,7 @@ export default function Home() {
         </div>
         <ModalAddAction></ModalAddAction>
         <ModalProblemSelection></ModalProblemSelection>
+        {/*<ModalRuleCreation></ModalRuleCreation>*/}
       </div>
     </>
   )

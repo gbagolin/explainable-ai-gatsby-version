@@ -12,7 +12,7 @@ export default function ActionSelection() {
       <div className="flex flex-col flex-initial justify-items-start">
         <div className="flex flex-row justify-between">
           <div>
-            <p className="inline text-center font-bold text-2xl "> Action Selections:dai</p>
+            <p className="inline text-center font-bold text-2xl "> Action Selections:</p>
           </div>
           <div>
             <input className="w-9 h-9" type="image" src={add} alt="Add ActionSelection"

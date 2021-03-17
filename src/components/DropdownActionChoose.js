@@ -1,30 +1,12 @@
-import React, { useEffect, useState } from "react"
+import React from "react"
 import "./dropdown.css"
-import RuleState from "../states/RuleState"
-import axios from "axios"
 import ActionMangament from "../states/ActionState"
+import RuleState from "../states/RuleState"
 
 export default function DropdownActionChoose() {
-
-  const [actions, setActions] = useState([])
-
+  const actions = RuleState(state => state.attributes.actions)
   const actionToAdd = ActionMangament(state => state.actionToAdd)
   const setActionToAdd = ActionMangament(state => state.setActionToAdd)
-  const problem = RuleState(state => state.problemName)
-
-  useEffect(() => {
-    async function fetchActions() {
-      try {
-        const response = await axios.post("http://localhost:8001/api/get_attributes_from_problem", { name: problem })
-        console.log(response)
-        setActions(response.data.actions || [])
-      } catch (e) {
-        console.log(e)
-      }
-    }
-
-    fetchActions()
-  }, [problem])
 
   return (
     <div className="flex justify-center">

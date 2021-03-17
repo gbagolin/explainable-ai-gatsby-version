@@ -2,6 +2,7 @@ import React from "react"
 import add from "../images/plus.png"
 import ModalProblemSelectionState from "../states/ModalProblemSelectionState"
 import RuleState from "../states/RuleState"
+import axios from "axios"
 
 export default function ProblemSelection() {
   const setModalProblemSelectionState = ModalProblemSelectionState(state => state.setVisible)
@@ -17,7 +18,9 @@ export default function ProblemSelection() {
           </div>
           <div>
             <input className="w-9 h-9" type="image" src={add} alt="Add ActionSelection"
-                   onClick={() => setModalProblemSelectionState({ visible: true })} />
+                   onClick={() => {
+                     setModalProblemSelectionState({ visible: true })
+                   }} />
           </div>
         </div>
         <div className="m-3"></div>
