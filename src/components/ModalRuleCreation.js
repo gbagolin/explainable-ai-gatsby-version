@@ -9,6 +9,10 @@ export default function ModalRuleCreation() {
   const attributes = RuleState(state => state.attributes)
   const goToNextState = ButtonsName(state => state.goToNextState)
   const buttons = ButtonsName(state => state.buttonsName)
+  const setConstraint = RuleState(state => state.setConstraint)
+  const addConstraint = RuleState(state => state.addConstraint)
+  const currentView = ButtonsName(state => state.currentState)
+
   //force buttonName to initialize.
   useEffect(() => {
     goToNextState(attributes)
@@ -49,7 +53,13 @@ export default function ModalRuleCreation() {
                           type="button"
                           style={{ transition: "all 0.9s ease" }}
                           onClick={
-                            () => goToNextState(attributes)
+                            () => {
+                              setConstraint({
+                                view: currentView,
+                                element: button.name
+                              })
+                              goToNextState(attributes)
+                            }
                           }
                         >
                           {button.name}

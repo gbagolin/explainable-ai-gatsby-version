@@ -1,0 +1,20 @@
+{
+    "atomic_rule": {
+        "constraints": [
+            [
+                {
+                    "state": "tiger left",
+                    "operator": "<",
+                    "variable": "x1"
+                }
+            ]
+        ],
+        "hard_constraint": [],
+        "trace": "Velocity Regulation",
+        "problem": "Tiger",
+        "action": "listen",
+        "variables": [
+            "1"
+        ]
+    }
+}
