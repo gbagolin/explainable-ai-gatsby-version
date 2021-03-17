@@ -1,4 +1,5 @@
 import create from "zustand"
+import views from "../util/views"
 
 /**
  * State mangament of the rule.
@@ -18,7 +19,12 @@ const RuleState = create(set => ({
   }),
   setTraceName: state => set(() => ({ traceName: state.traceName })),
   setConstraint: args => set(() => {
-      console.log("eh eh... ")
+      switch (args.view) {
+        case views.STATE_BELIEF:
+          return {
+
+          }
+      }
     }
   ),
   addConstraint: constraint => set((state) => (state.constraint.push(constraint)))

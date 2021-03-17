@@ -1,16 +1,5 @@
 import create from "zustand"
-
-/**
- * ENUM used to keep track of current state
- * @type {{STATE_BELIEF: number, OPERATOR: number, LOGIC_CONNECTOR: number}}
- */
-const views = Object.freeze({
-  STATE_BELIEF: 0,
-  OPERATOR: 1,
-  VARIABLE: 2,
-  LOGIC_CONNECTOR: 3
-})
-
+import views from "../util/views"
 
 /**
  * Map function used for names variables
@@ -24,6 +13,7 @@ function returnArray(element, index) {
     name: element
   }
 }
+
 /**
  * State for ModalAction component, set first to not visible.
  * @type {UseStore<{visibile: boolean, setVisibile: function(): *}>}
