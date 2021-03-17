@@ -26,7 +26,7 @@ export default function Home() {
         </div>
         <ModalAddAction></ModalAddAction>
         <ModalProblemSelection></ModalProblemSelection>
-        {/*<ModalRuleCreation></ModalRuleCreation>*/}
+        <ModalRuleCreation></ModalRuleCreation>
       </div>
     </>
   )

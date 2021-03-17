@@ -14,13 +14,11 @@ export default function DropdownTraceChoose() {
   const problem = RuleState(state => state.problemName)
   const trace = RuleState(state => state.traceName)
   const setTrace = RuleState(state => state.setTraceName)
-
-
+  
   useEffect(() => {
     async function fetchTraces() {
       try {
         const response = await axios.post("http://localhost:8001/api/get_traces_from_problem", { name: problem })
-        console.log(response)
         setTraces(response.data || [])
       } catch (e) {
         console.log(e)

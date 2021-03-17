@@ -2,7 +2,6 @@ import React from "react"
 import add from "../images/plus.png"
 import ModalProblemSelectionState from "../states/ModalProblemSelectionState"
 import RuleState from "../states/RuleState"
-import axios from "axios"
 
 export default function ProblemSelection() {
   const setModalProblemSelectionState = ModalProblemSelectionState(state => state.setVisible)

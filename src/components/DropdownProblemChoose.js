@@ -13,7 +13,6 @@ export default function DropdownProblemChoose() {
   const [problems, setProblems] = useState([])
   const problem = RuleState(state => state.problemName)
   const setProblem = RuleState(state => state.setProblemName)
-  const attr = RuleState(state => state.attributes)
 
   async function getData(problem) {
     const response = await axios.post("http://localhost:8001/api/get_attributes_from_problem", { name: problem })
@@ -56,7 +55,6 @@ export default function DropdownProblemChoose() {
                         problemName: problemString,
                         attributes: attributes
                       })
-                      console.log(attr)
                     }}
                   >{problemString}
                   </button>

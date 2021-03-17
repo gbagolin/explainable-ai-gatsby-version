@@ -1,48 +1,63 @@
 import create from "zustand"
-import axios from "axios"
 
 /**
  * ENUM used to keep track of current state
  * @type {{STATE_BELIEF: number, OPERATOR: number, LOGIC_CONNECTOR: number}}
  */
-const states = {
+const views = Object.freeze({
   STATE_BELIEF: 0,
   OPERATOR: 1,
-  LOGIC_CONNECTOR: 2
-}
+  VARIABLE: 2,
+  LOGIC_CONNECTOR: 3
+})
 
+
+/**
+ * Map function used for names variables
+ * @param element
+ * @param index
+ * @returns {{name, id}}
+ */
+function returnArray(element, index) {
+  return {
+    id: index,
+    name: element
+  }
+}
 /**
  * State for ModalAction component, set first to not visible.
  * @type {UseStore<{visibile: boolean, setVisibile: function(): *}>}
  */
 const ButtonsName = create(set => ({
-  currentState: states.STATE_BELIEF, //initial state
+  currentState: views.STATE_BELIEF, //initial state
   buttonsName: [],
-  goToNextState: problemsName => set(async (currentState) => {
-
-    try {
-      const response = await axios.post("http://localhost:8001/api/get_attributes_from_problem", { name: problemsName })
-      console.log("Resonse: ", response.data)
-    } catch (e) {
-      console.log(e)
+  variables: [{ id: 1, name: "x1" }],
+  goToNextState: (problemAttributes) => set((state) => {
+    if (problemAttributes === undefined) {
+      return
     }
-
-    switch (currentState) {
-      case states.STATE_BELIEF:
-        return {
-          buttonsName: [],
-          currentState: states.OPERATOR
-        }
-      case states.OPERATOR:
-        return {
-          currentState: states.LOGIC_CONNECTOR
-        }
-      case states.LOGIC_CONNECTOR:
-        return {
-          currentState: states.STATE_BELIEF
-        }
-      default:
-        break
+    if (state.currentState === views.STATE_BELIEF) {
+      return {
+        buttonsName: problemAttributes.states.map(returnArray),
+        currentState: views.OPERATOR
+      }
+    } else if (state.currentState === views.OPERATOR) {
+      return {
+        buttonsName: ["<", "<=", ">=", ">"].map(returnArray),
+        currentState: views.VARIABLE
+      }
+    } else if (state.currentState === views.VARIABLE) {
+      return {
+        buttonsName: state.variables,
+        currentState: views.LOGIC_CONNECTOR
+      }
+    } else if (state.currentState === views.LOGIC_CONNECTOR) {
+      return {
+        buttonsName: ["and", "or"].map(returnArray),
+        currentState: views.STATE_BELIEF
+      }
+    } else {
+      console.log("problema")
     }
   })
 }))

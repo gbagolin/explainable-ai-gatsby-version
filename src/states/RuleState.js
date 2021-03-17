@@ -1,5 +1,4 @@
 import create from "zustand"
-import axios from "axios"
 
 /**
  * State mangament of the rule.
@@ -8,7 +7,8 @@ import axios from "axios"
 const RuleState = create(set => ({
   problemName: "",
   traceName: "",
-  attributes: "prova",
+  attributes: undefined,
+  variables: Set,
   setProblemName: state => set(() => {
     return {
       attributes: state.attributes,

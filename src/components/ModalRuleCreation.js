@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect } from "react"
 import ModalRuleCreationState from "../states/ModalRuleCreationState"
 import ButtonsName from "../states/ButtonsName"
 import RuleState from "../states/RuleState"
@@ -6,8 +6,14 @@ import RuleState from "../states/RuleState"
 export default function ModalRuleCreation() {
   const visible = ModalRuleCreationState(state => state.visible)
   const setVisible = ModalRuleCreationState(state => state.setVisible)
-  const problemName = RuleState(state => state.problemName)
+  const attributes = RuleState(state => state.attributes)
   const goToNextState = ButtonsName(state => state.goToNextState)
+  const buttons = ButtonsName(state => state.buttonsName)
+  //force buttonName to initialize.
+  useEffect(() => {
+    goToNextState(attributes)
+  }, [attributes, goToNextState])
+
   return (
     <>
       {visible ? (
@@ -29,21 +35,28 @@ export default function ModalRuleCreation() {
                   >
                     <span
                       className="bg-transparent text-black opacity-5 h-6 w-6 text-2xl block outline-none focus:outline-none">
-                      ×
                     </span>
                   </button>
                 </div>
                 {/*body*/}
-                <div className="relative p-6 flex-auto">
-                  <button
-                    className="text-yellow-300 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1"
-                    type="button"
-                    style={{ transition: "all 0.9s ease" }}
-                    onClick={() => goToNextState(problemName)}
-                  >
-                    Prova
-                  </button>
-
+                <div className="relative p-6 flex flex-row justify-center">
+                  {
+                    buttons.map((button, index) => {
+                      return (
+                        <button
+                          key={index}
+                          className="text-yellow-300 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1"
+                          type="button"
+                          style={{ transition: "all 0.9s ease" }}
+                          onClick={
+                            () => goToNextState(attributes)
+                          }
+                        >
+                          {button.name}
+                        </button>
+                      )
+                    })
+                  }
                 </div>
                 {/*footer*/}
                 <div className="flex items-center justify-end p-6 border-t border-solid border-gray-300 rounded-b">

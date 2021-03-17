@@ -4,7 +4,7 @@ import ActionMangament from "../states/ActionState"
 import RuleState from "../states/RuleState"
 
 export default function DropdownActionChoose() {
-  const actions = RuleState(state => state.attributes.actions)
+  const actions = RuleState(state => state.attributes.actions) || []
   const actionToAdd = ActionMangament(state => state.actionToAdd)
   const setActionToAdd = ActionMangament(state => state.setActionToAdd)
 
