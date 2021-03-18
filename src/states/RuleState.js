@@ -1,5 +1,5 @@
 import create from "zustand"
-import views from "../util/views"
+import VIEWS from "../util/VIEWS"
 import logicConnector from "../util/LOGIC_CONNECTORS"
 
 /**
@@ -14,6 +14,8 @@ const RuleState = create(set => ({
   constraints: [],
   logicConnector: logicConnector.OR,
   tempConstraint: {},
+  ruleString: "",
+  subRuleCounter: 1,
   setProblemName: state => set(() => {
     return {
       attributes: state.attributes,
@@ -23,25 +25,25 @@ const RuleState = create(set => ({
   setTraceName: state => set(() => ({ traceName: state.traceName })),
   setConstraint: args => set((state) => {
       switch (+args.view) {
-        case views.STATE_BELIEF: {
+        case VIEWS.STATE_BELIEF: {
           state.tempConstraint["state"] = args.element
           return {
             tempConstraint: state.tempConstraint
           }
         }
-        case views.OPERATOR: {
+        case VIEWS.OPERATOR: {
           state.tempConstraint["operator"] = args.element
           return {
             tempConstraint: state.tempConstraint
           }
         }
-        case views.VARIABLE: {
+        case VIEWS.VARIABLE: {
           state.tempConstraint["variable"] = args.element
           return {
             tempConstraint: state.tempConstraint
           }
         }
-        case views.LOGIC_CONNECTOR: {
+        case VIEWS.LOGIC_CONNECTOR: {
           switch (state.logicConnector) {
             case logicConnector.OR:
               state.constraints.push([state.tempConstraint])
@@ -61,15 +63,14 @@ const RuleState = create(set => ({
           return {
             constraints: state.constraints,
             tempConstraint: {},
-            logicConnector: args.element.toLowerCase() === "or" ? logicConnector.OR : logicConnector.AND
+            logicConnector: args.element.toLowerCase() === "and" ? logicConnector.AND : logicConnector.OR
           }
         }
         default:
           console.error("View is not matching any case")
       }
     }
-  ),
-  addConstraint: constraint => set((state) => (state.constraint.push(constraint)))
+  )
 }))
 
 export default RuleState

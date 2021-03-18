@@ -12,7 +12,6 @@ export default function ModalRuleCreation() {
   const setConstraint = RuleState(state => state.setConstraint)
   const currentView = ButtonsName(state => state.currentState)
   const constraints = RuleState(state => state.constraints)
-
   //force buttonName to initialize.
   useEffect(() => {
     goToNextState(attributes)
@@ -52,15 +51,25 @@ export default function ModalRuleCreation() {
                           className="text-yellow-300 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1"
                           type="button"
                           style={{ transition: "all 0.9s ease" }}
+
                           onClick={
                             () => {
                               console.log("Constraints: ", constraints)
-                              setConstraint({
-                                view: currentView,
-                                id: button.id,
-                                element: button.name
-                              })
-                              goToNextState(attributes, button)
+                              if (button.name.toLowerCase() === "done") {
+                                setVisible({ visible: false })
+                                setConstraint({
+                                  view: currentView,
+                                  id: button.id,
+                                  element: button.name
+                                })
+                              } else {
+                                setConstraint({
+                                  view: currentView,
+                                  id: button.id,
+                                  element: button.name
+                                })
+                                goToNextState(attributes, button)
+                              }
                             }
                           }
                         >

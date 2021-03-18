@@ -1,5 +1,5 @@
 import create from "zustand"
-import views from "../util/views"
+import VIEWS from "../util/VIEWS"
 import logicConnector from "../util/LOGIC_CONNECTORS"
 
 /**
@@ -21,7 +21,7 @@ function returnArray(element, index) {
  * @type {UseStore<{visibile: boolean, setVisibile: function(): *}>}
  */
 const ButtonsName = create(set => ({
-  currentState: views.LOGIC_CONNECTOR, //initial state
+  currentState: VIEWS.LOGIC_CONNECTOR, //initial state
   buttonsName: [],
   variables: [{ id: 1, name: "x1" }],
   goToNextState: (problemAttributes, args) => set((state) => {
@@ -29,22 +29,22 @@ const ButtonsName = create(set => ({
       return
     }
     switch (state.currentState) {
-      case views.LOGIC_CONNECTOR:
+      case VIEWS.LOGIC_CONNECTOR:
         return {
           buttonsName: problemAttributes.states.map(returnArray),
-          currentState: views.STATE_BELIEF
+          currentState: VIEWS.STATE_BELIEF
         }
-      case views.STATE_BELIEF:
+      case VIEWS.STATE_BELIEF:
         return {
           buttonsName: ["<", "<=", ">=", ">"].map(returnArray),
-          currentState: views.OPERATOR
+          currentState: VIEWS.OPERATOR
         }
-      case views.OPERATOR:
+      case VIEWS.OPERATOR:
         return {
           buttonsName: state.variables,
-          currentState: views.VARIABLE
+          currentState: VIEWS.VARIABLE
         }
-      case views.VARIABLE:
+      case VIEWS.VARIABLE:
         const ids = state.variables.map(e => e.id)
         const maxId = Math.max(...ids)
         //a new variable need to be added
@@ -54,7 +54,7 @@ const ButtonsName = create(set => ({
         }
         return {
           buttonsName: Object.keys(logicConnector).map(returnArray),
-          currentState: views.LOGIC_CONNECTOR,
+          currentState: VIEWS.LOGIC_CONNECTOR,
           variables: state.variables
         }
       default:
