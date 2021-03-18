@@ -19,35 +19,36 @@ function returnArray(element, index) {
  * @type {UseStore<{visibile: boolean, setVisibile: function(): *}>}
  */
 const ButtonsName = create(set => ({
-  currentState: views.STATE_BELIEF, //initial state
+  currentState: views.LOGIC_CONNECTOR, //initial state
   buttonsName: [],
   variables: [{ id: 1, name: "x1" }],
   goToNextState: (problemAttributes) => set((state) => {
     if (problemAttributes === undefined) {
       return
     }
-    if (state.currentState === views.STATE_BELIEF) {
-      return {
-        buttonsName: problemAttributes.states.map(returnArray),
-        currentState: views.OPERATOR
-      }
-    } else if (state.currentState === views.OPERATOR) {
-      return {
-        buttonsName: ["<", "<=", ">=", ">"].map(returnArray),
-        currentState: views.VARIABLE
-      }
-    } else if (state.currentState === views.VARIABLE) {
-      return {
-        buttonsName: state.variables,
-        currentState: views.LOGIC_CONNECTOR
-      }
-    } else if (state.currentState === views.LOGIC_CONNECTOR) {
-      return {
-        buttonsName: ["and", "or"].map(returnArray),
-        currentState: views.STATE_BELIEF
-      }
-    } else {
-      console.log("problema")
+    switch (state.currentState) {
+      case views.LOGIC_CONNECTOR:
+        return {
+          buttonsName: problemAttributes.states.map(returnArray),
+          currentState: views.STATE_BELIEF
+        }
+      case views.STATE_BELIEF:
+        return {
+          buttonsName: ["<", "<=", ">=", ">"].map(returnArray),
+          currentState: views.OPERATOR
+        }
+      case views.OPERATOR:
+        return {
+          buttonsName: state.variables,
+          currentState: views.VARIABLE
+        }
+      case views.VARIABLE:
+        return {
+          buttonsName: ["and", "or"].map(returnArray),
+          currentState: views.LOGIC_CONNECTOR
+        }
+      default:
+        console.error("Current state is not matching any of the cases")
     }
   })
 }))
