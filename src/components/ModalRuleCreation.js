@@ -10,10 +10,9 @@ export default function ModalRuleCreation() {
   const goToNextState = ButtonsName(state => state.goToNextState)
   const buttons = ButtonsName(state => state.buttonsName)
   const setConstraint = RuleState(state => state.setConstraint)
-  // const addConstraint = RuleState(state => state.addConstraint)
   const currentView = ButtonsName(state => state.currentState)
-  const tempConstraint = RuleState(state => state.tempConstraint)
   const constraints = RuleState(state => state.constraints)
+
   //force buttonName to initialize.
   useEffect(() => {
     goToNextState(attributes)
@@ -58,9 +57,10 @@ export default function ModalRuleCreation() {
                               console.log("Constraints: ", constraints)
                               setConstraint({
                                 view: currentView,
+                                id: button.id,
                                 element: button.name
                               })
-                              goToNextState(attributes)
+                              goToNextState(attributes, button)
                             }
                           }
                         >

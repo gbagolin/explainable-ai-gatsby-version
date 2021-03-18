@@ -42,12 +42,21 @@ const RuleState = create(set => ({
           }
         }
         case views.LOGIC_CONNECTOR: {
-          if (state.logicConnector === logicConnector.OR) {
-            state.constraints.push([state.tempConstraint])
-          } else {
-            const subRule = state.constraints.pop()
-            subRule.push(state.tempConstraint)
-            state.constraints.push(subRule)
+          switch (state.logicConnector) {
+            case logicConnector.OR:
+              state.constraints.push([state.tempConstraint])
+              break
+            case logicConnector.AND:
+              const subRule = state.constraints.pop()
+              subRule.push(state.tempConstraint)
+              state.constraints.push(subRule)
+              break
+            case logicConnector.DONE:
+              //TODO: NOT SURE ABOUT WHAT SHOULD GO HERE
+              break
+            default:
+              console.error("Logic connector is not matching any case")
+              break
           }
           return {
             constraints: state.constraints,

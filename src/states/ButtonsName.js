@@ -1,5 +1,6 @@
 import create from "zustand"
 import views from "../util/views"
+import logicConnector from "../util/LOGIC_CONNECTORS"
 
 /**
  * Map function used for names variables
@@ -14,6 +15,7 @@ function returnArray(element, index) {
   }
 }
 
+
 /**
  * State for ModalAction component, set first to not visible.
  * @type {UseStore<{visibile: boolean, setVisibile: function(): *}>}
@@ -22,7 +24,7 @@ const ButtonsName = create(set => ({
   currentState: views.LOGIC_CONNECTOR, //initial state
   buttonsName: [],
   variables: [{ id: 1, name: "x1" }],
-  goToNextState: (problemAttributes) => set((state) => {
+  goToNextState: (problemAttributes, args) => set((state) => {
     if (problemAttributes === undefined) {
       return
     }
@@ -43,9 +45,17 @@ const ButtonsName = create(set => ({
           currentState: views.VARIABLE
         }
       case views.VARIABLE:
+        const ids = state.variables.map(e => e.id)
+        const maxId = Math.max(...ids)
+        //a new variable need to be added
+        if (args.id === maxId) {
+          const id = maxId + 1
+          state.variables.push({ id: id, name: "x" + id })
+        }
         return {
-          buttonsName: ["and", "or"].map(returnArray),
-          currentState: views.LOGIC_CONNECTOR
+          buttonsName: Object.keys(logicConnector).map(returnArray),
+          currentState: views.LOGIC_CONNECTOR,
+          variables: state.variables
         }
       default:
         console.error("Current state is not matching any of the cases")
