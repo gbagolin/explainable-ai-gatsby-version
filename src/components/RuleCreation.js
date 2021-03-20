@@ -1,9 +1,11 @@
 import React from "react"
 import add from "../images/plus.png"
 import ModalRuleCreationState from "../states/ModalRuleCreationState"
+import RuleState from "../states/RuleState"
 
 export default function RuleCreation() {
   const setVisible = ModalRuleCreationState(state => state.setVisible)
+  let rule = RuleState(state => state.ruleString)
 
   return (
     <div className="border-2 rounded-lg shadow-lg w-96 h-full  m-5 p-5 text-lg">
@@ -18,6 +20,17 @@ export default function RuleCreation() {
           </div>
         </div>
         <div className="m-3"></div>
+        <div>
+          {
+            rule.map(
+              (string, element) => {
+                return (
+                  <p>{element}. {string}</p>
+                )
+              }
+            )
+          }
+        </div>
       </div>
       <div className="mb-5"></div>
     </div>
