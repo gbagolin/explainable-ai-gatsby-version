@@ -1,12 +1,23 @@
-import React from "react"
+import React, { useEffect, useState } from "react"
 import add from "../images/plus.png"
 import ModalRuleCreationState from "../states/ModalRuleCreationState"
 import RuleState from "../states/RuleState"
 import ActionMangament from "../states/ActionState"
 
 function RuleList() {
-  const ruleString = []
   const actionSelected = ActionMangament(state => state.actionSelected)
+  const rule = RuleState(state => state.atomicRules[actionSelected])
+  const [ruleString, setRuleString] = useState([])
+
+  useEffect(
+    () => {
+      try {
+        setRuleString(rule.ruleString)
+      } catch (e) {
+        console.log("Action still not present")
+      }
+    }, [actionSelected, ruleString])
+
   console.log("L'azione selezionata è: ", actionSelected)
   return (
     <>

@@ -6,7 +6,7 @@ import create from "zustand"
  */
 const ActionMangament = create(set => ({
   actionToAdd: "",
-  actionSelected: 0,
+  actionSelected: -1,
   actionList: [],
   maxId: 0,
 
