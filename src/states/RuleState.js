@@ -16,6 +16,7 @@ const RuleState = create(set => ({
   tempConstraint: {},
   ruleString: "",
   subRuleCounter: 1,
+
   setProblemName: state => set(() => {
     return {
       attributes: state.attributes,
@@ -46,6 +47,7 @@ const RuleState = create(set => ({
         case VIEWS.LOGIC_CONNECTOR: {
           switch (state.logicConnector) {
             case logicConnector.OR:
+              //no need to add the constraint, in case
               state.constraints.push([state.tempConstraint])
               break
             case logicConnector.AND:
@@ -54,8 +56,10 @@ const RuleState = create(set => ({
               state.constraints.push(subRule)
               break
             case logicConnector.DONE:
-              //TODO: NOT SURE ABOUT WHAT SHOULD GO HERE
-              break
+              return {
+                logicConnector: args.element.toLowerCase() === "and" ? logicConnector.AND :
+                  args.element.toLowerCase() === "or" ? logicConnector.OR : logicConnector.DONE
+              }
             default:
               console.error("Logic connector is not matching any case")
               break
@@ -63,7 +67,8 @@ const RuleState = create(set => ({
           return {
             constraints: state.constraints,
             tempConstraint: {},
-            logicConnector: args.element.toLowerCase() === "and" ? logicConnector.AND : logicConnector.OR
+            logicConnector: args.element.toLowerCase() === "and" ? logicConnector.AND :
+              args.element.toLowerCase() === "or" ? logicConnector.OR : logicConnector.DONE
           }
         }
         default:
