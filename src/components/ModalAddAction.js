@@ -2,12 +2,17 @@ import React from "react"
 import ModalActionSelectionState from "../states/ModalActionSelectionState"
 import DropdownActionChoose from "./DropdownActionChoose"
 import ActionMangament from "../states/ActionState"
+import RuleState from "../states/RuleState"
 
 export default function ModalAddAction() {
   const visible = ModalActionSelectionState(state => state.visible)
   const setVisible = ModalActionSelectionState(state => state.setVisible)
   const actionToAdd = ActionMangament(state => state.actionToAdd)
   const pushAction = ActionMangament(state => state.setActionList)
+  const maxId = ActionMangament(state => state.maxId)
+  const incrementMaxId = ActionMangament(state => state.incrementMaxId)
+  const setActionSelected = ActionMangament(state => state.setActionSelected)
+  const addAtomicRule = RuleState(state => state.addAtomicRule)
 
   return (
     <>
@@ -54,8 +59,20 @@ export default function ModalAddAction() {
                     style={{ transition: "all 0.9s ease" }}
                     onClick={() => {
                       setVisible({ visible: false })
-                      pushAction(actionToAdd)
-                    }}
+                      incrementMaxId()
+                      console.log("Adding an action with id: ", maxId)
+                      pushAction(
+                        {
+                          id: maxId,
+                          name: actionToAdd
+                        }
+                      )
+                      //set new action to the current action selected.
+                      setActionSelected({ actionSelected: maxId })
+                      addAtomicRule(maxId)
+                      console.log("Adding atomic rule with id action id", maxId)
+                    }
+                    }
                   >
                     Add Action
                   </button>

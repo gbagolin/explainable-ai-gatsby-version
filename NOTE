@@ -1,0 +1,14 @@
+rule_template: [
+    atomic_rule: {
+        action_id: int
+        constraints: ...
+        rule_string
+    }
+]
+
+actions: [
+    {
+        action_id: int
+        action: string
+    }
+]

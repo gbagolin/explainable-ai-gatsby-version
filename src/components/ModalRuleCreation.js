@@ -2,6 +2,7 @@ import React, { useEffect } from "react"
 import ModalRuleCreationState from "../states/ModalRuleCreationState"
 import ButtonsName from "../states/ButtonsName"
 import RuleState from "../states/RuleState"
+import ActionMangament from "../states/ActionState"
 
 export default function ModalRuleCreation() {
   const visible = ModalRuleCreationState(state => state.visible)
@@ -11,7 +12,8 @@ export default function ModalRuleCreation() {
   const buttons = ButtonsName(state => state.buttonsName)
   const setConstraint = RuleState(state => state.setConstraint)
   const currentView = ButtonsName(state => state.currentState)
-  const constraints = RuleState(state => state.constraints)
+  const actionSelected = ActionMangament(state => state.actionSelected)
+
   //force buttonName to initialize.
   useEffect(() => {
     goToNextState(attributes)
@@ -54,20 +56,22 @@ export default function ModalRuleCreation() {
 
                           onClick={
                             () => {
-                              console.log("Constraints: ", constraints)
                               if (button.name.toLowerCase() === "done") {
                                 setVisible({ visible: false })
                                 setConstraint({
                                   view: currentView,
                                   id: button.id,
-                                  element: button.name
+                                  element: button.name,
+                                  action_id: actionSelected
                                 })
                               } else {
                                 setConstraint({
                                   view: currentView,
                                   id: button.id,
-                                  element: button.name
+                                  element: button.name,
+                                  action_id: actionSelected
                                 })
+                                console.log("Setting constraints of action with id: ", actionSelected)
                                 goToNextState(attributes, button)
                               }
                             }

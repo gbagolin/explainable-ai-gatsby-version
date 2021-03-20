@@ -6,7 +6,8 @@ import ActionMangament from "../states/ActionState"
 export default function ActionSelection() {
   const setModalActionVisible = ModalActionSelectionState(state => state.setVisible)
   const actions = ActionMangament(state => state.actionList)
-
+  const setActionSelected = ActionMangament(state => state.setActionSelected)
+  console.log("Actions list: ", actions)
   return (
     <div className="border-2 rounded-lg shadow-lg w-96 h-full m-5 p-5 text-lg">
       <div className="flex flex-col flex-initial justify-items-start">
@@ -28,7 +29,11 @@ export default function ActionSelection() {
                   key={index}
                   className="w-auto h-auto">
                   <button
-                    className="font-semibold  yellow-color rounded-lg p-3">{action}</button>
+                    className="font-semibold  yellow-color rounded-lg p-3"
+                    onClick={() => {
+                      setActionSelected({ actionSelected: action.id })
+                    }}>
+                    {action.name}</button>
                 </div>
                 <div key={"second div" + index}
                      className="mt-3"></div>

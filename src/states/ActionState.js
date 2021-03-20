@@ -6,11 +6,15 @@ import create from "zustand"
  */
 const ActionMangament = create(set => ({
   actionToAdd: "",
-  actionSelected: -1,
+  actionSelected: 0,
   actionList: [],
+  maxId: 0,
+
   setActionSelected: action => set(() => ({ actionSelected: action.actionSelected })),
   setActionList: action => set((state) => ({ actionList: state.actionList.concat([action]) })),
-  setActionToAdd: action => set(() => ({ actionToAdd: action.actionToAdd }))
+  setActionToAdd: action => set(() => ({ actionToAdd: action.actionToAdd })),
+  incrementMaxId: () => set((state) => ({ maxId: state.maxId + 1 }))
+
 }))
 
 export default ActionMangament
