@@ -86,7 +86,7 @@ const ButtonsName = create(set => ({
         //a new variable need to be added
         if (args.id === maxId) {
           const id = maxId + 1
-          state.variables[actionSelected].concat({ id: id, name: "x" + id })
+          state.variables[actionSelected].push({ id: id, name: "x" + id })
         }
         return {
           buttonsName: [...state.buttonsName],

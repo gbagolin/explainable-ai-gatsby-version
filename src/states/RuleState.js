@@ -32,7 +32,7 @@ const RuleState = create(set => ({
       problemName: state.problemName
     }
   }),
-  
+
   setTraceName: state => set(() => ({ traceName: state.traceName })),
   setConstraint: args => set((state) => {
     console.log("Action selected: ", args.actionSelected)
@@ -105,7 +105,10 @@ const RuleState = create(set => ({
         }
         const logic = args.element.toLowerCase() === "and" ? logicConnector.AND :
           args.element.toLowerCase() === "or" ? logicConnector.OR : logicConnector.DONE
+
         state.logicConnector[args.actionSelected] = logic
+        state.tempConstraint[args.actionSelected] = {}
+
         return {
           ruleString: [...state.ruleString],
           constraints: state.constraints,

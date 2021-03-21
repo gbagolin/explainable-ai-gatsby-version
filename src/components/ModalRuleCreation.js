@@ -1,4 +1,4 @@
-import React, { useEffect } from "react"
+import React from "react"
 import ModalRuleCreationState from "../states/ModalRuleCreationState"
 import ButtonsName from "../states/ButtonsName"
 import RuleState from "../states/RuleState"

@@ -1,7 +1,6 @@
 import React from "react"
 import add from "../images/plus.png"
 import ModalRuleCreationState from "../states/ModalRuleCreationState"
-import RuleState from "../states/RuleState"
 
 export default function RuleCreation() {
   const setVisible = ModalRuleCreationState(state => state.setVisible)
