@@ -15,10 +15,10 @@ export default function Anomalies() {
         </div>
         <div className="m-3"></div>
         <div className="w-auto h-auto">
-          <button className="font-semibold  yellow-color rounded-lg p-3"> ActionSelection: Listen</button>
+          <button className="font-semibold  yellow-color rounded-lg p-3"> ActionS election: Listen</button>
         </div>
         <div className="w-auto h-auto mt-5">
-          <button className="font-semibold  yellow-color rounded-lg p-3"> ActionSelection: Open left</button>
+          <button className="font-semibold  yellow-color rounded-lg p-3"> Action Selection: Open left</button>
         </div>
       </div>
       <div className="mb-5"></div>

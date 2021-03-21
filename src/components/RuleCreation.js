@@ -16,7 +16,7 @@ export default function RuleCreation() {
           </div>
           <div>
             <input className="w-9 h-9" type="image" src={add} alt="Add ActionSelection"
-                   onClick={() => setVisible({ visible: true })} />
+              onClick={() => setVisible({ visible: true })} />
           </div>
         </div>
         <div className="m-3"></div>
@@ -25,7 +25,7 @@ export default function RuleCreation() {
             rule.map(
               (string, element) => {
                 return (
-                  <p>{element}. {string}</p>
+                  <p key={element}>{element}. {string}</p>
                 )
               }
             )

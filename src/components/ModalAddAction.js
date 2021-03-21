@@ -8,6 +8,8 @@ export default function ModalAddAction() {
   const setVisible = ModalActionSelectionState(state => state.setVisible)
   const actionToAdd = ActionMangament(state => state.actionToAdd)
   const pushAction = ActionMangament(state => state.setActionList)
+  const actionCounter = ActionMangament(state => state.actionCounter)
+  const incrementActionCounter = ActionMangament(state => state.incrementActionCounter)
 
   return (
     <>
@@ -54,7 +56,12 @@ export default function ModalAddAction() {
                     style={{ transition: "all 0.9s ease" }}
                     onClick={() => {
                       setVisible({ visible: false })
-                      pushAction(actionToAdd)
+                      pushAction({
+                        id: actionCounter,
+                        name: actionToAdd
+                      })
+                      console.log("Adding action with id: %i, name : %s", actionCounter, actionToAdd)
+                      incrementActionCounter()
                     }}
                   >
                     Add Action
