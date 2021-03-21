@@ -7,7 +7,6 @@ export default function ActionSelection() {
   const setModalActionVisible = ModalActionSelectionState(state => state.setVisible)
   const actions = ActionMangament(state => state.actionList)
   const setActionSelected = ActionMangament(state => state.setActionSelected)
-  console.log("Actions list: ", actions)
   return (
     <div className="border-2 rounded-lg shadow-lg w-96 h-full m-5 p-5 text-lg">
       <div className="flex flex-col flex-initial justify-items-start">
@@ -17,7 +16,7 @@ export default function ActionSelection() {
           </div>
           <div>
             <input className="w-9 h-9" type="image" src={add} alt="Add ActionSelection"
-                   onClick={() => setModalActionVisible({ visible: true })} />
+              onClick={() => setModalActionVisible({ visible: true })} />
           </div>
         </div>
         <div className="m-3"></div>
@@ -32,11 +31,12 @@ export default function ActionSelection() {
                     className="font-semibold  yellow-color rounded-lg p-3"
                     onClick={() => {
                       setActionSelected({ actionSelected: action.id })
-                    }}>
-                    {action.name}</button>
+                      console.log("Clicking action with id: %i", action.id)
+                    }
+                    }>{action.name}</button>
                 </div>
                 <div key={"second div" + index}
-                     className="mt-3"></div>
+                  className="mt-3"></div>
               </div>
             )
           })

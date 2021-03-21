@@ -3,17 +3,19 @@ import ModalActionSelectionState from "../states/ModalActionSelectionState"
 import DropdownActionChoose from "./DropdownActionChoose"
 import ActionMangament from "../states/ActionState"
 import RuleState from "../states/RuleState"
+import ButtonsName from "../states/ButtonsName"
 
 export default function ModalAddAction() {
   const visible = ModalActionSelectionState(state => state.visible)
   const setVisible = ModalActionSelectionState(state => state.setVisible)
   const actionToAdd = ActionMangament(state => state.actionToAdd)
   const pushAction = ActionMangament(state => state.setActionList)
-  const maxId = ActionMangament(state => state.maxId)
-  const incrementMaxId = ActionMangament(state => state.incrementMaxId)
+  const actionCounter = ActionMangament(state => state.actionCounter)
+  const incrementActionCounter = ActionMangament(state => state.incrementActionCounter)
   const setActionSelected = ActionMangament(state => state.setActionSelected)
-  const addAtomicRule = RuleState(state => state.addAtomicRule)
-
+  const addRule = RuleState(state => state.addRule)
+  const addButtons = ButtonsName(state => state.addButtons)
+  const attributes = RuleState(state => state.attributes)
   return (
     <>
       {visible ? (
@@ -59,6 +61,7 @@ export default function ModalAddAction() {
                     style={{ transition: "all 0.9s ease" }}
                     onClick={() => {
                       setVisible({ visible: false })
+<<<<<<< HEAD
                       incrementMaxId()
                       console.log("Adding an action with id: ", maxId)
                       pushAction(
@@ -73,6 +76,18 @@ export default function ModalAddAction() {
                       console.log("Adding atomic rule with id action id", maxId)
                     }
                     }
+=======
+                      pushAction({
+                        id: actionCounter,
+                        name: actionToAdd
+                      })
+                      console.log("Adding action with id: %i, name : %s", actionCounter, actionToAdd)
+                      setActionSelected({ actionSelected: actionCounter })
+                      incrementActionCounter()
+                      addRule()
+                      addButtons(actionCounter, attributes)
+                    }}
+>>>>>>> origin/dev
                   >
                     Add Action
                   </button>

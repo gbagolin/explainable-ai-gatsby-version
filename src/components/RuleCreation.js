@@ -2,41 +2,12 @@ import React, { useEffect, useState } from "react"
 import add from "../images/plus.png"
 import ModalRuleCreationState from "../states/ModalRuleCreationState"
 import RuleState from "../states/RuleState"
-import ActionMangament from "../states/ActionState"
-
-function RuleList() {
-  const actionSelected = ActionMangament(state => state.actionSelected)
-  const rule = RuleState(state => state.atomicRules[actionSelected])
-  const [ruleString, setRuleString] = useState([])
-
-  useEffect(
-    () => {
-      try {
-        setRuleString(rule.ruleString)
-      } catch (e) {
-        console.log("Action still not present")
-      }
-    }, [actionSelected, ruleString])
-
-  console.log("L'azione selezionata è: ", actionSelected)
-  return (
-    <>
-      {
-        ruleString.map(
-          (string, element) => {
-            return (
-              <p>{+element + 1}. {string}</p>
-            )
-          }
-        )
-      }
-    </>
-  )
-}
+import ActionManagament from '../states/ActionState'
 
 export default function RuleCreation() {
   const setVisible = ModalRuleCreationState(state => state.setVisible)
-  const actionSelected = ActionMangament(state => state.actionSelected)
+  const actionSelected = ActionManagament(state => state.actionSelected)
+  let rule = RuleState(state => state.ruleString)
 
   return (
     <div className="border-2 rounded-lg shadow-lg w-96 h-full  m-5 p-5 text-lg">
@@ -47,13 +18,19 @@ export default function RuleCreation() {
           </div>
           <div>
             <input className="w-9 h-9" type="image" src={add} alt="Add ActionSelection"
-                   onClick={() => setVisible({ visible: true })} />
+              onClick={() => setVisible({ visible: true })} />
           </div>
         </div>
         <div className="m-3"></div>
         <div>
           {
-            <RuleList></RuleList>
+            (rule[actionSelected] || []).map(
+              (string, element) => {
+                return (
+                  <p key={element}>{element + 1}. {string}</p>
+                )
+              }
+            )
           }
         </div>
       </div>

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react"
+import React from "react"
 import ModalRuleCreationState from "../states/ModalRuleCreationState"
 import ButtonsName from "../states/ButtonsName"
 import RuleState from "../states/RuleState"
@@ -7,17 +7,19 @@ import ActionMangament from "../states/ActionState"
 export default function ModalRuleCreation() {
   const visible = ModalRuleCreationState(state => state.visible)
   const setVisible = ModalRuleCreationState(state => state.setVisible)
-  const attributes = RuleState(state => state.attributes)
-  const goToNextState = ButtonsName(state => state.goToNextState)
-  const buttons = ButtonsName(state => state.buttonsName)
-  const setConstraint = RuleState(state => state.setConstraint)
-  const currentView = ButtonsName(state => state.currentState)
   const actionSelected = ActionMangament(state => state.actionSelected)
-
+  const buttons = ButtonsName(state => state.buttonsName[actionSelected])
+  const setConstraint = RuleState(state => state.setConstraint)
+  const currentView = ButtonsName(state => state.currentState[actionSelected])
+  const constraints = RuleState(state => state.constraints)
+  const goToNextState = ButtonsName(state => state.goToNextState)
+  const attributes = RuleState(state => state.attributes)
+  /** 
   //force buttonName to initialize.
   useEffect(() => {
-    goToNextState(attributes)
-  }, [attributes, goToNextState])
+    goToNextState(actionSelected, attributes)
+  }, [actionSelected, attributes, goToNextState])
+  */
 
   return (
     <>
@@ -53,7 +55,6 @@ export default function ModalRuleCreation() {
                           className="text-yellow-300 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1"
                           type="button"
                           style={{ transition: "all 0.9s ease" }}
-
                           onClick={
                             () => {
                               if (button.name.toLowerCase() === "done") {
@@ -62,17 +63,16 @@ export default function ModalRuleCreation() {
                                   view: currentView,
                                   id: button.id,
                                   element: button.name,
-                                  action_id: actionSelected
+                                  actionSelected: actionSelected,
                                 })
                               } else {
                                 setConstraint({
                                   view: currentView,
                                   id: button.id,
                                   element: button.name,
-                                  action_id: actionSelected
+                                  actionSelected: actionSelected,
                                 })
-                                console.log("Setting constraints of action with id: ", actionSelected)
-                                goToNextState(attributes, button)
+                                goToNextState(actionSelected, attributes, button)
                               }
                             }
                           }
