@@ -2,6 +2,8 @@ import React from "react"
 import ModalActionSelectionState from "../states/ModalActionSelectionState"
 import DropdownActionChoose from "./DropdownActionChoose"
 import ActionMangament from "../states/ActionState"
+import RuleState from "../states/RuleState"
+import ButtonsName from "../states/ButtonsName"
 
 export default function ModalAddAction() {
   const visible = ModalActionSelectionState(state => state.visible)
@@ -11,7 +13,10 @@ export default function ModalAddAction() {
   const actionCounter = ActionMangament(state => state.actionCounter)
   const incrementActionCounter = ActionMangament(state => state.incrementActionCounter)
   const setActionSelected = ActionMangament(state => state.setActionSelected)
-
+  const addRule = RuleState(state => state.addRule)
+  const addButtons = ButtonsName(state => state.addButtons)
+  const attributes = RuleState(state => state.attributes)
+  const goToNextState = ButtonsName(state => state.goToNextState)
   return (
     <>
       {visible ? (
@@ -62,8 +67,10 @@ export default function ModalAddAction() {
                         name: actionToAdd
                       })
                       console.log("Adding action with id: %i, name : %s", actionCounter, actionToAdd)
-                      setActionSelected({actionSelected : actionCounter})
+                      setActionSelected({ actionSelected: actionCounter })
                       incrementActionCounter()
+                      addRule()
+                      addButtons(actionCounter, attributes)
                     }}
                   >
                     Add Action

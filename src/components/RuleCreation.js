@@ -5,7 +5,7 @@ import RuleState from "../states/RuleState"
 
 export default function RuleCreation() {
   const setVisible = ModalRuleCreationState(state => state.setVisible)
-  let rule = RuleState(state => state.ruleString)
+  let rule = []
 
   return (
     <div className="border-2 rounded-lg shadow-lg w-96 h-full  m-5 p-5 text-lg">

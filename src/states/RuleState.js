@@ -12,10 +12,19 @@ const RuleState = create(set => ({
   attributes: undefined,
   variables: [],
   constraints: [],
-  logicConnector: logicConnector.OR,
-  tempConstraint: {},
+  logicConnector: [logicConnector.OR],
+  tempConstraint: [{}],
   ruleString: [],
-  subRuleCounter: 1,
+  subRuleCounter: [1],
+
+  addRule: () => set((state) => ({
+    constraints: [...state.constraints, []],
+    variables: [...state.variables, []],
+    logicConnector: [...state.logicConnector, logicConnector.OR],
+    tempConstraint: [...state.tempConstraint, {}],
+    ruleString: [...state.ruleString, []],
+    subRuleCounter: [...state.subRuleCounter, 1]
+  })),
 
   setProblemName: state => set(() => {
     return {
@@ -23,84 +32,91 @@ const RuleState = create(set => ({
       problemName: state.problemName
     }
   }),
+  
   setTraceName: state => set(() => ({ traceName: state.traceName })),
   setConstraint: args => set((state) => {
-      switch (+args.view) {
-        case VIEWS.STATE_BELIEF: {
-          //Edit rule String.
-          if (state.logicConnector === logicConnector.OR) {
-            state.ruleString.push(args.element)
-          } else {
-            if (state.ruleString.length === 0) {
-              state.ruleString.push("")
-            }
-            let tempRuleString = state.ruleString.pop()
-            tempRuleString += " " + args.element
-            state.ruleString.push(tempRuleString)
+    console.log("Action selected: ", args.actionSelected)
+    console.log("Rule string: ", state.ruleString)
+    switch (+args.view) {
+      case VIEWS.STATE_BELIEF: {
+        //Edit rule String.
+        if (state.logicConnector[args.actionSelected] === logicConnector.OR) {
+          state.ruleString[args.actionSelected].push(args.element)
+        } else {
+          if (state.ruleString[args.actionSelected].length === 0) {
+            state.ruleString[args.actionSelected].push("")
           }
-          state.tempConstraint["state"] = args.element
-          return {
-            ruleString: [...state.ruleString],
-            tempConstraint: state.tempConstraint
-          }
+          let tempRuleString = state.ruleString[args.actionSelected].pop()
+          tempRuleString += " " + args.element
+          state.ruleString[args.actionSelected].push(tempRuleString)
         }
-        case VIEWS.OPERATOR: {
-          let rule = state.ruleString.pop()
-          rule += " " + args.element
-          state.ruleString.push(rule)
-          state.tempConstraint["operator"] = args.element
-          return {
-            ruleString: [...state.ruleString],
-            tempConstraint: state.tempConstraint
-          }
+        state.tempConstraint[args.actionSelected]["state"] = args.element
+        return {
+          ruleString: [...state.ruleString],
+          tempConstraint: state.tempConstraint
         }
-        case VIEWS.VARIABLE: {
-          let rule = state.ruleString.pop()
-          rule += " " + args.element
-          state.ruleString.push(rule)
-          state.tempConstraint["variable"] = args.element
-          return {
-            ruleString: [...state.ruleString],
-            tempConstraint: state.tempConstraint
-          }
-        }
-        case VIEWS.LOGIC_CONNECTOR: {
-          if (args.element.toLowerCase() === "and") {
-            let rule = state.ruleString.pop()
-            rule += " " + args.element.toLowerCase()
-            state.ruleString.push(rule)
-          }
-          switch (state.logicConnector) {
-            case logicConnector.OR:
-              //no need to add the constraint, in case
-              state.constraints.push([state.tempConstraint])
-              break
-            case logicConnector.AND:
-              const subRule = state.constraints.pop()
-              subRule.push(state.tempConstraint)
-              state.constraints.push(subRule)
-              break
-            case logicConnector.DONE:
-              return {
-                logicConnector: args.element.toLowerCase() === "and" ? logicConnector.AND :
-                  args.element.toLowerCase() === "or" ? logicConnector.OR : logicConnector.DONE
-              }
-            default:
-              console.error("Logic connector is not matching any case")
-              break
-          }
-          return {
-            ruleString: [...state.ruleString],
-            constraints: state.constraints,
-            tempConstraint: {},
-            logicConnector: args.element.toLowerCase() === "and" ? logicConnector.AND :
-              args.element.toLowerCase() === "or" ? logicConnector.OR : logicConnector.DONE
-          }
-        }
-        default:
-          console.error("View is not matching any case")
       }
+      case VIEWS.OPERATOR: {
+        let rule = state.ruleString[args.actionSelected].pop()
+        rule += " " + args.element
+        state.ruleString[args.actionSelected].push(rule)
+        state.tempConstraint[args.actionSelected]["operator"] = args.element
+        return {
+          ruleString: [...state.ruleString],
+          tempConstraint: state.tempConstraint
+        }
+      }
+      case VIEWS.VARIABLE: {
+        let rule = state.ruleString[args.actionSelected].pop()
+        rule += " " + args.element
+        state.ruleString[args.actionSelected].push(rule)
+        state.tempConstraint[args.actionSelected]["variable"] = args.element
+        return {
+          ruleString: [...state.ruleString],
+          tempConstraint: state.tempConstraint
+        }
+      }
+      case VIEWS.LOGIC_CONNECTOR: {
+        if (args.element.toLowerCase() === "and") {
+          let rule = state.ruleString[args.actionSelected].pop()
+          rule += " " + args.element.toLowerCase()
+          state.ruleString[args.actionSelected].push(rule)
+        }
+        switch (state.logicConnector[args.actionSelected]) {
+          case logicConnector.OR:
+            //no need to add the constraint, in case
+            state.constraints[args.actionSelected].push([state.tempConstraint[args.actionSelected]])
+            break
+          case logicConnector.AND:
+            const subRule = state.constraints[args.actionSelected].pop()
+            subRule.push(state.tempConstraint[args.actionSelected])
+            state.constraints[args.actionSelected].push(subRule)
+            break
+          case logicConnector.DONE:
+            const logic = args.element.toLowerCase() === "and" ? logicConnector.AND :
+              args.element.toLowerCase() === "or" ? logicConnector.OR : logicConnector.DONE
+            state.logicConnector[args.actionSelected] = logic
+            return {
+              logicConnector: state.logicConnector
+            }
+          default:
+            console.error("Logic connector is not matching any case")
+            break
+        }
+        const logic = args.element.toLowerCase() === "and" ? logicConnector.AND :
+          args.element.toLowerCase() === "or" ? logicConnector.OR : logicConnector.DONE
+        state.logicConnector[args.actionSelected] = logic
+        return {
+          ruleString: [...state.ruleString],
+          constraints: state.constraints,
+          tempConstraint: state.tempConstraint,
+          logicConnector: state.logicConnector
+        }
+      }
+      default:
+        console.error("View is not matching any case")
     }
+  }
   )
 }))
 

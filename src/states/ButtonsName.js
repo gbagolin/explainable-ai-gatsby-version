@@ -15,48 +15,86 @@ function returnArray(element, index) {
   }
 }
 
-
 /**
  * State for ModalAction component, set first to not visible.
  * @type {UseStore<{visibile: boolean, setVisibile: function(): *}>}
  */
 const ButtonsName = create(set => ({
-  currentState: VIEWS.LOGIC_CONNECTOR, //initial state
+  currentState: [], //initial state
   buttonsName: [],
-  variables: [{ id: 1, name: "x1" }],
-  goToNextState: (problemAttributes, args) => set((state) => {
+  variables: [],
+
+  addButtons: (actionSelected, problemAttributes) => set((state) => {
+    state.buttonsName.push([])
+    state.buttonsName[actionSelected] = problemAttributes.states.map(returnArray)
+    state.currentState.push(VIEWS.STATE_BELIEF)
+
+    return {
+      currentState: state.currentState,
+      buttonsName: state.buttonsName,
+      variables: [...state.variables, [{
+        id: 1,
+        name: "x1"
+      }]],
+    }
+  }),
+
+  goToNextState: (actionSelected, problemAttributes, args) => set((state) => {
+    // console.log("Action selected: ", actionSelected)
+    // console.log(actionSelected, problemAttributes, args)
+    // console.log(state.currentState[actionSelected])
+    // console.log(state.buttonsName[actionSelected])
     if (problemAttributes === undefined) {
       return
     }
-    switch (state.currentState) {
+    switch (+state.currentState[actionSelected]) {
       case VIEWS.LOGIC_CONNECTOR:
-        return {
-          buttonsName: problemAttributes.states.map(returnArray),
-          currentState: VIEWS.STATE_BELIEF
+        {
+          state.buttonsName[actionSelected] = problemAttributes.states.map(returnArray)
+          state.currentState[actionSelected] = VIEWS.STATE_BELIEF
+          return {
+            buttonsName: [...state.buttonsName],
+            currentState: [...state.currentState],
+          }
         }
+
       case VIEWS.STATE_BELIEF:
-        return {
-          buttonsName: ["<", "<=", ">=", ">"].map(returnArray),
-          currentState: VIEWS.OPERATOR
+        {
+          state.buttonsName[actionSelected] = ["<", "<=", ">=", ">"].map(returnArray)
+          state.currentState[actionSelected] = VIEWS.OPERATOR
+          return {
+            buttonsName: [...state.buttonsName],
+            currentState: [...state.currentState]
+          }
         }
       case VIEWS.OPERATOR:
-        return {
-          buttonsName: state.variables,
-          currentState: VIEWS.VARIABLE
+        {
+          state.buttonsName[actionSelected] = state.variables[actionSelected]
+          state.currentState[actionSelected] = VIEWS.VARIABLE
+          return {
+            buttonsName: [...state.buttonsName],
+            currentState: [...state.currentState]
+          }
         }
-      case VIEWS.VARIABLE:
-        const ids = state.variables.map(e => e.id)
+
+      case VIEWS.VARIABLE: {
+        state.buttonsName[actionSelected] = Object.keys(logicConnector).map(returnArray)
+        state.currentState[actionSelected] = VIEWS.LOGIC_CONNECTOR
+
+        const ids = state.variables[actionSelected].map(e => e.id)
         const maxId = Math.max(...ids)
         //a new variable need to be added
         if (args.id === maxId) {
           const id = maxId + 1
-          state.variables.push({ id: id, name: "x" + id })
+          state.variables[actionSelected].concat({ id: id, name: "x" + id })
         }
         return {
-          buttonsName: Object.keys(logicConnector).map(returnArray),
-          currentState: VIEWS.LOGIC_CONNECTOR,
-          variables: state.variables
+          buttonsName: [...state.buttonsName],
+          currentState: [...state.currentState],
+          variables: [...state.variables]
         }
+      }
+
       default:
         console.error("Current state is not matching any of the cases")
     }
