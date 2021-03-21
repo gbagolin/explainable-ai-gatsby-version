@@ -1,5 +1,7 @@
 import create from "zustand"
-import AtomicRule from "../classes/AtomicRule"
+
+import VIEWS from '../util/VIEWS'
+import logicConnector from '../util/LOGIC_CONNECTORS'
 
 /**
  * State mangament of the rule.

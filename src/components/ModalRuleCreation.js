@@ -11,15 +11,8 @@ export default function ModalRuleCreation() {
   const buttons = ButtonsName(state => state.buttonsName[actionSelected])
   const setConstraint = RuleState(state => state.setConstraint)
   const currentView = ButtonsName(state => state.currentState[actionSelected])
-  const constraints = RuleState(state => state.constraints)
   const goToNextState = ButtonsName(state => state.goToNextState)
   const attributes = RuleState(state => state.attributes)
-  /** 
-  //force buttonName to initialize.
-  useEffect(() => {
-    goToNextState(actionSelected, attributes)
-  }, [actionSelected, attributes, goToNextState])
-  */
 
   return (
     <>

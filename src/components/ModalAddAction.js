@@ -61,22 +61,6 @@ export default function ModalAddAction() {
                     style={{ transition: "all 0.9s ease" }}
                     onClick={() => {
                       setVisible({ visible: false })
-<<<<<<< HEAD
-                      incrementMaxId()
-                      console.log("Adding an action with id: ", maxId)
-                      pushAction(
-                        {
-                          id: maxId,
-                          name: actionToAdd
-                        }
-                      )
-                      //set new action to the current action selected.
-                      setActionSelected({ actionSelected: maxId })
-                      addAtomicRule(maxId)
-                      console.log("Adding atomic rule with id action id", maxId)
-                    }
-                    }
-=======
                       pushAction({
                         id: actionCounter,
                         name: actionToAdd
@@ -87,7 +71,6 @@ export default function ModalAddAction() {
                       addRule()
                       addButtons(actionCounter, attributes)
                     }}
->>>>>>> origin/dev
                   >
                     Add Action
                   </button>
