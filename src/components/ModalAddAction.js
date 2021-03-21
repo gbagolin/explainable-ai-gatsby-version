@@ -10,6 +10,7 @@ export default function ModalAddAction() {
   const pushAction = ActionMangament(state => state.setActionList)
   const actionCounter = ActionMangament(state => state.actionCounter)
   const incrementActionCounter = ActionMangament(state => state.incrementActionCounter)
+  const setActionSelected = ActionMangament(state => state.setActionSelected)
 
   return (
     <>
@@ -61,6 +62,7 @@ export default function ModalAddAction() {
                         name: actionToAdd
                       })
                       console.log("Adding action with id: %i, name : %s", actionCounter, actionToAdd)
+                      setActionSelected({actionSelected : actionCounter})
                       incrementActionCounter()
                     }}
                   >
