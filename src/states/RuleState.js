@@ -12,10 +12,10 @@ const RuleState = create(set => ({
   attributes: undefined,
   variables: [],
   constraints: [],
-  logicConnector: [logicConnector.OR],
-  tempConstraint: [{}],
+  logicConnector: [],
+  tempConstraint: [],
   ruleString: [],
-  subRuleCounter: [1],
+  subRuleCounter: [],
 
   addRule: () => set((state) => ({
     constraints: [...state.constraints, []],
@@ -34,6 +34,7 @@ const RuleState = create(set => ({
   }),
 
   setTraceName: state => set(() => ({ traceName: state.traceName })),
+
   setConstraint: args => set((state) => {
     console.log("Action selected: ", args.actionSelected)
     console.log("Rule string: ", state.ruleString)
