@@ -27,8 +27,7 @@ export default function RuleCreation() {
                     onClick={() => {
                       const ruleTemplate = []
                       for (let i = 0; i < actions.length; i++) {
-                        const atomicRule = {}
-                        atomicRule["atomic_rule"] = {
+                        const atomicRule = {
                           constraints: rule.constraints[i],
                           hard_constraint: [],
                           trace: rule.traceName,
