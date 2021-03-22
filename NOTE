@@ -1,14 +1,10 @@
-rule_template: [
-    atomic_rule: {
-        action_id: int
-        constraints: ...
-        rule_string
-    }
-]
-
-actions: [
+rule: [
     {
-        action_id: int
-        action: string
+        action: open left,
+        constraints: [[]],
+    },
+    {
+    action: open right,
+    constraints: [[]]
     }
 ]

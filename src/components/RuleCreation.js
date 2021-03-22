@@ -33,7 +33,7 @@ export default function RuleCreation() {
                           trace: rule.traceName,
                           problem: rule.problemName,
                           action: actions[i].name,
-                          variables: variables[i].map((e) => e.id).slice(0, variables[i].length - 1)
+                          variables: variables[i].map((e) => e.name).slice(0, variables[i].length - 1)
                         }
                         ruleTemplate.push(atomicRule)
                       }
