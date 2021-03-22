@@ -33,12 +33,13 @@ export default function RuleCreation() {
                           hard_constraint: [],
                           trace: rule.traceName,
                           problem: rule.problemName,
-                          action: actions[i],
+                          action: actions[i].name,
                           variables: variables[i].map((e) => e.id).slice(0, variables[i].length - 1)
                         }
                         ruleTemplate.push(atomicRule)
                       }
                       console.log(ruleTemplate)
+                      axios.post("http://localhost:8001/api/send_rule", ruleTemplate)
                     }}>Send Rule
             </button>
           </div>
