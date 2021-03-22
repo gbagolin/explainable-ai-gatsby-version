@@ -23,7 +23,7 @@ const ButtonsName = create(set => ({
   currentState: [], //initial state
   buttonsName: [],
   variables: [],
-
+  maxVariableId: 1,
   addButtons: (actionSelected, problemAttributes) => set((state) => {
     state.buttonsName.push([])
     state.buttonsName[actionSelected] = problemAttributes.states.map(returnArray)
@@ -33,9 +33,9 @@ const ButtonsName = create(set => ({
       currentState: state.currentState,
       buttonsName: state.buttonsName,
       variables: [...state.variables, [{
-        id: 1,
-        name: "x1"
-      }]],
+        id: state.maxVariableId,
+        name: "x" + state.maxVariableId
+      }]]
     }
   }),
 
@@ -48,34 +48,31 @@ const ButtonsName = create(set => ({
       return
     }
     switch (+state.currentState[actionSelected]) {
-      case VIEWS.LOGIC_CONNECTOR:
-        {
-          state.buttonsName[actionSelected] = problemAttributes.states.map(returnArray)
-          state.currentState[actionSelected] = VIEWS.STATE_BELIEF
-          return {
-            buttonsName: [...state.buttonsName],
-            currentState: [...state.currentState],
-          }
+      case VIEWS.LOGIC_CONNECTOR: {
+        state.buttonsName[actionSelected] = problemAttributes.states.map(returnArray)
+        state.currentState[actionSelected] = VIEWS.STATE_BELIEF
+        return {
+          buttonsName: [...state.buttonsName],
+          currentState: [...state.currentState]
         }
+      }
 
-      case VIEWS.STATE_BELIEF:
-        {
-          state.buttonsName[actionSelected] = ["<", "<=", ">=", ">"].map(returnArray)
-          state.currentState[actionSelected] = VIEWS.OPERATOR
-          return {
-            buttonsName: [...state.buttonsName],
-            currentState: [...state.currentState]
-          }
+      case VIEWS.STATE_BELIEF: {
+        state.buttonsName[actionSelected] = ["<", "<=", ">=", ">"].map(returnArray)
+        state.currentState[actionSelected] = VIEWS.OPERATOR
+        return {
+          buttonsName: [...state.buttonsName],
+          currentState: [...state.currentState]
         }
-      case VIEWS.OPERATOR:
-        {
-          state.buttonsName[actionSelected] = state.variables[actionSelected]
-          state.currentState[actionSelected] = VIEWS.VARIABLE
-          return {
-            buttonsName: [...state.buttonsName],
-            currentState: [...state.currentState]
-          }
+      }
+      case VIEWS.OPERATOR: {
+        state.buttonsName[actionSelected] = state.variables[actionSelected]
+        state.currentState[actionSelected] = VIEWS.VARIABLE
+        return {
+          buttonsName: [...state.buttonsName],
+          currentState: [...state.currentState]
         }
+      }
 
       case VIEWS.VARIABLE: {
         state.buttonsName[actionSelected] = Object.keys(logicConnector).map(returnArray)
@@ -88,10 +85,12 @@ const ButtonsName = create(set => ({
           const id = maxId + 1
           state.variables[actionSelected].push({ id: id, name: "x" + id })
         }
+        const max = Math.max(maxId, state.maxVariableId)
         return {
           buttonsName: [...state.buttonsName],
           currentState: [...state.currentState],
-          variables: [...state.variables]
+          variables: [...state.variables],
+          maxVariableId: max + 1
         }
       }
 
