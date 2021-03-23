@@ -1,0 +1,22 @@
+functiondataset(list(object)):
+    ordinare la lista in ordine crescente,
+    finchè ci sono elementi:
+        il primo valore sarà l'elemento stesso.
+        se esiste il prossimo elemento:
+            calcolo la differenza, quella sarà il prossimo valore che andrà inserito nel dataset,
+        altrimenti:
+            calcolo 1 - la somma dei inseriti, e lo aggiungo come l'opposto dell'ultimo segno inserito.
+
+[
+    {
+        tiger_right,
+        0.10,
+        >
+    },
+    {
+        tiger_right,
+        0.60,
+        <
+    },
+
+]
