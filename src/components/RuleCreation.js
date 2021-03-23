@@ -5,6 +5,7 @@ import RuleState from "../states/RuleState"
 import ActionManagament from "../states/ActionState"
 import axios from "axios"
 import ButtonsName from "../states/ButtonsName"
+import RuleSynthetizedState from "../states/RuleSynthetizedState"
 
 export default function RuleCreation() {
   const setVisible = ModalRuleCreationState(state => state.setVisible)
@@ -12,6 +13,7 @@ export default function RuleCreation() {
   const actions = ActionManagament(state => state.actionList)
   const rule = RuleState()
   const variables = ButtonsName(state => state.variables)
+  const ruleSynthetized = RuleSynthetizedState()
 
   return (
     <div className="border-2 rounded-lg shadow-lg w-96 h-full  m-5 p-5 text-lg">
@@ -24,7 +26,7 @@ export default function RuleCreation() {
             <input className="w-10 h-10" type="image" src={add} alt="Add ActionSelection"
                    onClick={() => setVisible({ visible: true })} />
             <button className="ml-5 font-semibold  yellow-color rounded-lg p-2"
-                    onClick={() => {
+                    onClick={async () => {
                       const ruleTemplate = []
                       for (let i = 0; i < actions.length; i++) {
                         const atomicRule = {
@@ -38,7 +40,10 @@ export default function RuleCreation() {
                         ruleTemplate.push(atomicRule)
                       }
                       console.log(ruleTemplate)
-                      axios.post("http://localhost:8001/api/send_rule", ruleTemplate)
+                      const response = await axios.post("http://localhost:8001/api/send_rule", ruleTemplate)
+                      console.log(response)
+                      ruleSynthetized.setRule(response.data)
+
                     }}>Send Rule
             </button>
           </div>

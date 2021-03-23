@@ -40,10 +40,6 @@ const ButtonsName = create(set => ({
   }),
 
   goToNextState: (actionSelected, problemAttributes, args) => set((state) => {
-    // console.log("Action selected: ", actionSelected)
-    // console.log(actionSelected, problemAttributes, args)
-    // console.log(state.currentState[actionSelected])
-    // console.log(state.buttonsName[actionSelected])
     if (problemAttributes === undefined) {
       return
     }
