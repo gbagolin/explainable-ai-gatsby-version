@@ -4,8 +4,11 @@ import { Bar } from "react-chartjs-2"
 import OPTIONS from "../util/PLOT_OPTIONS"
 import ActionMangament from "../states/ActionState"
 
-const GREEN_BACKGROUND = "green"
-const RED_BACKGROUND = "red"
+const RED_BACKGROUND = "rgba(255, 99, 132, 0.5)"
+const RED_COLOR = "rgb(255, 99, 132)"
+
+const GREEN_BACKGROUND = "rgba(75, 192, 192, 0.5)"
+const GREEN_COLOR = "rgb(75, 192, 192)"
 
 function createDatasetFromStatesList(stateList, states) {
   const dataset = []
@@ -31,14 +34,18 @@ function createDatasetFromStatesList(stateList, states) {
           data: data,
           backgroundColor: (stateBeliefs[i].operator === "<" || stateBeliefs[i].operator === "<=") ?
             GREEN_BACKGROUND : RED_BACKGROUND,
-          label: ""
+          label: "",
+          borderColor: (stateBeliefs[i].operator === "<" || stateBeliefs[i].operator === "<=") ?
+            GREEN_COLOR : RED_COLOR
         })
       } else {
         dataset.push({
           data: [stateBeliefs[i].value],
           backgroundColor: (stateBeliefs[i].operator === "<" || stateBeliefs[i].operator === "<=") ?
             GREEN_BACKGROUND : RED_BACKGROUND,
-          label: ""
+          label: "",
+          borderColor: (stateBeliefs[i].operator === "<" || stateBeliefs[i].operator === "<=") ?
+            GREEN_COLOR : RED_COLOR
         })
       }
 
@@ -58,14 +65,18 @@ function createDatasetFromStatesList(stateList, states) {
             //the color is the opposite of the last element.
             backgroundColor: !(stateBeliefs[i].operator === "<" || stateBeliefs[i].operator === "<=") ?
               GREEN_BACKGROUND : RED_BACKGROUND,
-            label: ""
+            label: "",
+            borderColor: !(stateBeliefs[i].operator === "<" || stateBeliefs[i].operator === "<=") ?
+              GREEN_COLOR : RED_COLOR
           })
         } else {
           dataset.push({
             data: [1 - stateBeliefs[i].value],
             backgroundColor: !(stateBeliefs[i].operator === "<" || stateBeliefs[i].operator === "<=") ?
               GREEN_BACKGROUND : RED_BACKGROUND,
-            label: ""
+            label: "",
+            borderColor: !(stateBeliefs[i].operator === "<" || stateBeliefs[i].operator === "<=") ?
+              GREEN_COLOR : RED_COLOR
           })
         }
       }
@@ -75,8 +86,8 @@ function createDatasetFromStatesList(stateList, states) {
   return dataset
 }
 
-const datasetKeyProvider=()=>{
-  return btoa(Math.random()).substring(0,12)
+const datasetKeyProvider = () => {
+  return btoa(Math.random()).substring(0, 12)
 }
 
 export default function Plot() {
