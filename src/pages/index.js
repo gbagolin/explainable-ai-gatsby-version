@@ -7,6 +7,7 @@ import ModalAddAction from "../components/ModalAddAction"
 import ProblemSelection from "../components/ProblemSelection"
 import ModalProblemSelection from "../components/ModalProblemSelection"
 import ModalRuleCreation from "../components/ModalRuleCreation"
+import Plot from "../components/Plot"
 
 export default function Home() {
   return (
@@ -20,6 +21,7 @@ export default function Home() {
         </div>
         <div className="flex flex-col flex-wrap">
           <RuleSynthetized></RuleSynthetized>
+          <Plot></Plot>
         </div>
         <div className="flex flex-col flex-wrap">
           <Anomalies></Anomalies>
