@@ -1,4 +1,10 @@
-const OPTIONS = {
+export const RED_BACKGROUND = "rgba(255, 99, 132, 0.5)"
+export const RED_COLOR = "rgb(255, 99, 132)"
+
+export const GREEN_BACKGROUND = "rgba(75, 192, 192, 0.5)"
+export const GREEN_COLOR = "rgb(75, 192, 192)"
+
+export const OPTIONS = {
   tooltips: {
     titleFontSize: 16,
     bodyFontSize: 14
@@ -38,5 +44,3 @@ const OPTIONS = {
     }]
   }
 }
-
-export default OPTIONS
