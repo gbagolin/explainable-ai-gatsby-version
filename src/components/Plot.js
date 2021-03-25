@@ -2,6 +2,7 @@ import React from "react"
 import RuleSynthetizedState from "../states/RuleSynthetizedState"
 import { Bar } from "react-chartjs-2"
 import OPTIONS from "../util/PLOT_OPTIONS"
+import ActionMangament from "../states/ActionState"
 
 const GREEN_BACKGROUND = "green"
 const RED_BACKGROUND = "red"
@@ -74,23 +75,33 @@ function createDatasetFromStatesList(stateList, states) {
   return dataset
 }
 
+const datasetKeyProvider=()=>{
+  return btoa(Math.random()).substring(0,12)
+}
+
 export default function Plot() {
   const rule = RuleSynthetizedState(state => state.rule)
-  console.log(rule.states)
-  console.log(rule.rule[0].constraints)
-  const dataset = createDatasetFromStatesList(rule.rule[0].constraints[0], rule.states)
-  console.log(dataset)
-
-  const data = {
-    labels: rule.states,
-    datasets: dataset
-  }
+  const actionSelected = ActionMangament(state => state.actionSelected)
+  const actionString = ActionMangament(state => state.actionList)[actionSelected]
   return (
     <>
-      <Bar
-        data={data}
-        options={OPTIONS}
-      />
+      {
+        ((rule.rule[actionSelected] || {}).constraints || []).map((constraintInOr, index) => {
+          const dataset = createDatasetFromStatesList(constraintInOr, rule.states)
+          const data = {
+            labels: rule.states,
+            datasets: dataset
+          }
+          return (
+            < Bar
+              key={actionString + index}
+              data={data}
+              options={OPTIONS}
+              datasetKeyProvider={datasetKeyProvider}
+            />
+          )
+        })
+      }
     </>
   )
 }
