@@ -25,7 +25,7 @@ export default function RuleCreation() {
           <div className="flex items-center">
             <input className="w-10 h-10" type="image" src={add} alt="Add ActionSelection"
                    onClick={() => setVisible({ visible: true })} />
-            <button className="ml-5 font-semibold  yellow-color rounded-lg p-2"
+            <button className="ml-5 font-semibold yellow-color rounded-lg p-2"
                     onClick={async () => {
                       const ruleTemplate = []
                       for (let i = 0; i < actions.length; i++) {
