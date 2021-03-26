@@ -27,10 +27,10 @@ export default function Anomalies() {
         <table className="table-auto">
           <thead>
           <tr>
-            <th className="border text-left px-8 py-4">#</th>
-            <th className="border text-left px-8 py-4">Run</th>
-            <th className="border text-left px-8 py-4">Action</th>
-            <th className="border text-left px-8 py-4">Beliefs</th>
+            <th className=" text-left px-8 py-4">#</th>
+            <th className=" text-left px-8 py-4">Run</th>
+            <th className=" text-left px-8 py-4">Action</th>
+            <th className=" text-left px-8 py-4">Beliefs</th>
             <th>
               <div>
                 Severity
@@ -42,6 +42,7 @@ export default function Anomalies() {
           {
             ((((rule[whichAnomaly] || [])[actionSelected]) || []).anomalies || []).map(
               (element, index) => {
+                const anomaly = element.hellinger_distance.toFixed(2) >= 0.10 ? true : false
                 return (
                   <tr>
                     <td className=" text-left px-8">
@@ -63,6 +64,12 @@ export default function Anomalies() {
                           )
                         })
                       }
+                    </td>
+                    <td className=" text-left px-8 ">
+
+                      <div className={anomaly ? "bg-red-300 rounded" : ""}>
+                        {element.hellinger_distance.toFixed(2)}
+                      </div>
                     </td>
                   </tr>
                 )
