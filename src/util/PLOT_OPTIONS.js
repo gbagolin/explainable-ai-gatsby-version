@@ -4,6 +4,9 @@ export const RED_COLOR = "rgb(255, 99, 132)"
 export const GREEN_BACKGROUND = "rgba(75, 192, 192, 0.5)"
 export const GREEN_COLOR = "rgb(75, 192, 192)"
 
+export const GREY_BACKGROUND = "rgba(128,128,128,0.5)"
+export const GREY_COLOR = "rgb(128,128,128)"
+
 export const OPTIONS = {
   tooltips: {
     titleFontSize: 16,

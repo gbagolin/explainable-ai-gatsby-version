@@ -1,7 +1,7 @@
 import React from "react"
 import RuleSynthetizedState from "../states/RuleSynthetizedState"
 import { Bar } from "react-chartjs-2"
-import { OPTIONS, RED_COLOR, RED_BACKGROUND, GREEN_COLOR, GREEN_BACKGROUND } from "../util/PLOT_OPTIONS"
+import { OPTIONS, RED_COLOR, RED_BACKGROUND, GREEN_COLOR, GREEN_BACKGROUND, GREY_BACKGROUND, GREY_COLOR } from "../util/PLOT_OPTIONS"
 import ActionMangament from "../states/ActionState"
 
 
@@ -22,6 +22,20 @@ function createDatasetFromStatesList(stateList, states) {
     console.log("State beliefs: ", stateBeliefs)
     //for each object
     let sum = 0
+    //no analysis on this state, so a gray bar is added.
+    if (stateBeliefs.length === 0) {
+      const data = []
+      for (let j = 0; j < stateIndex; j++) {
+        data.push(0)
+      }
+      data.push(1)
+      dataset.push({
+        data: data,
+        backgroundColor: GREY_BACKGROUND,
+        label: "",
+        borderColor: GREY_COLOR
+      })
+    }
     for (let i = 0; i < stateBeliefs.length; i++) {
       const valueToPush = i > 0 ? Math.abs(sum - stateBeliefs[i].value) : stateBeliefs[i].value
       sum += valueToPush
@@ -85,7 +99,44 @@ function createDatasetFromStatesList(stateList, states) {
         }
       }
     }
+    //draw here all anomalies
     stateIndex += 1
+  }
+  return dataset
+}
+
+function createScatterDataset(anomalies, stateList) {
+  const dataset = []
+  for (let indexState = 0; indexState < stateList.length; indexState++) {
+    for (let indexAnomaly = 0; indexAnomaly < anomalies.length; indexAnomaly++) {
+      const stateBelief = anomalies[indexAnomaly].beliefs.find(belief => belief.state === stateList[indexState])
+      const label = anomalies[indexAnomaly].run + " " + anomalies[indexAnomaly].step
+
+      if (indexState > 0) {
+        const data = []
+        for (let i = 0; i < indexState; i++) {
+          data.push(0)
+        }
+        data.push(stateBelief.belief)
+        dataset.push({
+          data: data,
+          type: "scatter",
+          radius: 5,
+          label: label,
+          backgroundColor: "rgba(0, 0, 255,0.5)"
+        })
+      } else {
+        const data = []
+        data.push(stateBelief.belief)
+        dataset.push({
+          data: data,
+          type: "scatter",
+          radius: 5,
+          label: label,
+          backgroundColor: "rgba(0, 0, 255,0.5)"
+        })
+      }
+    }
   }
   return dataset
 }
@@ -102,16 +153,19 @@ export default function Plot() {
   const rule = RuleSynthetizedState(state => state.rule)
   const actionSelected = ActionMangament(state => state.actionSelected)
   const actionString = ActionMangament(state => state.actionList)[actionSelected]
-
+  const anomalies = (((rule.anomalies_same_action || [])[actionSelected] || {}).anomalies || [])
+  const scatterDataset = createScatterDataset(anomalies, rule.states)
+  console.log(scatterDataset)
   return (
     <>
       {
         ((rule.rule[actionSelected] || {}).constraints || []).map((constraintInOr, index) => {
           const dataset = createDatasetFromStatesList(constraintInOr, rule.states)
+
           console.log(dataset)
           const data = {
             labels: rule.states,
-            datasets: dataset
+            datasets: dataset.concat(scatterDataset)
           }
           return (
             < Bar
