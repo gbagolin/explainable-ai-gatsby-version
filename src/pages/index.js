@@ -13,17 +13,17 @@ export default function Home() {
   return (
     <>
       <p className="text-center font-bold text-5xl underline text-color-yellow">Explainable AI</p>
-      <div className="flex justify-around flex-row flex-wrap mt-5">
-        <div className="flex flex-col">
+      <div className="flex flex-wrap justify-start 2xl:justify-around flex-row mt-5">
+        <div className="flex flex-col flex-shrink">
           <ProblemSelection></ProblemSelection>
           <ActionSelection></ActionSelection>
           <RuleCreation></RuleCreation>
         </div>
-        <div className="flex flex-col flex-wrap">
+        <div className="flex flex-col flex-shrink">
           <RuleSynthetized></RuleSynthetized>
           <Plot></Plot>
         </div>
-        <div className="flex flex-col flex-wrap">
+        <div className="flex flex-col flex-shrink">
           <Anomalies></Anomalies>
         </div>
         <ModalAddAction></ModalAddAction>

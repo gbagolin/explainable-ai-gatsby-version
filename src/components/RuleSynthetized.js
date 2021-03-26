@@ -7,7 +7,7 @@ export default function RuleSynthetized() {
   const action = ActionMangament(state => state.actionSelected)
 
   return (
-    <div className="flex-wrap border-2 rounded-lg shadow-lg w-96 m-5 p-5 text-lg">
+    <div className="flex-wrap border-2 rounded-lg shadow-lg w-96 h-auto m-5 p-5 text-lg">
       <p className="text-left font-bold text-2xl"> Rule synthetized:</p>
       <div className="mt-5"></div>
       {
