@@ -24,13 +24,13 @@ export default function Anomalies() {
         </button>
       </div>
       <div className="overflow-auto h-96">
-        <table className="table-auto">
+        <table className="table-auto text-left">
           <thead>
           <tr>
-            <th className=" text-left px-8 py-4">#</th>
-            <th className=" text-left px-8 py-4">Run</th>
-            <th className=" text-left px-8 py-4">Action</th>
-            <th className=" text-left px-8 py-4">Beliefs</th>
+            <th className="p-3">#</th>
+            <th className="p-3">Run</th>
+            <th className="p-3">Action</th>
+            <th className="p-3">Beliefs</th>
             <th>
               <div>
                 Severity
@@ -50,16 +50,16 @@ export default function Anomalies() {
 
                 return (
                   <tr>
-                    <td className=" text-left px-8">
+                    <td className="p-3">
                       {index + 1}
                     </td>
-                    <td className=" text-left px-8 ">
+                    <td className="p-3">
                       {element.run}
                     </td>
-                    <td className=" text-left px-8 ">
+                    <td className="p-3">
                       {element.action}
                     </td>
-                    <td className=" text-left px-8 ">
+                    <td className="p-3">
                       {
                         element.beliefs.map((belief) => {
                           return (
@@ -70,7 +70,7 @@ export default function Anomalies() {
                         })
                       }
                     </td>
-                    <td className=" text-left px-8 ">
+                    <td className="">
                       <div className={anomaly ? "bg-red-300 rounded" : ""}>
                         {severity === undefined ? "" : severity.toFixed(2)}
                       </div>
