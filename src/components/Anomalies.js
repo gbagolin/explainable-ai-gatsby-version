@@ -42,7 +42,12 @@ export default function Anomalies() {
           {
             ((((rule[whichAnomaly] || [])[actionSelected]) || []).anomalies || []).map(
               (element, index) => {
-                const anomaly = element.hellinger_distance.toFixed(2) >= 0.10 ? true : false
+                let anomaly = false
+                if (element.hellinger_distance != undefined)
+                  anomaly = element.hellinger_distance.toFixed(2) >= 0.10 ? true : false
+
+                const severity = element.hellinger_distance != undefined ? element.hellinger_distance : undefined
+
                 return (
                   <tr>
                     <td className=" text-left px-8">
@@ -66,9 +71,8 @@ export default function Anomalies() {
                       }
                     </td>
                     <td className=" text-left px-8 ">
-
                       <div className={anomaly ? "bg-red-300 rounded" : ""}>
-                        {element.hellinger_distance.toFixed(2)}
+                        {severity === undefined ? "" : severity.toFixed(2)}
                       </div>
                     </td>
                   </tr>
