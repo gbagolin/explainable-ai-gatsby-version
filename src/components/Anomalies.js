@@ -14,24 +14,25 @@ export default function Anomalies() {
   const actionSelected = ActionMangament(state => state.actionSelected)
 
   return (
-    <div className="border-2 rounded-lg shadow-lg w-auto h-auto m-5 p-5 text-lg">
+    <div className="border-2 rounded-lg shadow-lg w-auto h-auto m-5 p-3 text-lg">
       <div className="flex flex-row">
-        <button className="m-5 font-semibold  yellow-color rounded-lg p-1"
+        <button className="m-5 font-semibold  yellow-color rounded-lg p-3"
                 onClick={() => setWhichAnomaly(ANOMALIES.SAME_ACTION)}>Anomalies same action
         </button>
-        <button className="m-5 font-semibold  yellow-color rounded-lg p-1"
+        <button className="m-5 font-semibold  yellow-color rounded-lg p-3"
                 onClick={() => setWhichAnomaly(ANOMALIES.DIFFERENT_ACTION)}>Anomalies different action
         </button>
       </div>
-      <div className="overflow-auto h-96">
+      <div className="flex justify-center overflow-auto h-96">
         <table className="table-auto text-left">
           <thead>
           <tr>
             <th className="p-3">#</th>
             <th className="p-3">Run</th>
+            <th className="p-3">Step</th>
             <th className="p-3">Action</th>
             <th className="p-3">Beliefs</th>
-            <th>
+            <th className="p-3">
               <div>
                 Severity
               </div>
@@ -57,6 +58,9 @@ export default function Anomalies() {
                       {element.run}
                     </td>
                     <td className="p-3">
+                      {element.step}
+                    </td>
+                    <td className="p-3">
                       {element.action}
                     </td>
                     <td className="p-3">
@@ -70,7 +74,7 @@ export default function Anomalies() {
                         })
                       }
                     </td>
-                    <td className="">
+                    <td className="p-3">
                       <div className={anomaly ? "bg-red-300 rounded" : ""}>
                         {severity === undefined ? "" : severity.toFixed(2)}
                       </div>
