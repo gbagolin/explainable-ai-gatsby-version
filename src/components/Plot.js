@@ -119,7 +119,7 @@ function createScatterDataset(anomalies, stateList) {
   for (let indexState = 0; indexState < stateList.length; indexState++) {
     for (let indexAnomaly = 0; indexAnomaly < anomalies.length; indexAnomaly++) {
       const stateBelief = anomalies[indexAnomaly].beliefs.find(belief => belief.state === stateList[indexState])
-      const label = anomalies[indexAnomaly].run + " " + anomalies[indexAnomaly].step
+      const label = anomalies[indexAnomaly].run + " step " + anomalies[indexAnomaly].step
 
       if (indexState > 0) {
         const data = []
@@ -130,7 +130,7 @@ function createScatterDataset(anomalies, stateList) {
         dataset.push({
           data: data,
           type: "scatter",
-          radius: 5,
+          radius: 3,
           label: label,
           backgroundColor: "rgba(0, 0, 255,0.5)"
         })
@@ -140,7 +140,7 @@ function createScatterDataset(anomalies, stateList) {
         dataset.push({
           data: data,
           type: "scatter",
-          radius: 5,
+          radius: 3,
           label: label,
           backgroundColor: "rgba(0, 0, 255,0.5)"
         })
