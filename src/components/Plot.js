@@ -1,8 +1,17 @@
 import React from "react"
 import RuleSynthetizedState from "../states/RuleSynthetizedState"
 import { Bar } from "react-chartjs-2"
-import { OPTIONS, RED_COLOR, RED_BACKGROUND, GREEN_COLOR, GREEN_BACKGROUND, GREY_BACKGROUND, GREY_COLOR } from "../util/PLOT_OPTIONS"
+import {
+  OPTIONS,
+  RED_COLOR,
+  RED_BACKGROUND,
+  GREEN_COLOR,
+  GREEN_BACKGROUND,
+  GREY_BACKGROUND,
+  GREY_COLOR
+} from "../util/PLOT_OPTIONS"
 import ActionMangament from "../states/ActionState"
+import { WhichAnomaly } from "../states/WhichAnomaly"
 
 
 /**
@@ -153,8 +162,10 @@ export default function Plot() {
   const rule = RuleSynthetizedState(state => state.rule)
   const actionSelected = ActionMangament(state => state.actionSelected)
   const actionString = ActionMangament(state => state.actionList)[actionSelected]
-  const anomalies = (((rule.anomalies_same_action || [])[actionSelected] || {}).anomalies || [])
+  const anomalyType = WhichAnomaly()
+  const anomalies = (((rule[anomalyType.type] || [])[actionSelected] || {}).anomalies || [])
   const scatterDataset = createScatterDataset(anomalies, rule.states)
+
   console.log(scatterDataset)
   return (
     <>
