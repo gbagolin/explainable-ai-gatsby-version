@@ -130,7 +130,7 @@ function createScatterForRun(run, stateList) {
     type: "scatter",
     radius: 3,
     label: label,
-    backgroundColor: "rgba(0, 0, 255,0.5)"
+    backgroundColor: "rgba(251, 191, 36, 1)"
   })
   return dataset
 }
@@ -171,7 +171,7 @@ function createScatterDatasetForAnomalies(anomalies, stateList) {
 }
 
 /**
- * 
+ *
  * @param anomalies
  * @param stateList
  * @param run

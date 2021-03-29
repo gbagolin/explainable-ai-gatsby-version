@@ -54,14 +54,16 @@ export default function Anomalies() {
                   anomaly = element.hellinger_distance.toFixed(2) >= 0.10 ? true : false
 
                 const severity = element.hellinger_distance != undefined ? element.hellinger_distance : undefined
+                const background = runState.run === element ? "rounded-lg bg-yellow-200" : ""
 
                 return (
-                  <tr>
+                  <tr className={background}>
                     <td className="p-3">
                       {index + 1}
                     </td>
                     <td className="p-3">
-                      <button onClick={() => runState.setRun(element)}> {element.run} </button>
+                      <button className="underline text-color-yellow"
+                              onClick={() => runState.setRun(element)}> {element.run} </button>
                     </td>
                     <td className="p-3">
                       {element.step}
