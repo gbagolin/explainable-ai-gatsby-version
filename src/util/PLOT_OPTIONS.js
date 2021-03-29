@@ -40,7 +40,7 @@ export const OPTIONS = {
       },
       scaleLabel: {
         display: true,
-        labelString: "Belief",
+        labelString: "Prob of state belief",
         fontColor: "black",
         fontSize: 16
       }

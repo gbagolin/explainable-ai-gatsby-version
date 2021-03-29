@@ -121,7 +121,7 @@ function createScatterForRun(run, stateList) {
   let label = ""
 
   for (let indexState = 0; indexState < stateList.length; indexState++) {
-    const stateBelief = run.beliefs.find(belief => belief.state === stateList[indexState])
+    const stateBelief = run.beliefs.find(belief => belief.state === stateList[indexState]) || {}
     label = run.run + " step " + run.step
     data.push(stateBelief.belief)
   }
@@ -139,7 +139,7 @@ function createScatterDatasetForAnomalies(anomalies, stateList) {
   const dataset = []
   for (let indexState = 0; indexState < stateList.length; indexState++) {
     for (let indexAnomaly = 0; indexAnomaly < anomalies.length; indexAnomaly++) {
-      const stateBelief = anomalies[indexAnomaly].beliefs.find(belief => belief.state === stateList[indexState])
+      const stateBelief = anomalies[indexAnomaly].beliefs.find(belief => belief.state === stateList[indexState]) || {}
       const label = anomalies[indexAnomaly].run + " step " + anomalies[indexAnomaly].step
       if (indexState > 0) {
         const data = []
@@ -152,7 +152,7 @@ function createScatterDatasetForAnomalies(anomalies, stateList) {
           type: "scatter",
           radius: 3,
           label: label,
-          backgroundColor: "rgba(0, 0, 255,0.5)"
+          backgroundColor: "rgba(251, 191, 36, 1)"
         })
       } else {
         const data = []
@@ -162,7 +162,7 @@ function createScatterDatasetForAnomalies(anomalies, stateList) {
           type: "scatter",
           radius: 3,
           label: label,
-          backgroundColor: "rgba(0, 0, 255,0.5)"
+          backgroundColor: "rgba(251, 191, 36, 1)"
         })
       }
     }
