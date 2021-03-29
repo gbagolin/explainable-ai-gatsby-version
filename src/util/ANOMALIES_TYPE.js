@@ -4,5 +4,6 @@
  */
 export const ANOMALIES = {
   "SAME_ACTION": "anomalies_same_action",
-  "DIFFERENT_ACTION": "anomalies_different_action"
+  "DIFFERENT_ACTION": "anomalies_different_action",
+  "RUN": "run"
 }

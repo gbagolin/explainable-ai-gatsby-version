@@ -12,6 +12,7 @@ import {
 } from "../util/PLOT_OPTIONS"
 import ActionMangament from "../states/ActionState"
 import { WhichAnomaly } from "../states/WhichAnomaly"
+import { RunState } from "../states/RunState"
 
 
 /**
@@ -114,13 +115,32 @@ function createDatasetFromStatesList(stateList, states) {
   return dataset
 }
 
-function createScatterDataset(anomalies, stateList) {
+function createScatterForRun(run, stateList) {
+  const dataset = []
+  const data = []
+  let label = ""
+
+  for (let indexState = 0; indexState < stateList.length; indexState++) {
+    const stateBelief = run.beliefs.find(belief => belief.state === stateList[indexState])
+    label = run.run + " step " + run.step
+    data.push(stateBelief.belief)
+  }
+  dataset.push({
+    data: data,
+    type: "scatter",
+    radius: 3,
+    label: label,
+    backgroundColor: "rgba(0, 0, 255,0.5)"
+  })
+  return dataset
+}
+
+function createScatterDatasetForAnomalies(anomalies, stateList) {
   const dataset = []
   for (let indexState = 0; indexState < stateList.length; indexState++) {
     for (let indexAnomaly = 0; indexAnomaly < anomalies.length; indexAnomaly++) {
       const stateBelief = anomalies[indexAnomaly].beliefs.find(belief => belief.state === stateList[indexState])
       const label = anomalies[indexAnomaly].run + " step " + anomalies[indexAnomaly].step
-
       if (indexState > 0) {
         const data = []
         for (let i = 0; i < indexState; i++) {
@@ -151,6 +171,18 @@ function createScatterDataset(anomalies, stateList) {
 }
 
 /**
+ * 
+ * @param anomalies
+ * @param stateList
+ * @param run
+ * @returns {[]}
+ */
+function createScatterDataset(anomalies, stateList, run) {
+  return run === undefined ? createScatterDatasetForAnomalies(anomalies, stateList) :
+    createScatterForRun(run, stateList)
+}
+
+/**
  * Creates a unique string used for the <Bar> component
  * @returns {string}
  */
@@ -164,7 +196,8 @@ export default function Plot() {
   const actionString = ActionMangament(state => state.actionList)[actionSelected]
   const anomalyType = WhichAnomaly()
   const anomalies = (((rule[anomalyType.type] || [])[actionSelected] || {}).anomalies || [])
-  const scatterDataset = createScatterDataset(anomalies, rule.states)
+  const runState = RunState()
+  const scatterDataset = createScatterDataset(anomalies, rule.states, runState.run)
 
   console.log(scatterDataset)
   return (

@@ -3,20 +3,30 @@ import RuleSynthetizedState from "../states/RuleSynthetizedState"
 import { WhichAnomaly } from "../states/WhichAnomaly"
 import { ANOMALIES } from "../util/ANOMALIES_TYPE"
 import ActionMangament from "../states/ActionState"
+import { RUN_TYPES, RunState } from "../states/RunState"
 
 export default function Anomalies() {
   const rule = RuleSynthetizedState(state => state.rule)
   const anomalyTypeState = WhichAnomaly()
   const actionSelected = ActionMangament(state => state.actionSelected)
+  const runState = RunState()
 
   return (
     <div className="border-2 rounded-lg shadow-lg w-auto h-auto m-5 p-3 text-lg">
       <div className="flex flex-row">
         <button className="m-5 font-semibold  yellow-color rounded-lg p-3"
-                onClick={() => anomalyTypeState.setType(ANOMALIES.SAME_ACTION)}>Anomalies same action
+                onClick={() => {
+                  anomalyTypeState.setType(ANOMALIES.SAME_ACTION)
+                  runState.setRun(undefined)
+                }}
+        >Anomalies same action
         </button>
         <button className="m-5 font-semibold  yellow-color rounded-lg p-3"
-                onClick={() => anomalyTypeState.setType(ANOMALIES.DIFFERENT_ACTION)}>Anomalies different action
+                onClick={() => {
+                  anomalyTypeState.setType(ANOMALIES.DIFFERENT_ACTION)
+                  runState.setRun(undefined)
+                }}
+        >Anomalies different action
         </button>
       </div>
       <div className="flex justify-center overflow-auto h-96">
@@ -51,7 +61,7 @@ export default function Anomalies() {
                       {index + 1}
                     </td>
                     <td className="p-3">
-                      {element.run}
+                      <button onClick={() => runState.setRun(element)}> {element.run} </button>
                     </td>
                     <td className="p-3">
                       {element.step}
