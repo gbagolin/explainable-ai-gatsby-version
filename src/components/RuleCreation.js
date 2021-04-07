@@ -1,4 +1,5 @@
 import React from "react"
+import edit from "../images/edit.png"
 import add from "../images/plus.png"
 import ModalRuleCreationState from "../states/ModalRuleCreationState"
 import RuleState from "../states/RuleState"
@@ -6,14 +7,19 @@ import ActionManagament from "../states/ActionState"
 import axios from "axios"
 import ButtonsName from "../states/ButtonsName"
 import RuleSynthetizedState from "../states/RuleSynthetizedState"
+import ModalRuleEditState from "../states/ModalRuleEditState"
+import RuleSelectedState from "../states/RuleSelectedState"
 
 export default function RuleCreation() {
   const setVisible = ModalRuleCreationState(state => state.setVisible)
   const actionSelected = ActionManagament(state => state.actionSelected)
   const actions = ActionManagament(state => state.actionList)
   const rule = RuleState()
-  const variables = ButtonsName(state => state.variables)
+  const variables = ButtonsName(state => state.variablesIdSet)
   const ruleSynthetized = RuleSynthetizedState()
+  const editState = ModalRuleEditState()
+  const editRule = RuleSelectedState()
+
 
   return (
     <div className="border-2 rounded-lg shadow-lg w-96 h-auto m-5 p-5 text-lg">
@@ -29,13 +35,19 @@ export default function RuleCreation() {
                     onClick={async () => {
                       const ruleTemplate = []
                       for (let i = 0; i < actions.length; i++) {
+                        const variables = new Set()
+                        for (const constraints of rule.constraints[i]) {
+                          for (const constraintsInAnd of constraints) {
+                            variables.add(constraintsInAnd.variable)
+                          }
+                        }
                         const atomicRule = {
                           constraints: rule.constraints[i],
                           hard_constraint: [],
                           trace: rule.traceName,
                           problem: rule.problemName,
                           action: actions[i].name,
-                          variables: variables[i].map((e) => e.name).slice(0, variables[i].length - 1)
+                          variables: [...variables]
                         }
                         ruleTemplate.push(atomicRule)
                       }
@@ -54,7 +66,17 @@ export default function RuleCreation() {
             (rule.ruleString[actionSelected] || []).map(
               (string, element) => {
                 return (
-                  <p key={element}>{element + 1}. {string}</p>
+                  <div className="flex justify-between" key={element}>
+                    <p key={element}
+                    >{element + 1}. {string}</p>
+                    <input className="w-9 h-9 rounded" type="image" src={edit} alt="Rule edit"
+                           onClick={() => {
+                             editState.setVisible({ visible: true })
+                             editRule.setRuleId(element)
+                             editRule.setActionId(actionSelected)
+                             editRule.setRuleString(string)
+                           }} />
+                  </div>
                 )
               }
             )

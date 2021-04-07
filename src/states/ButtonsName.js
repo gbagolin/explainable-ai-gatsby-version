@@ -28,7 +28,6 @@ const ButtonsName = create(set => ({
     state.buttonsName.push([])
     state.buttonsName[actionSelected] = problemAttributes.states.map(returnArray)
     state.currentState.push(VIEWS.STATE_BELIEF)
-
     return {
       currentState: state.currentState,
       buttonsName: state.buttonsName,
@@ -38,6 +37,7 @@ const ButtonsName = create(set => ({
       }]]
     }
   }),
+
 
   goToNextState: (actionSelected, problemAttributes, args) => set((state) => {
     if (problemAttributes === undefined) {
@@ -80,6 +80,7 @@ const ButtonsName = create(set => ({
         if (args.id === maxId) {
           const id = maxId + 1
           state.variables[actionSelected].push({ id: id, name: "x" + id })
+
         }
         const max = Math.max(maxId, state.maxVariableId)
         return {

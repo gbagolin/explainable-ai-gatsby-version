@@ -2,7 +2,12 @@ import create from "zustand"
 
 import VIEWS from "../util/VIEWS"
 import logicConnector from "../util/LOGIC_CONNECTORS"
+import ButtonsName from "./ButtonsName"
 
+const STATE_MAPPING = {
+  "tigerright": "tiger right",
+  "tigerleft": "tiger left"
+}
 /**
  * State mangament of the rule.
  * @type {UseStore<{setVisible: function(*): *, visible: boolean}>}
@@ -32,6 +37,38 @@ const RuleState = create(set => ({
       attributes: state.attributes,
       problemName: state.problemName
     }
+  }),
+
+  setRuleString: (actionId, ruleId, newRuleString) => set((state) => {
+    state.ruleString[actionId][ruleId] = newRuleString
+  }),
+
+  editRule: (actionId, ruleId, ruleString) => set((state) => {
+    console.log(state.constraints)
+    console.log({
+      action: actionId,
+      ruleId: ruleId,
+      ruleString: ruleString.split(" ").join("")
+    })
+    const REGEX = /(tigerleft|tigerright){1}(<|>|<=|>=){1}([a-z][0-9]+){1}(and){0,1}/g
+    const matches = [...ruleString.split(" ").join("").matchAll(REGEX)]
+    //the rule insert is not correct.
+    if (matches.length === 0) {
+      //TODO: ADD AN ERROR MESSAGE HERE
+      return
+    }
+    const subRulesInAnd = []
+    for (const [index, match] of matches.entries()) {
+      const subRule = {
+        state: STATE_MAPPING[match[1]],
+        operator: match[2],
+        variable: match[3]
+      }
+      subRulesInAnd.push(subRule)
+      console.log(match)
+    }
+    state.constraints[actionId][ruleId] = subRulesInAnd
+    console.log(state.variables, state.ruleString, state.constraints)
   }),
 
   setTraceName: state => set(() => ({ traceName: state.traceName })),

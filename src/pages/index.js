@@ -8,6 +8,7 @@ import ProblemSelection from "../components/ProblemSelection"
 import ModalProblemSelection from "../components/ModalProblemSelection"
 import ModalRuleCreation from "../components/ModalRuleCreation"
 import Plot from "../components/Plot"
+import ModalRuleEdit from "../components/ModalRuleEdit"
 
 export default function Home() {
   return (
@@ -29,6 +30,7 @@ export default function Home() {
         <ModalAddAction></ModalAddAction>
         <ModalProblemSelection></ModalProblemSelection>
         <ModalRuleCreation></ModalRuleCreation>
+        <ModalRuleEdit></ModalRuleEdit>
       </div>
     </>
   )
