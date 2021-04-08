@@ -16,7 +16,7 @@ export default function ProblemSelection() {
             <p className="inline text-center font-bold text-2xl "> Problem Selection:</p>
           </div>
           <div>
-            <input className="w-9 h-9" type="image" src={add} alt="Add ActionSelection"
+            <input className="w-9 h-9 disabled:opacity-50" type="image" src={add} alt="Add ActionSelection"
                    onClick={() => {
                      setModalProblemSelectionState({ visible: true })
                    }} />

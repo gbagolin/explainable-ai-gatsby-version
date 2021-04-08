@@ -31,7 +31,8 @@ export default function DropdownActionChoose() {
                     className="">
                   <button
                     className="w-full rounded-t bg-white hover:bg-yellow-200 py-2 px-4 block whitespace-no-wrap"
-                    onClick={() => setActionToAdd({ actionToAdd: actionString })}
+                    onClick={() => setActionToAdd({ actionToAdd: actionString })
+                    }
                   >{actionString}
                   </button>
                 </li>

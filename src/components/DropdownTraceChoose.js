@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react"
 import "./dropdown.css"
 import axios from "axios"
 import RuleState from "../states/RuleState"
+import RuleReady from "../states/RuleReady"
 
 /**
  * Dropdown component used in problem choose modal
@@ -14,7 +15,7 @@ export default function DropdownTraceChoose() {
   const problem = RuleState(state => state.problemName)
   const trace = RuleState(state => state.traceName)
   const setTrace = RuleState(state => state.setTraceName)
-  
+  const ruleReady = RuleReady()
   useEffect(() => {
     async function fetchTraces() {
       try {
@@ -46,7 +47,10 @@ export default function DropdownTraceChoose() {
                     className="">
                   <button
                     className="w-full rounded-t bg-white hover:bg-yellow-200 py-2 px-4 block whitespace-no-wrap"
-                    onClick={() => setTrace({ traceName: traceString })}
+                    onClick={() => {
+                      setTrace({ traceName: traceString })
+                      ruleReady.setIsTraceReady(true)
+                    }}
                   >{traceString}
                   </button>
                 </li>

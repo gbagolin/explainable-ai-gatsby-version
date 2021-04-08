@@ -2,6 +2,9 @@ import React, { useEffect, useState } from "react"
 import "./dropdown.css"
 import axios from "axios"
 import RuleState from "../states/RuleState"
+import RuleReady from "../states/RuleReady"
+import ButtonsName from "../states/ButtonsName"
+import ActionState from "../states/ActionState"
 
 /**
  * Dropdown problem component used in problem choose modal
@@ -13,6 +16,10 @@ export default function DropdownProblemChoose() {
   const [problems, setProblems] = useState([])
   const problem = RuleState(state => state.problemName)
   const setProblem = RuleState(state => state.setProblemName)
+  const ruleReady = RuleReady()
+  const resetRuleState = RuleState(state => state.resetRuleState)
+  const resetButtons = ButtonsName(state => state.resetButtonsName)
+  const resetActions = ActionState(state => state.reset)
 
   async function getData(problem) {
     const response = await axios.post("http://localhost:8001/api/get_attributes_from_problem", { name: problem })
@@ -51,10 +58,15 @@ export default function DropdownProblemChoose() {
                     className="w-full rounded-t bg-white hover:bg-yellow-200 py-2 px-4 block whitespace-no-wrap"
                     onClick={async () => {
                       const attributes = await getData(problemString)
+                      resetRuleState()
                       setProblem({
                         problemName: problemString,
                         attributes: attributes
                       })
+                      ruleReady.setIsProblemReady(true)
+                      ruleReady.setIsTraceReady(false)
+                      resetButtons()
+                      resetActions()
                     }}
                   >{problemString}
                   </button>

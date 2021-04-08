@@ -38,6 +38,12 @@ const ButtonsName = create(set => ({
     }
   }),
 
+  resetButtonsName: () => set(() => ({
+    currentState: [], //initial state
+    buttonsName: [],
+    variables: [],
+    maxVariableId: 1
+  })),
 
   goToNextState: (actionSelected, problemAttributes, args) => set((state) => {
     if (problemAttributes === undefined) {

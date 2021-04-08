@@ -12,7 +12,7 @@ export default function ModalRuleEdit() {
   const editRule = RuleState(state => state.editRule)
   const [ruleEdited, setRuleEdited] = useState(ruleSelectedState.ruleString)
   const setNewRuleString = RuleState(state => state.setRuleString)
-
+  const [error, setError] = useState(false)
   return (
     <>
       {visible ? (
@@ -39,8 +39,10 @@ export default function ModalRuleEdit() {
                   </button>
                 </div>
                 {/*body*/}
-                <div className="relative p-6 flex flex-row justify-evenly">
-                  <input className="border-2 border-yellow-400 rounded text-center" type="text"
+                <div className="relative p-6 flex flex-col justify-evenly">
+                  <p className="text-center text-red-500 font-extrabold"
+                     hidden={!error}>The rule is not complete</p>
+                  <input className="mt-2 border-2 border-yellow-400 rounded text-center" type="text"
                          defaultValue={ruleSelectedState.ruleString}
                          onChange={(e) => setRuleEdited(e.target.value)}></input>
                 </div>
@@ -53,13 +55,18 @@ export default function ModalRuleEdit() {
                     onClick={() => {
                       editRule(ruleSelectedState.actionId, ruleSelectedState.ruleId, ruleEdited)
                       const matchDigitRegex = /\d+/g
-                      const matchedDigit = ruleEdited.match(matchDigitRegex)
-                      const listOfVariablesId = []
-                      for (const match of matchedDigit) {
-                        listOfVariablesId.push(match)
+                      try {
+                        const matchedDigit = ruleEdited.match(matchDigitRegex)
+                        setError(false)
+                        const listOfVariablesId = []
+                        for (const match of matchedDigit) {
+                          listOfVariablesId.push(match)
+                        }
+                        setVisible({ visible: false })
+                        setNewRuleString(ruleSelectedState.actionId, ruleSelectedState.ruleId, ruleEdited)
+                      } catch (e) {
+                        setError(true)
                       }
-                      setVisible({ visible: false })
-                      setNewRuleString(ruleSelectedState.actionId, ruleSelectedState.ruleId, ruleEdited)
                     }}
                   >
                     Done

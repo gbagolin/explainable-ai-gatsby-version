@@ -4,6 +4,7 @@ import DropdownActionChoose from "./DropdownActionChoose"
 import ActionMangament from "../states/ActionState"
 import RuleState from "../states/RuleState"
 import ButtonsName from "../states/ButtonsName"
+import RuleReady from "../states/RuleReady"
 
 export default function ModalAddAction() {
   const visible = ModalActionSelectionState(state => state.visible)
@@ -16,6 +17,7 @@ export default function ModalAddAction() {
   const addRule = RuleState(state => state.addRule)
   const addButtons = ButtonsName(state => state.addButtons)
   const attributes = RuleState(state => state.attributes)
+  const ruleReady = RuleReady()
   return (
     <>
       {visible ? (
@@ -70,6 +72,7 @@ export default function ModalAddAction() {
                       incrementActionCounter()
                       addRule()
                       addButtons(actionCounter, attributes)
+                      ruleReady.setActionReady(true)
                     }}
                   >
                     Add Action

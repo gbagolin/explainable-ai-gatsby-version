@@ -3,6 +3,7 @@ import ModalRuleCreationState from "../states/ModalRuleCreationState"
 import ButtonsName from "../states/ButtonsName"
 import RuleState from "../states/RuleState"
 import ActionMangament from "../states/ActionState"
+import RuleReady from "../states/RuleReady"
 
 export default function ModalRuleCreation() {
   const visible = ModalRuleCreationState(state => state.visible)
@@ -13,7 +14,7 @@ export default function ModalRuleCreation() {
   const currentView = ButtonsName(state => state.currentState[actionSelected])
   const goToNextState = ButtonsName(state => state.goToNextState)
   const attributes = RuleState(state => state.attributes)
-
+  const ruleReady = RuleReady()
   return (
     <>
       {visible ? (
@@ -56,16 +57,18 @@ export default function ModalRuleCreation() {
                                   view: currentView,
                                   id: button.id,
                                   element: button.name,
-                                  actionSelected: actionSelected,
+                                  actionSelected: actionSelected
                                 })
+                                ruleReady.setIsRuleReady(true)
                               } else {
                                 setConstraint({
                                   view: currentView,
                                   id: button.id,
                                   element: button.name,
-                                  actionSelected: actionSelected,
+                                  actionSelected: actionSelected
                                 })
                                 goToNextState(actionSelected, attributes, button)
+                                ruleReady.setIsRuleReady(false)
                               }
                             }
                           }

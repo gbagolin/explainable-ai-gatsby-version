@@ -39,6 +39,18 @@ const RuleState = create(set => ({
     }
   }),
 
+  resetRuleState: () => set(() => ({
+    problemName: "",
+    traceName: "",
+    attributes: undefined,
+    variables: [],
+    constraints: [],
+    logicConnector: [],
+    tempConstraint: [],
+    ruleString: [],
+    subRuleCounter: []
+  })),
+
   setRuleString: (actionId, ruleId, newRuleString) => set((state) => {
     state.ruleString[actionId][ruleId] = newRuleString
   }),
