@@ -55,6 +55,13 @@ const RuleState = create(set => ({
     state.ruleString[actionId][ruleId] = newRuleString
   }),
 
+  removeConstraint: (actionId) => set((state) => {
+    state.constraints.splice(actionId, 1)
+    state.ruleString.splice(actionId, 1)
+    state.logicConnector.splice(actionId, 1)
+    state.tempConstraint.splice(actionId, 1)
+    state.subRuleCounter.splice(actionId, 1)
+  }),
   editRule: (actionId, ruleId, ruleString) => set((state) => {
     console.log(state.constraints)
     console.log({

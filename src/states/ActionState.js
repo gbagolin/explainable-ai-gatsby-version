@@ -10,7 +10,12 @@ const ActionMangament = create(set => ({
   actionList: [],
   actionCounter: 0,
   setActionSelected: action => set(() => ({ actionSelected: action.actionSelected })),
-  setActionList: action => set((state) => ({ actionList: state.actionList.concat([action]) })),
+  addActionToList: action => set((state) => {
+    state.actionList.push(action)
+    return {
+      actionList: state.actionList
+    }
+  }),
   setActionToAdd: action => set(() => ({ actionToAdd: action.actionToAdd })),
   incrementActionCounter: () => set((state) => ({ actionCounter: state.actionCounter + 1 })),
   reset: () => set(() => ({
@@ -18,7 +23,15 @@ const ActionMangament = create(set => ({
     actionSelected: 0,
     actionList: [],
     actionCounter: 0
-  }))
+  })),
+  deleteAction: (actionId) => set((state) => {
+    state.actionList.splice(actionId, 1)
+    return {
+      actionList: state.actionList,
+      actionCounter: state.actionCounter - 1,
+      actionSelected: state.actionSelected - 1
+    }
+  })
 }))
 
 export default ActionMangament

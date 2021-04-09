@@ -19,7 +19,7 @@ function returnArray(element, index) {
  * State for ModalAction component, set first to not visible.
  * @type {UseStore<{visibile: boolean, setVisibile: function(): *}>}
  */
-const ButtonsName = create(set => ({
+export const ButtonsName = create(set => ({
   currentState: [], //initial state
   buttonsName: [],
   variables: [],
@@ -44,6 +44,12 @@ const ButtonsName = create(set => ({
     variables: [],
     maxVariableId: 1
   })),
+
+  resetButtonsHavingSpecificId: (actionId) => set((state) => {
+    state.currentState.splice(actionId, 1)
+    state.buttonsName.splice(actionId, 1)
+    state.variables.splice(actionId, 1)
+  }),
 
   goToNextState: (actionSelected, problemAttributes, args) => set((state) => {
     if (problemAttributes === undefined) {

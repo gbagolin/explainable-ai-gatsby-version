@@ -26,20 +26,20 @@ export default function RuleCreation() {
     ruleReady.isTraceReady &&
     ruleReady.isActionReady)
   const [name, setName] = useState("Send rule")
-  const [animation, setAnimation] = useState("")
   /**
    * returns true if there is a rule for each action
    * and the rule is complete.
    * @returns {boolean}
    */
   const isRuleReady = () => {
-    for (const action of actions) {
-      if (!(rule.constraints[action.id] != undefined &&
-        rule.constraints[action.id].length > 0)) {
+    console.log(rule.constraints)
+    for (let i = 0; i < actions.length; i++) {
+      if (!(rule.constraints[i] != undefined &&
+        rule.constraints[i].length > 0)) {
         return false
       }
     }
-    return (ruleReady.isRuleReady)
+    return (ruleReady.isRuleReady) && actions.length > 0
   }
   return (
     <div className="border-2 rounded-lg shadow-lg w-96 h-auto m-5 p-5 text-lg">
@@ -55,7 +55,6 @@ export default function RuleCreation() {
             <button className="flex ml-5 font-semibold yellow-color rounded-lg p-2 disabled:opacity-50"
                     onClick={async () => {
                       setName("Rule Sent")
-                      setAnimation("animation-pulse")
                       const ruleTemplate = []
                       for (let i = 0; i < actions.length; i++) {
                         const variables = new Set()
@@ -79,12 +78,9 @@ export default function RuleCreation() {
                       console.log(response)
                       ruleSynthetized.setRule(response.data)
                       setName("Rule Sent")
-                      setAnimation("animation-pulse")
                     }}
                     disabled={!isRuleReady()}>
-              <div className="animate-pulse">
-                {name}
-              </div>
+              {name}
             </button>
 
           </div>
@@ -99,17 +95,15 @@ export default function RuleCreation() {
                        key={element}>
                     <p key={element}
                     >{element + 1}. {string}</p>
-                    <input className="w-9 h-9 rounded"
-                           type="image"
-                           src={edit}
-                           alt="Rule edit"
-                           onClick={() => {
-                             editState.setVisible({ visible: true })
-                             editRule.setRuleId(element)
-                             editRule.setActionId(actionSelected)
-                             editRule.setRuleString(string)
-                           }}
-                           disabled={ruleEditable[actionSelected] !== VIEWS.LOGIC_CONNECTOR} />
+                    <button className="rounded-full bg-yellow-300 h-8 w-8 flex items-center justify-center"
+                            onClick={() => {
+                              editState.setVisible({ visible: true })
+                              editRule.setRuleId(element)
+                              editRule.setActionId(actionSelected)
+                              editRule.setRuleString(string)
+                            }}
+                            disabled={ruleEditable[actionSelected] !== VIEWS.LOGIC_CONNECTOR}>✎
+                    </button>
                   </div>
                 )
               }

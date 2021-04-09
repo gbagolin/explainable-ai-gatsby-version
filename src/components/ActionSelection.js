@@ -3,6 +3,8 @@ import add from "../images/plus.png"
 import ModalActionSelectionState from "../states/ModalActionSelectionState"
 import ActionMangament from "../states/ActionState"
 import RuleReady from "../states/RuleReady"
+import RuleState from "../states/RuleState"
+import ButtonsName from "../states/ButtonsName"
 
 export default function ActionSelection() {
   const setModalActionVisible = ModalActionSelectionState(state => state.setVisible)
@@ -11,7 +13,9 @@ export default function ActionSelection() {
   const ruleReady = RuleReady()
   const isDisabled = !(ruleReady.isProblemReady && ruleReady.isTraceReady)
   const actionSelected = ActionMangament(state => state.actionSelected)
-
+  const actionManagement = ActionMangament()
+  const removeConstraint = RuleState(state => state.removeConstraint)
+  const buttonsName = ButtonsName()
   return (
     <div className="border-2 rounded-lg shadow-lg w-96 m-5 p-5 text-lg">
       <div className="flex flex-col flex-initial justify-items-start">
@@ -34,15 +38,23 @@ export default function ActionSelection() {
               <div key={index}>
                 <div
                   key={index}
-                  className="w-auto h-auto">
+                  className="flex w-auto h-auto justify-between items-center">
                   <button
                     className={style}
                     onClick={() => {
-                      setActionSelected({ actionSelected: action.id })
+                      setActionSelected({ actionSelected: index })
                       console.log("Clicking action with id: %i", action.id)
                     }
                     }
                   >{action.name}</button>
+                  <button className="rounded-full bg-yellow-300 h-8 w-8 flex items-center justify-center"
+                          onClick={() => {
+                            actionManagement.deleteAction(index)
+                            removeConstraint(index)
+                            buttonsName.resetButtonsHavingSpecificId(index)
+                          }}>
+                    X
+                  </button>
                 </div>
                 <div key={"second div" + index}
                      className="mt-3"></div>

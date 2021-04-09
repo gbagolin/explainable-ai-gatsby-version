@@ -5,12 +5,13 @@ import ActionMangament from "../states/ActionState"
 import RuleState from "../states/RuleState"
 import ButtonsName from "../states/ButtonsName"
 import RuleReady from "../states/RuleReady"
+import ActionState from "../states/ActionState"
 
 export default function ModalAddAction() {
   const visible = ModalActionSelectionState(state => state.visible)
   const setVisible = ModalActionSelectionState(state => state.setVisible)
   const actionToAdd = ActionMangament(state => state.actionToAdd)
-  const pushAction = ActionMangament(state => state.setActionList)
+  const pushAction = ActionMangament(state => state.addActionToList)
   const actionCounter = ActionMangament(state => state.actionCounter)
   const incrementActionCounter = ActionMangament(state => state.incrementActionCounter)
   const setActionSelected = ActionMangament(state => state.setActionSelected)
@@ -18,6 +19,7 @@ export default function ModalAddAction() {
   const addButtons = ButtonsName(state => state.addButtons)
   const attributes = RuleState(state => state.attributes)
   const ruleReady = RuleReady()
+  const actionList = ActionState(state => state.actionList)
   return (
     <>
       {visible ? (
@@ -73,6 +75,7 @@ export default function ModalAddAction() {
                       addRule()
                       addButtons(actionCounter, attributes)
                       ruleReady.setActionReady(true)
+                      console.log(actionList)
                     }}
                   >
                     Add Action
