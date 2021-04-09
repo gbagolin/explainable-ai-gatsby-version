@@ -26,13 +26,16 @@ export const ButtonsName = create(set => ({
   buttonsName: [],
   variables: [],
   maxVariableId: [],
-  startingVariableCode: "a",
+  variableCharacter: [],
+  deltaCharacter: 0,
   addButtons: (actionSelected, problemAttributes) => set((state) => {
     state.buttonsName.push([])
     state.buttonsName[actionSelected] = problemAttributes.states.map(returnArray)
     state.currentState.push(VIEWS.STATE_BELIEF)
     state.maxVariableId.push(1)
-    const nextChar = String.fromCharCode(state.startingVariableCode.charCodeAt(0) + 1)
+    const nextChar = String.fromCharCode(STARTING_VARIABLE_CODE.charCodeAt(0) + state.deltaCharacter)
+    state.variableCharacter.push(nextChar)
+    state.deltaCharacter += 1
     return {
       currentState: state.currentState,
       buttonsName: state.buttonsName,
@@ -41,7 +44,8 @@ export const ButtonsName = create(set => ({
         id: state.maxVariableId[actionSelected],
         name: nextChar + state.maxVariableId[actionSelected]
       }]],
-      maxVariableId: state.maxVariableId
+      maxVariableId: state.maxVariableId,
+      deltaCharacter: state.deltaCharacter
     }
   }),
 
@@ -49,7 +53,9 @@ export const ButtonsName = create(set => ({
     currentState: [], //initial state
     buttonsName: [],
     variables: [],
-    maxVariableId: []
+    maxVariableId: [],
+    variableCharacter: [],
+    deltaCharacter: 0
   })),
 
   resetButtonsHavingSpecificId: (actionId) => set((state) => {
@@ -57,6 +63,7 @@ export const ButtonsName = create(set => ({
     state.buttonsName.splice(actionId, 1)
     state.variables.splice(actionId, 1)
     state.maxVariableId.splice(actionId, 1)
+    state.variableCharacter.splice(actionId, 1)
   }),
 
   goToNextState: (actionSelected, problemAttributes, args) => set((state) => {
@@ -103,10 +110,7 @@ export const ButtonsName = create(set => ({
           state.variables[actionSelected].push(
             {
               id: id,
-              name: String.fromCharCode(
-                STARTING_VARIABLE_CODE.charCodeAt(0) + actionSelected
-                )
-                + id
+              name: state.variableCharacter[actionSelected] + id
             }
           )
 
