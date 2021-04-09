@@ -15,6 +15,8 @@ function returnArray(element, index) {
   }
 }
 
+const STARTING_VARIABLE_CODE = "a"
+
 /**
  * State for ModalAction component, set first to not visible.
  * @type {UseStore<{visibile: boolean, setVisibile: function(): *}>}
@@ -23,18 +25,23 @@ export const ButtonsName = create(set => ({
   currentState: [], //initial state
   buttonsName: [],
   variables: [],
-  maxVariableId: 1,
+  maxVariableId: [],
+  startingVariableCode: "a",
   addButtons: (actionSelected, problemAttributes) => set((state) => {
     state.buttonsName.push([])
     state.buttonsName[actionSelected] = problemAttributes.states.map(returnArray)
     state.currentState.push(VIEWS.STATE_BELIEF)
+    state.maxVariableId.push(1)
+    const nextChar = String.fromCharCode(state.startingVariableCode.charCodeAt(0) + 1)
     return {
       currentState: state.currentState,
       buttonsName: state.buttonsName,
+      startingVariableCode: nextChar,
       variables: [...state.variables, [{
-        id: state.maxVariableId,
-        name: "x" + state.maxVariableId
-      }]]
+        id: state.maxVariableId[actionSelected],
+        name: nextChar + state.maxVariableId[actionSelected]
+      }]],
+      maxVariableId: state.maxVariableId
     }
   }),
 
@@ -42,13 +49,14 @@ export const ButtonsName = create(set => ({
     currentState: [], //initial state
     buttonsName: [],
     variables: [],
-    maxVariableId: 1
+    maxVariableId: []
   })),
 
   resetButtonsHavingSpecificId: (actionId) => set((state) => {
     state.currentState.splice(actionId, 1)
     state.buttonsName.splice(actionId, 1)
     state.variables.splice(actionId, 1)
+    state.maxVariableId.splice(actionId, 1)
   }),
 
   goToNextState: (actionSelected, problemAttributes, args) => set((state) => {
@@ -88,18 +96,28 @@ export const ButtonsName = create(set => ({
 
         const ids = state.variables[actionSelected].map(e => e.id)
         const maxId = Math.max(...ids)
-        //a new variable need to be added
+
         if (args.id === maxId) {
+          //a new variable needs to be added
           const id = maxId + 1
-          state.variables[actionSelected].push({ id: id, name: "x" + id })
+          state.variables[actionSelected].push(
+            {
+              id: id,
+              name: String.fromCharCode(
+                STARTING_VARIABLE_CODE.charCodeAt(0) + actionSelected
+                )
+                + id
+            }
+          )
 
         }
-        const max = Math.max(maxId, state.maxVariableId)
+        const max = Math.max(maxId, state.maxVariableId[actionSelected])
+        state.maxVariableId[actionSelected] = max + 1
         return {
           buttonsName: [...state.buttonsName],
           currentState: [...state.currentState],
           variables: [...state.variables],
-          maxVariableId: max + 1
+          maxVariableId: state.maxVariableId
         }
       }
 
