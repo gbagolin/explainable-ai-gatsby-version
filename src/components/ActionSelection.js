@@ -5,6 +5,7 @@ import ActionMangament from "../states/ActionState"
 import RuleReady from "../states/RuleReady"
 import RuleState from "../states/RuleState"
 import ButtonsName from "../states/ButtonsName"
+import RuleSynthetizedState from "../states/RuleSynthetizedState"
 
 export default function ActionSelection() {
   const setModalActionVisible = ModalActionSelectionState(state => state.setVisible)
@@ -16,7 +17,7 @@ export default function ActionSelection() {
   const actionManagement = ActionMangament()
   const removeConstraint = RuleState(state => state.removeConstraint)
   const buttonsName = ButtonsName()
-
+  const ruleSynthetized = RuleSynthetizedState()
   return (
     <div className="border-2 rounded-lg shadow-lg w-96 m-5 p-5 text-lg">
       <div className="flex flex-col flex-initial justify-items-start">
@@ -53,6 +54,8 @@ export default function ActionSelection() {
                             actionManagement.deleteAction(index)
                             removeConstraint(index)
                             buttonsName.resetButtonsHavingSpecificId(index)
+
+                            ruleSynthetized.deleteConstraints(index)
                             if (actionManagement.actionList.length == 0)
                               ruleReady.setActionReady(false)
                           }}>

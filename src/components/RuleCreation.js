@@ -114,7 +114,6 @@ export default function RuleCreation() {
                                   buttonsName.resetButtonsHavingSpecificId(actionSelected)
                                   buttonsName.addButtons(actionSelected, rule.attributes, false)
                                   rule.removeConstraint(actionSelected)
-                                  // rule.removeSubRule(actionSelected, element)
                                   rule.addRule()
                                 } else {
                                   rule.removeSubRule(actionSelected, element)
