@@ -73,7 +73,7 @@ export default function ModalAddAction() {
                       setActionSelected({ actionSelected: actionCounter })
                       incrementActionCounter()
                       addRule()
-                      addButtons(actionCounter, attributes)
+                      addButtons(actionCounter, attributes,true)
                       ruleReady.setActionReady(true)
                       console.log(actionList)
                     }}

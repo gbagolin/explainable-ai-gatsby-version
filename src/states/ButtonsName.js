@@ -28,14 +28,15 @@ export const ButtonsName = create(set => ({
   maxVariableId: [],
   variableCharacter: [],
   deltaCharacter: 0,
-  addButtons: (actionSelected, problemAttributes) => set((state) => {
+  addButtons: (actionSelected, problemAttributes, doesDeltaIncrement) => set((state) => {
     state.buttonsName.push([])
     state.buttonsName[actionSelected] = problemAttributes.states.map(returnArray)
     state.currentState.push(VIEWS.STATE_BELIEF)
     state.maxVariableId.push(1)
     const nextChar = String.fromCharCode(STARTING_VARIABLE_CODE.charCodeAt(0) + state.deltaCharacter)
     state.variableCharacter.push(nextChar)
-    state.deltaCharacter += 1
+    if (doesDeltaIncrement)
+      state.deltaCharacter += 1
     return {
       currentState: state.currentState,
       buttonsName: state.buttonsName,
@@ -57,6 +58,13 @@ export const ButtonsName = create(set => ({
     variableCharacter: [],
     deltaCharacter: 0
   })),
+
+  resetCurrentState: (actionId) => set((state) => {
+    state.currentState[actionId] = VIEWS.STATE_BELIEF
+    return {
+      currentState: [...state.currentState]
+    }
+  }),
 
   resetButtonsHavingSpecificId: (actionId) => set((state) => {
     state.currentState.splice(actionId, 1)
@@ -113,7 +121,6 @@ export const ButtonsName = create(set => ({
               name: state.variableCharacter[actionSelected] + id
             }
           )
-
         }
         const max = Math.max(maxId, state.maxVariableId[actionSelected])
         state.maxVariableId[actionSelected] = max + 1

@@ -62,6 +62,16 @@ const RuleState = create(set => ({
     state.tempConstraint.splice(actionId, 1)
     state.subRuleCounter.splice(actionId, 1)
   }),
+
+  removeSubRule: (actionId, ruleId) => set((state) => {
+    state.constraints[actionId].splice(ruleId, 1)
+    state.ruleString[actionId].splice(ruleId, 1)
+    if (ruleId === state.ruleString[actionId].length - 1) {
+      state.tempConstraint[actionId] = {}
+      state.logicConnector[actionId] = logicConnector.OR
+    }
+
+  }),
   editRule: (actionId, ruleId, ruleString) => set((state) => {
     console.log(state.constraints)
     console.log({

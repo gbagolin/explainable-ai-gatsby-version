@@ -22,9 +22,11 @@ export default function RuleCreation() {
   const editRule = RuleSelectedState()
   const ruleEditable = ButtonsName(state => state.currentState)
   const ruleReady = RuleReady()
+  const buttonsName = ButtonsName()
   const isAddRuleDisabled = !(ruleReady.isProblemReady &&
     ruleReady.isTraceReady &&
     ruleReady.isActionReady)
+  const resetCurrentState = ButtonsName(state => state.resetCurrentState)
   const [name, setName] = useState("Send rule")
   /**
    * returns true if there is a rule for each action
@@ -82,7 +84,6 @@ export default function RuleCreation() {
                     disabled={!isRuleReady()}>
               {name}
             </button>
-
           </div>
         </div>
         <div className="m-3"></div>
@@ -91,20 +92,39 @@ export default function RuleCreation() {
             (rule.ruleString[actionSelected] || []).map(
               (string, element) => {
                 return (
-                  <div className="flex justify-between"
+                  <div className="flex justify-between mt-1"
                        key={element}>
                     <p key={element}
                     >{element + 1}. {string}</p>
-                    <button className="rounded-full bg-yellow-300 h-8 w-8 flex items-center justify-center"
-                            onClick={() => {
-                              editState.setVisible({ visible: true })
-                              editRule.setRuleId(element)
-                              editRule.setActionId(actionSelected)
-                              editRule.setRuleString(string)
-                            }}
-                            disabled={ruleEditable[actionSelected] !== VIEWS.LOGIC_CONNECTOR}>✎
-                    </button>
+                    <div className="flex justify-end">
+                      <button className="rounded-full bg-yellow-300 h-8 w-8 flex items-center justify-center"
+                              onClick={() => {
+                                editState.setVisible({ visible: true })
+                                editRule.setRuleId(element)
+                                editRule.setActionId(actionSelected)
+                                editRule.setRuleString(string)
+                              }}
+                              disabled={ruleEditable[actionSelected] !== VIEWS.LOGIC_CONNECTOR}>✎
+                      </button>
+                      <button className="ml-2 rounded-full bg-yellow-300 h-8 w-8 flex items-center justify-center"
+                              onClick={() => {
+                                console.log(rule.constraints[actionSelected])
+                                if (rule.constraints[actionSelected].length == 1) {
+                                  console.log("sono qui")
+                                  buttonsName.resetButtonsHavingSpecificId(actionSelected)
+                                  buttonsName.addButtons(actionSelected, rule.attributes, false)
+                                  rule.removeConstraint(actionSelected)
+                                  // rule.removeSubRule(actionSelected, element)
+                                  rule.addRule()
+                                } else {
+                                  rule.removeSubRule(actionSelected, element)
+                                }
+                              }}
+                              disabled={ruleEditable[actionSelected] !== VIEWS.LOGIC_CONNECTOR}>X
+                      </button>
+                    </div>
                   </div>
+
                 )
               }
             )
