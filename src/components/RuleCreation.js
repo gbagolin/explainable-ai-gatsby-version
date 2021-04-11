@@ -110,9 +110,8 @@ export default function RuleCreation() {
                               onClick={() => {
                                 console.log(rule.constraints[actionSelected])
                                 if (rule.constraints[actionSelected].length == 1) {
-                                  console.log("sono qui")
                                   buttonsName.resetButtonsHavingSpecificId(actionSelected)
-                                  buttonsName.addButtons(actionSelected, rule.attributes, false)
+                                  buttonsName.addButtons(actionSelected, rule.attributes)
                                   rule.removeConstraint(actionSelected)
                                   rule.addRule()
                                 } else {

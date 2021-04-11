@@ -28,15 +28,13 @@ export const ButtonsName = create(set => ({
   maxVariableId: [],
   variableCharacter: [],
   deltaCharacter: 0,
-  addButtons: (actionSelected, problemAttributes, doesDeltaIncrement) => set((state) => {
+  addButtons: (actionSelected, problemAttributes) => set((state) => {
     state.buttonsName.push([])
     state.buttonsName[actionSelected] = problemAttributes.states.map(returnArray)
     state.currentState.push(VIEWS.STATE_BELIEF)
     state.maxVariableId.push(1)
     const nextChar = String.fromCharCode(STARTING_VARIABLE_CODE.charCodeAt(0) + state.deltaCharacter)
     state.variableCharacter.push(nextChar)
-    if (doesDeltaIncrement)
-      state.deltaCharacter += 1
     return {
       currentState: state.currentState,
       buttonsName: state.buttonsName,
@@ -45,9 +43,16 @@ export const ButtonsName = create(set => ({
         id: state.maxVariableId[actionSelected],
         name: nextChar + state.maxVariableId[actionSelected]
       }]],
-      maxVariableId: state.maxVariableId,
-      deltaCharacter: state.deltaCharacter
+      maxVariableId: state.maxVariableId
     }
+  }),
+
+  incrementDeltaCharacter: () => set((state) => {
+    return { deltaCharacter: state.deltaCharacter + 1 }
+  }),
+
+  decrementDeltaCharacter: () => set((state) => {
+    state.deltaCharacter -= 1
   }),
 
   resetButtonsName: () => set(() => ({

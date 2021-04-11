@@ -54,10 +54,12 @@ export default function ActionSelection() {
                             actionManagement.deleteAction(index)
                             removeConstraint(index)
                             buttonsName.resetButtonsHavingSpecificId(index)
-
                             ruleSynthetized.deleteConstraints(index)
-                            if (actionManagement.actionList.length == 0)
+                            if (actionManagement.actionList.length == 0) {
+                              buttonsName.resetButtonsName()
                               ruleReady.setActionReady(false)
+                              return
+                            }
                           }}>
                     X
                   </button>

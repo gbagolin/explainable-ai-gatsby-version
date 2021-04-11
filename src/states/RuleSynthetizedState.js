@@ -13,7 +13,8 @@ const RuleSynthetizedState = create(set => ({
   setRule: (rule) => set(() => ({ rule: rule })),
   deleteConstraints: actionId => set((state) => {
     console.log(state.rule)
-    if (state.rule.rule[actionId].constraints.length > 0) {
+    if (state.rule.rule[actionId] != undefined &&
+      state.rule.rule[actionId].constraints.length > 0) {
       state.rule.rule[actionId].constraints = []
     }
     if (state.rule.anomalies_same_action != undefined &&

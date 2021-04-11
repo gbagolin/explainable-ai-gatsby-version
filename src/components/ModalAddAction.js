@@ -16,10 +16,10 @@ export default function ModalAddAction() {
   const incrementActionCounter = ActionMangament(state => state.incrementActionCounter)
   const setActionSelected = ActionMangament(state => state.setActionSelected)
   const addRule = RuleState(state => state.addRule)
-  const addButtons = ButtonsName(state => state.addButtons)
   const attributes = RuleState(state => state.attributes)
   const ruleReady = RuleReady()
   const actionList = ActionState(state => state.actionList)
+  const buttonsName = ButtonsName()
   return (
     <>
       {visible ? (
@@ -73,7 +73,8 @@ export default function ModalAddAction() {
                       setActionSelected({ actionSelected: actionCounter })
                       incrementActionCounter()
                       addRule()
-                      addButtons(actionCounter, attributes,true)
+                      buttonsName.addButtons(actionCounter, attributes)
+                      buttonsName.incrementDeltaCharacter()
                       ruleReady.setActionReady(true)
                       console.log(actionList)
                     }}
