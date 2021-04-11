@@ -10,7 +10,7 @@ export default function Anomalies() {
   const anomalyTypeState = WhichAnomaly()
   const actionSelected = ActionMangament(state => state.actionSelected)
   const runState = RunState()
-
+  const [severityValue, setSeverity] = useState(0)
   return (
     <div className="border-2 rounded-lg shadow-lg w-auto h-auto m-5 p-3 text-lg">
       <div className="flex flex-row">
@@ -29,7 +29,7 @@ export default function Anomalies() {
         >Anomalies different action
         </button>
       </div>
-      <div className="flex justify-center overflow-auto h-96">
+      <div className="flex overflow-auto h-96">
         <table className="table-auto text-left">
           <thead>
           <tr>
@@ -39,8 +39,19 @@ export default function Anomalies() {
             <th className="p-3">Action</th>
             <th className="p-3">Beliefs</th>
             <th className="p-3">
-              <div>
-                Severity
+              <div className="flex flex-col items-start">
+                <div className="w-32">
+                  Severity : {severityValue}
+                </div>
+                <div>
+                  <input className="rounded-lg overflow-hidden appearance-none bg-yellow-300 h-3 w-16"
+                         type="range"
+                         min="0.0"
+                         max="1.0"
+                         step="0.01"
+                         onChange={e => setSeverity(e.target.value)}>
+                  </input>
+                </div>
               </div>
             </th>
           </tr>
@@ -51,7 +62,7 @@ export default function Anomalies() {
               (element, index) => {
                 let anomaly = false
                 if (element.hellinger_distance != undefined)
-                  anomaly = element.hellinger_distance.toFixed(2) >= 0.10 ? true : false
+                  anomaly = element.hellinger_distance.toFixed(2) >= severityValue ? true : false
 
                 const severity = element.hellinger_distance != undefined ? element.hellinger_distance : undefined
                 const background = runState.run === element ? "rounded-lg bg-yellow-200" : ""
@@ -84,7 +95,9 @@ export default function Anomalies() {
                     </td>
                     <td className="p-3">
                       <div className={anomaly ? "bg-red-300 rounded" : ""}>
-                        {severity === undefined ? "" : severity.toFixed(2)}
+                        <p className="text-center">
+                          {severity === undefined ? "" : severity.toFixed(2)}
+                        </p>
                       </div>
                     </td>
                   </tr>
