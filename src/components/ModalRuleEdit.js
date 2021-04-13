@@ -53,6 +53,10 @@ export default function ModalRuleEdit() {
                     type="button"
                     style={{ transition: "all 0.9s ease" }}
                     onClick={() => {
+                      if (ruleEdited.includes("or")) {
+                        setError(true)
+                        return
+                      }
                       editRule(ruleSelectedState.actionId, ruleSelectedState.ruleId, ruleEdited)
                       const matchDigitRegex = /\d+/g
                       try {
