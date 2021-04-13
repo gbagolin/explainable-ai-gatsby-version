@@ -212,12 +212,15 @@ export default function Plot() {
             datasets: dataset.concat(scatterDataset)
           }
           return (
-            < Bar
-              key={actionString + index}
-              data={data}
-              options={OPTIONS}
-              datasetKeyProvider={datasetKeyProvider}
-            />
+            <>
+              <p className="text-center">Distribution of state beliefs of sub rule: {index + 1}</p>
+              < Bar
+                key={actionString + index}
+                data={data}
+                options={OPTIONS}
+                datasetKeyProvider={datasetKeyProvider}
+              />
+            </>
           )
         })
       }

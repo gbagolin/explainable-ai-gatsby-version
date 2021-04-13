@@ -13,7 +13,7 @@ import ModalRuleEdit from "../components/ModalRuleEdit"
 export default function Home() {
   return (
     <>
-      <p className="text-center font-bold text-5xl underline text-color-yellow">Explainable AI</p>
+      <p className="text-center font-bold text-5xl underline text-color-yellow">Explainable POMCP</p>
       <div className="flex flex-wrap justify-start 2xl:justify-around flex-row mt-5">
         <div className="flex flex-col flex-shrink">
           <ProblemSelection></ProblemSelection>
