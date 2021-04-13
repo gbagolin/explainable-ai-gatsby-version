@@ -11,17 +11,23 @@ export default function Anomalies() {
   const actionSelected = ActionMangament(state => state.actionSelected)
   const runState = RunState()
   const [severityValue, setSeverity] = useState(0)
+  const anomalyClassSameAction = anomalyTypeState.type === ANOMALIES.SAME_ACTION ?
+    "m-5 font-semibold  yellow-color rounded-lg p-3" :
+    "m-5 font-semibold  bg-yellow-200 rounded-lg p-3"
+  const anomalyClassDifferentAction = anomalyTypeState.type === ANOMALIES.DIFFERENT_ACTION ?
+    "m-5 font-semibold  yellow-color rounded-lg p-3" :
+    "m-5 font-semibold  bg-yellow-200 rounded-lg p-3"
   return (
     <div className="border-2 rounded-lg shadow-lg w-auto h-auto m-5 p-3 text-lg">
       <div className="flex flex-row">
-        <button className="m-5 font-semibold  yellow-color rounded-lg p-3"
+        <button className={anomalyClassSameAction}
                 onClick={() => {
                   anomalyTypeState.setType(ANOMALIES.SAME_ACTION)
                   runState.setRun(undefined)
                 }}
         >Anomalies same action
         </button>
-        <button className="m-5 font-semibold  yellow-color rounded-lg p-3"
+        <button className={anomalyClassDifferentAction}
                 onClick={() => {
                   anomalyTypeState.setType(ANOMALIES.DIFFERENT_ACTION)
                   runState.setRun(undefined)
