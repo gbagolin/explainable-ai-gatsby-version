@@ -9,7 +9,7 @@ export default function ProblemSelection() {
   const trace = RuleState(state => state.traceName)
 
   return (
-    <div className="border-2 rounded-lg shadow-lg w-96 h-auto m-5 p-5 text-lg">
+    <div className="border-2 rounded-lg shadow-lg w-96 h-auto m-1 p-5 text-lg">
       <div className="flex flex-col flex-initial justify-items-start">
         <div className="flex flex-row justify-between">
           <div>

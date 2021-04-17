@@ -11,6 +11,8 @@ import Plot from "../components/Plot"
 import ModalRuleEdit from "../components/ModalRuleEdit"
 import VariableDeclaration from "../components/VariableDeclaration"
 import ModalVariableDeclaration from "../components/ModalVariableDeclaration"
+import HardConstraint from "../components/HardConstraint"
+import ModalHardConstraint from "../components/ModalHardConstraint"
 
 export default function Home() {
   return (
@@ -18,12 +20,13 @@ export default function Home() {
       <p className="text-center font-bold text-5xl underline text-color-yellow">
         Explainable POMCP
       </p>
-      <div className="flex flex-wrap justify-start 2xl:justify-around flex-row mt-5">
+      <div className="flex flex-wrap justify-start 2xl:justify-around flex-row ">
         <div className="flex flex-col flex-shrink">
           <ProblemSelection></ProblemSelection>
           <ActionSelection></ActionSelection>
           <VariableDeclaration></VariableDeclaration>
           <RuleCreation></RuleCreation>
+          <HardConstraint></HardConstraint>
         </div>
         <div className="flex flex-col flex-shrink">
           <RuleSynthetized></RuleSynthetized>
@@ -37,6 +40,7 @@ export default function Home() {
         <ModalRuleCreation></ModalRuleCreation>
         <ModalRuleEdit></ModalRuleEdit>
         <ModalVariableDeclaration></ModalVariableDeclaration>
+        <ModalHardConstraint></ModalHardConstraint>
       </div>
     </>
   )
