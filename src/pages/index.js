@@ -9,15 +9,20 @@ import ModalProblemSelection from "../components/ModalProblemSelection"
 import ModalRuleCreation from "../components/ModalRuleCreation"
 import Plot from "../components/Plot"
 import ModalRuleEdit from "../components/ModalRuleEdit"
+import VariableDeclaration from "../components/VariableDeclaration"
+import ModalVariableDeclaration from "../components/ModalVariableDeclaration"
 
 export default function Home() {
   return (
     <>
-      <p className="text-center font-bold text-5xl underline text-color-yellow">Explainable POMCP</p>
+      <p className="text-center font-bold text-5xl underline text-color-yellow">
+        Explainable POMCP
+      </p>
       <div className="flex flex-wrap justify-start 2xl:justify-around flex-row mt-5">
         <div className="flex flex-col flex-shrink">
           <ProblemSelection></ProblemSelection>
           <ActionSelection></ActionSelection>
+          <VariableDeclaration></VariableDeclaration>
           <RuleCreation></RuleCreation>
         </div>
         <div className="flex flex-col flex-shrink">
@@ -31,6 +36,7 @@ export default function Home() {
         <ModalProblemSelection></ModalProblemSelection>
         <ModalRuleCreation></ModalRuleCreation>
         <ModalRuleEdit></ModalRuleEdit>
+        <ModalVariableDeclaration></ModalVariableDeclaration>
       </div>
     </>
   )
