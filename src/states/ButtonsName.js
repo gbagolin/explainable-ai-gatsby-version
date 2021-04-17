@@ -15,7 +15,6 @@ function returnArray(element, index) {
   }
 }
 
-const STARTING_VARIABLE_CODE = "a"
 
 /**
  * State for ModalAction component, set first to not visible.
@@ -24,11 +23,7 @@ const STARTING_VARIABLE_CODE = "a"
 export const ButtonsName = create(set => ({
   currentState: [], //initial state
   buttonsName: [],
-  variables: [],
-  maxVariableId: [],
-  variableCharacter: [],
-  deltaCharacter: 0,
-  
+
   addButtons: (actionSelected, problemAttributes) =>
     set(state => {
       state.buttonsName.push([])
@@ -36,46 +31,16 @@ export const ButtonsName = create(set => ({
         returnArray
       )
       state.currentState.push(VIEWS.STATE_BELIEF)
-      state.maxVariableId.push(1)
-      const nextChar = String.fromCharCode(
-        STARTING_VARIABLE_CODE.charCodeAt(0) + state.deltaCharacter
-      )
-      state.variableCharacter.push(nextChar)
       return {
         currentState: state.currentState,
         buttonsName: state.buttonsName,
-        startingVariableCode: nextChar,
-        variables: [
-          ...state.variables,
-          [
-            {
-              id: state.maxVariableId[actionSelected],
-              name: nextChar + state.maxVariableId[actionSelected],
-            },
-          ],
-        ],
-        maxVariableId: state.maxVariableId,
       }
-    }),
-
-  incrementDeltaCharacter: () =>
-    set(state => {
-      return { deltaCharacter: state.deltaCharacter + 1 }
-    }),
-
-  decrementDeltaCharacter: () =>
-    set(state => {
-      state.deltaCharacter -= 1
     }),
 
   resetButtonsName: () =>
     set(() => ({
       currentState: [], //initial state
       buttonsName: [],
-      variables: [],
-      maxVariableId: [],
-      variableCharacter: [],
-      deltaCharacter: 0,
     })),
 
   resetCurrentState: actionId =>
@@ -90,12 +55,9 @@ export const ButtonsName = create(set => ({
     set(state => {
       state.currentState.splice(actionId, 1)
       state.buttonsName.splice(actionId, 1)
-      state.variables.splice(actionId, 1)
-      state.maxVariableId.splice(actionId, 1)
-      state.variableCharacter.splice(actionId, 1)
     }),
 
-  goToNextState: (actionSelected, problemAttributes, args) =>
+  goToNextState: (actionSelected, problemAttributes, variables, args) =>
     set(state => {
       if (problemAttributes === undefined) {
         return
@@ -123,7 +85,11 @@ export const ButtonsName = create(set => ({
           }
         }
         case VIEWS.OPERATOR: {
-          state.buttonsName[actionSelected] = state.variables[actionSelected]
+          const variablesObjects = variables.map((element, index) => {
+            return { id: index, name: element }
+          })
+          state.buttonsName[actionSelected] = variablesObjects
+          console.log(variables)
           state.currentState[actionSelected] = VIEWS.VARIABLE
           return {
             buttonsName: [...state.buttonsName],
@@ -136,25 +102,9 @@ export const ButtonsName = create(set => ({
             returnArray
           )
           state.currentState[actionSelected] = VIEWS.LOGIC_CONNECTOR
-
-          const ids = state.variables[actionSelected].map(e => e.id)
-          const maxId = Math.max(...ids)
-
-          if (args.id === maxId) {
-            //a new variable needs to be added
-            const id = maxId + 1
-            state.variables[actionSelected].push({
-              id: id,
-              name: state.variableCharacter[actionSelected] + id,
-            })
-          }
-          const max = Math.max(maxId, state.maxVariableId[actionSelected])
-          state.maxVariableId[actionSelected] = max + 1
           return {
             buttonsName: [...state.buttonsName],
             currentState: [...state.currentState],
-            variables: [...state.variables],
-            maxVariableId: state.maxVariableId,
           }
         }
 
