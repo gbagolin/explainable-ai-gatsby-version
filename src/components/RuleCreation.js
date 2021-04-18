@@ -11,6 +11,7 @@ import ModalRuleEditState from "../states/ModalRuleEditState"
 import RuleSelectedState from "../states/RuleSelectedState"
 import VIEWS from "../util/VIEWS"
 import RuleReady from "../states/RuleReady"
+import HardConstraintState from "../states/HardConstraintState"
 
 export default function RuleCreation() {
   const setVisible = ModalRuleCreationState(state => state.setVisible)
@@ -30,6 +31,7 @@ export default function RuleCreation() {
   )
   const resetCurrentState = ButtonsName(state => state.resetCurrentState)
   const [name, setName] = useState("Send rule")
+  const hardConstraint = HardConstraintState()
   /**
    * returns true if there is a rule for each action
    * and the rule is complete.
@@ -87,10 +89,15 @@ export default function RuleCreation() {
                   }
                   ruleTemplate.push(atomicRule)
                 }
+                const data = {
+                  hardConstraint: hardConstraint.hardConstraints,
+                  ruleTemplate: ruleTemplate,
+                }
+                console.log("Data to send:", data)
                 console.log(ruleTemplate)
                 const response = await axios.post(
                   "http://localhost:8001/api/send_rule",
-                  ruleTemplate
+                  data
                 )
                 console.log(response)
                 ruleSynthetized.setRule(response.data)

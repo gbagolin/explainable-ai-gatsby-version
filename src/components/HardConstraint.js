@@ -1,11 +1,15 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import add from "../images/plus.png"
 import ModalHardConstraintState from "../states/ModalHardConstraintState"
 import HardConstraintState from "../states/HardConstraintState"
+import VariablesState from "../states/VariablesState"
 
 export default function HardConstraint() {
   const modalState = ModalHardConstraintState()
   const hardConstraint = HardConstraintState()
+  const variables = VariablesState().variables
+  const isButtonDisabled = variables.size > 0 ? false : true
+
   return (
     <div className="border-2 rounded-lg shadow-lg w-96 h-auto m-1 p-5 text-lg">
       <div className="flex flex-col flex-initial justify-items-start">
@@ -22,7 +26,7 @@ export default function HardConstraint() {
               src={add}
               alt="Add ActionSelection"
               onClick={() => modalState.setVisible(true)}
-              disabled={false}
+              disabled={isButtonDisabled}
             />
           </div>
         </div>

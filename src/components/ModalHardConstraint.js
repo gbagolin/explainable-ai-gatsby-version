@@ -25,7 +25,7 @@ export default function ModalHardConstraints() {
         <button
           onClick={() => {
             const value = document.getElementById("number").value
-            buttons.goToNextState(parseInt(value), variables)
+            buttons.goToNextState(parseFloat(value), variables)
             hardConstraints.addHardConstraint(buttons.tempConstraint)
             buttons.resetTempConstraint()
             setInput(false)
