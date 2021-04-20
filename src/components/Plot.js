@@ -8,12 +8,11 @@ import {
   GREEN_COLOR,
   GREEN_BACKGROUND,
   GREY_BACKGROUND,
-  GREY_COLOR
+  GREY_COLOR,
 } from "../util/PLOT_OPTIONS"
 import ActionMangament from "../states/ActionState"
 import { WhichAnomaly } from "../states/WhichAnomaly"
 import { RunState } from "../states/RunState"
-
 
 /**
  * Create the whole dataset given the list of constraints in and as represented in the rule object
@@ -27,7 +26,7 @@ function createDatasetFromStatesList(stateList, states) {
   let stateIndex = 0
   for (const state of states) {
     //get all the object which are of the same state
-    const stateBeliefs = stateList.filter((e) => e.state === state)
+    const stateBeliefs = stateList.filter(e => e.state === state)
     stateBeliefs.sort((a, b) => a.value - b.value)
     console.log("State beliefs: ", stateBeliefs)
     //for each object
@@ -43,11 +42,12 @@ function createDatasetFromStatesList(stateList, states) {
         data: data,
         backgroundColor: GREY_BACKGROUND,
         label: "",
-        borderColor: GREY_COLOR
+        borderColor: GREY_COLOR,
       })
     }
     for (let i = 0; i < stateBeliefs.length; i++) {
-      const valueToPush = i > 0 ? Math.abs(sum - stateBeliefs[i].value) : stateBeliefs[i].value
+      const valueToPush =
+        i > 0 ? Math.abs(sum - stateBeliefs[i].value) : stateBeliefs[i].value
       sum += valueToPush
       //if the state index in the states list is not 0, than element
       //are already present and beliefs needs to be added to those objects.
@@ -60,20 +60,32 @@ function createDatasetFromStatesList(stateList, states) {
         data.push(valueToPush)
         dataset.push({
           data: data,
-          backgroundColor: (stateBeliefs[i].operator === "<" || stateBeliefs[i].operator === "<=") ?
-            GREEN_BACKGROUND : RED_BACKGROUND,
+          backgroundColor:
+            stateBeliefs[i].operator === "<" ||
+            stateBeliefs[i].operator === "<="
+              ? GREEN_BACKGROUND
+              : RED_BACKGROUND,
           label: "",
-          borderColor: (stateBeliefs[i].operator === "<" || stateBeliefs[i].operator === "<=") ?
-            GREEN_COLOR : RED_COLOR
+          borderColor:
+            stateBeliefs[i].operator === "<" ||
+            stateBeliefs[i].operator === "<="
+              ? GREEN_COLOR
+              : RED_COLOR,
         })
       } else {
         dataset.push({
           data: [valueToPush],
-          backgroundColor: (stateBeliefs[i].operator === "<" || stateBeliefs[i].operator === "<=") ?
-            GREEN_BACKGROUND : RED_BACKGROUND,
+          backgroundColor:
+            stateBeliefs[i].operator === "<" ||
+            stateBeliefs[i].operator === "<="
+              ? GREEN_BACKGROUND
+              : RED_BACKGROUND,
           label: "",
-          borderColor: (stateBeliefs[i].operator === "<" || stateBeliefs[i].operator === "<=") ?
-            GREEN_COLOR : RED_COLOR
+          borderColor:
+            stateBeliefs[i].operator === "<" ||
+            stateBeliefs[i].operator === "<="
+              ? GREEN_COLOR
+              : RED_COLOR,
         })
       }
 
@@ -91,20 +103,36 @@ function createDatasetFromStatesList(stateList, states) {
           dataset.push({
             data: data,
             //the color is the opposite of the last element.
-            backgroundColor: !(stateBeliefs[i].operator === "<" || stateBeliefs[i].operator === "<=") ?
-              GREEN_BACKGROUND : RED_BACKGROUND,
+            backgroundColor: !(
+              stateBeliefs[i].operator === "<" ||
+              stateBeliefs[i].operator === "<="
+            )
+              ? GREEN_BACKGROUND
+              : RED_BACKGROUND,
             label: "",
-            borderColor: !(stateBeliefs[i].operator === "<" || stateBeliefs[i].operator === "<=") ?
-              GREEN_COLOR : RED_COLOR
+            borderColor: !(
+              stateBeliefs[i].operator === "<" ||
+              stateBeliefs[i].operator === "<="
+            )
+              ? GREEN_COLOR
+              : RED_COLOR,
           })
         } else {
           dataset.push({
             data: [1 - sum],
-            backgroundColor: !(stateBeliefs[i].operator === "<" || stateBeliefs[i].operator === "<=") ?
-              GREEN_BACKGROUND : RED_BACKGROUND,
+            backgroundColor: !(
+              stateBeliefs[i].operator === "<" ||
+              stateBeliefs[i].operator === "<="
+            )
+              ? GREEN_BACKGROUND
+              : RED_BACKGROUND,
             label: "",
-            borderColor: !(stateBeliefs[i].operator === "<" || stateBeliefs[i].operator === "<=") ?
-              GREEN_COLOR : RED_COLOR
+            borderColor: !(
+              stateBeliefs[i].operator === "<" ||
+              stateBeliefs[i].operator === "<="
+            )
+              ? GREEN_COLOR
+              : RED_COLOR,
           })
         }
       }
@@ -121,7 +149,8 @@ function createScatterForRun(run, stateList) {
   let label = ""
 
   for (let indexState = 0; indexState < stateList.length; indexState++) {
-    const stateBelief = run.beliefs.find(belief => belief.state === stateList[indexState]) || {}
+    const stateBelief =
+      run.beliefs.find(belief => belief.state === stateList[indexState]) || {}
     label = run.run + " step " + run.step
     data.push(stateBelief.belief)
   }
@@ -130,7 +159,7 @@ function createScatterForRun(run, stateList) {
     type: "scatter",
     radius: 3,
     label: label,
-    backgroundColor: "rgba(251, 191, 36, 1)"
+    backgroundColor: "rgba(251, 191, 36, 1)",
   })
   return dataset
 }
@@ -138,9 +167,17 @@ function createScatterForRun(run, stateList) {
 function createScatterDatasetForAnomalies(anomalies, stateList) {
   const dataset = []
   for (let indexState = 0; indexState < stateList.length; indexState++) {
-    for (let indexAnomaly = 0; indexAnomaly < anomalies.length; indexAnomaly++) {
-      const stateBelief = anomalies[indexAnomaly].beliefs.find(belief => belief.state === stateList[indexState]) || {}
-      const label = anomalies[indexAnomaly].run + " step " + anomalies[indexAnomaly].step
+    for (
+      let indexAnomaly = 0;
+      indexAnomaly < anomalies.length;
+      indexAnomaly++
+    ) {
+      const stateBelief =
+        anomalies[indexAnomaly].beliefs.find(
+          belief => belief.state === stateList[indexState]
+        ) || {}
+      const label =
+        anomalies[indexAnomaly].run + " step " + anomalies[indexAnomaly].step
       if (indexState > 0) {
         const data = []
         for (let i = 0; i < indexState; i++) {
@@ -152,7 +189,7 @@ function createScatterDatasetForAnomalies(anomalies, stateList) {
           type: "scatter",
           radius: 3,
           label: label,
-          backgroundColor: "rgba(251, 191, 36, 1)"
+          backgroundColor: "rgba(251, 191, 36, 1)",
         })
       } else {
         const data = []
@@ -162,7 +199,7 @@ function createScatterDatasetForAnomalies(anomalies, stateList) {
           type: "scatter",
           radius: 3,
           label: label,
-          backgroundColor: "rgba(251, 191, 36, 1)"
+          backgroundColor: "rgba(251, 191, 36, 1)",
         })
       }
     }
@@ -178,8 +215,9 @@ function createScatterDatasetForAnomalies(anomalies, stateList) {
  * @returns {[]}
  */
 function createScatterDataset(anomalies, stateList, run) {
-  return run === undefined ? createScatterDatasetForAnomalies(anomalies, stateList) :
-    createScatterForRun(run, stateList)
+  return run === undefined
+    ? createScatterDatasetForAnomalies(anomalies, stateList)
+    : createScatterForRun(run, stateList)
 }
 
 /**
@@ -193,28 +231,40 @@ const datasetKeyProvider = () => {
 export default function Plot() {
   const rule = RuleSynthetizedState(state => state.rule)
   const actionSelected = ActionMangament(state => state.actionSelected)
-  const actionString = ActionMangament(state => state.actionList)[actionSelected]
+  const actionString = ActionMangament(state => state.actionList)[
+    actionSelected
+  ]
   const anomalyType = WhichAnomaly()
-  const anomalies = (((rule[anomalyType.type] || [])[actionSelected] || {}).anomalies || [])
+  const anomalies =
+    ((rule[anomalyType.type] || [])[actionSelected] || {}).anomalies || []
   const runState = RunState()
-  const scatterDataset = createScatterDataset(anomalies, rule.states, runState.run)
+  const scatterDataset = createScatterDataset(
+    anomalies,
+    rule.states,
+    runState.run
+  )
 
   console.log(scatterDataset)
   return (
-    <>
-      {
-        ((rule.rule[actionSelected] || {}).constraints || []).map((constraintInOr, index) => {
-          const dataset = createDatasetFromStatesList(constraintInOr, rule.states)
+    <div className="m-5">
+      {((rule.rule[actionSelected] || {}).constraints || []).map(
+        (constraintInOr, index) => {
+          const dataset = createDatasetFromStatesList(
+            constraintInOr,
+            rule.states
+          )
 
           console.log(dataset)
           const data = {
             labels: rule.states,
-            datasets: dataset.concat(scatterDataset)
+            datasets: dataset.concat(scatterDataset),
           }
           return (
             <>
-              <p className="text-center">Distribution of state beliefs of sub rule: {index + 1}</p>
-              < Bar
+              <p className="text-center">
+                Distribution of state beliefs of sub rule: {index + 1}
+              </p>
+              <Bar
                 key={actionString + index}
                 data={data}
                 options={OPTIONS}
@@ -222,8 +272,8 @@ export default function Plot() {
               />
             </>
           )
-        })
-      }
-    </>
+        }
+      )}
+    </div>
   )
 }

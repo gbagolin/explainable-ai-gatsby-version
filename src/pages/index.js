@@ -13,6 +13,7 @@ import VariableDeclaration from "../components/VariableDeclaration"
 import ModalVariableDeclaration from "../components/ModalVariableDeclaration"
 import HardConstraint from "../components/HardConstraint"
 import ModalHardConstraint from "../components/ModalHardConstraint"
+import TraceSelector from "../components/TraceSelector"
 
 export default function Home() {
   return (
@@ -20,8 +21,8 @@ export default function Home() {
       <p className="text-center font-bold text-5xl underline text-color-yellow">
         Explainable POMCP
       </p>
-      <div className="flex flex-wrap justify-start 2xl:justify-around flex-row ">
-        <div className="flex flex-col flex-shrink">
+      <div className="flex flex-wrap justify-start 2xl:justify-around flex-row">
+        <div className="flex flex-col flex-shrink m-5">
           <ProblemSelection></ProblemSelection>
           <ActionSelection></ActionSelection>
           <VariableDeclaration></VariableDeclaration>
@@ -29,6 +30,7 @@ export default function Home() {
           <HardConstraint></HardConstraint>
         </div>
         <div className="flex flex-col flex-shrink">
+          <TraceSelector></TraceSelector>
           <RuleSynthetized></RuleSynthetized>
           <Plot></Plot>
         </div>

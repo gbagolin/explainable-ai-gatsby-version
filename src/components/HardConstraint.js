@@ -11,7 +11,7 @@ export default function HardConstraint() {
   const isButtonDisabled = variables.size > 0 ? false : true
 
   return (
-    <div className="border-2 rounded-lg shadow-lg w-96 h-auto m-1 p-5 text-lg">
+    <div className="border-2 rounded-lg shadow-lg w-96 h-auto mt-2 p-5 text-lg">
       <div className="flex flex-col flex-initial justify-items-start">
         <div className="flex flex-row justify-between items-center">
           <div>

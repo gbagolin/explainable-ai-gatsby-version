@@ -23,7 +23,7 @@ export default function Anomalies() {
     ((rule[anomalyTypeState.type] || [])[actionSelected] || []).anomalies || []
   const anomaliesLength = anomaliesArray.length
   return (
-    <div className="border-2 rounded-lg shadow-lg w-auto h-auto m-5 p-3 text-lg">
+    <div className="border-2 rounded-lg shadow-lg h-auto  m-5 p-3 text-lg">
       <div className="flex flex-row">
         <button
           className={anomalyClassSameAction}
@@ -48,7 +48,7 @@ export default function Anomalies() {
         <table className="table-auto text-left">
           <thead>
             <tr>
-              <th className="p-3"> # : ({anomaliesArray.length}) </th>{" "}
+              <th className="p-3"> # : ({anomaliesArray.length}) </th>
               <th className="p-3"> Run </th>
               <th className="p-3"> Step </th> <th className="p-3"> Action </th>
               <th className="p-3"> Beliefs </th>
@@ -86,8 +86,8 @@ export default function Anomalies() {
 
               return (
                 <tr className={background}>
-                  <td className="p-3"> {index + 1} </td>
-                  <td className="p-3">
+                  <td className="p-3 w-10"> {index + 1} </td>
+                  <td className="p-3 w-20">
                     <button
                       className="underline text-color-yellow"
                       onClick={() => runState.setRun(element)}
@@ -95,9 +95,9 @@ export default function Anomalies() {
                       {element.run}
                     </button>
                   </td>
-                  <td className="p-3"> {element.step} </td>
-                  <td className="p-3"> {element.action} </td>
-                  <td className="p-3">
+                  <td className="p-3 w-20"> {element.step} </td>
+                  <td className="p-3 w-20"> {element.action} </td>
+                  <td className="p-3 w-auto">
                     {element.beliefs.map(belief => {
                       return (
                         <p>
@@ -106,7 +106,7 @@ export default function Anomalies() {
                       )
                     })}
                   </td>
-                  <td className="p-3">
+                  <td className="p-3 w-auto">
                     <div className={anomaly ? "bg-red-300 rounded" : ""}>
                       <p className="text-center">
                         {severity === undefined ? "" : severity.toFixed(2)}
