@@ -19,6 +19,9 @@ export default function Anomalies() {
     anomalyTypeState.type === ANOMALIES.DIFFERENT_ACTION
       ? "m-5 font-semibold  yellow-color rounded-lg p-3"
       : "m-5 font-semibold  bg-yellow-200 rounded-lg p-3"
+  const anomaliesArray =
+    ((rule[anomalyTypeState.type] || [])[actionSelected] || []).anomalies || []
+  const anomaliesLength = anomaliesArray.length
   return (
     <div className="border-2 rounded-lg shadow-lg w-auto h-auto m-5 p-3 text-lg">
       <div className="flex flex-row">
@@ -45,7 +48,8 @@ export default function Anomalies() {
         <table className="table-auto text-left">
           <thead>
             <tr>
-              <th className="p-3"> # </th> <th className="p-3"> Run </th>
+              <th className="p-3"> # : ({anomaliesArray.length}) </th>{" "}
+              <th className="p-3"> Run </th>
               <th className="p-3"> Step </th> <th className="p-3"> Action </th>
               <th className="p-3"> Beliefs </th>
               <th className="p-3">
@@ -66,10 +70,7 @@ export default function Anomalies() {
             </tr>
           </thead>
           <tbody>
-            {(
-              ((rule[anomalyTypeState.type] || [])[actionSelected] || [])
-                .anomalies || []
-            ).map((element, index) => {
+            {anomaliesArray.map((element, index) => {
               let anomaly = false
               if (element.hellinger_distance != undefined)
                 anomaly =

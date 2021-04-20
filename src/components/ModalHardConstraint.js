@@ -11,6 +11,7 @@ export default function ModalHardConstraints() {
   const variables = VariablesState().variables
   const hardConstraints = HardConstraintState()
   const [input, setInput] = useState(false)
+  const [inputRangeError, setInputRangeError] = useState(false)
   /**
    * Force the update of the buttons array in case is in the right state.
    */
@@ -20,19 +21,18 @@ export default function ModalHardConstraints() {
 
   const Input = () => {
     return (
-      <div className="flex flex-row">
-        <input type="number" id="number" min="0" max="1" step="0.01"></input>
-        <button
-          onClick={() => {
-            const value = document.getElementById("number").value
-            buttons.goToNextState(parseFloat(value), variables)
-            hardConstraints.addHardConstraint(buttons.tempConstraint)
-            buttons.resetTempConstraint()
-            setInput(false)
-          }}
-        >
-          Done
-        </button>
+      <div className="flex flex-col justify-center">
+        <p className="bg-yellow-300 rounded" hidden={!inputRangeError}>
+          Insert a value between 0.0 and 1.0
+        </p>
+        <input
+          type="number"
+          id="number"
+          min="0"
+          max="1"
+          step="0.01"
+          className="mt-3 border-2 rounded border-black"
+        ></input>
       </div>
     )
   }
@@ -99,6 +99,26 @@ export default function ModalHardConstraints() {
                     onClick={() => modalState.setVisible(false)}
                   >
                     Close
+                  </button>
+                  <button
+                    onClick={() => {
+                      const value = document.getElementById("number").value
+                      if (value < 0.0 || value > 1.0) {
+                        setInputRangeError(true)
+                        return
+                      } else {
+                        setInputRangeError(false)
+                      }
+                      buttons.goToNextState(parseFloat(value), variables)
+
+                      hardConstraints.addHardConstraint(buttons.tempConstraint)
+                      buttons.resetTempConstraint()
+                      setInput(false)
+                    }}
+                    className="text-yellow-300 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1"
+                    hidden={!input}
+                  >
+                    Done
                   </button>
                 </div>
               </div>

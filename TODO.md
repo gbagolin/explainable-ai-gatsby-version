@@ -1,13 +1,13 @@
-# Task to complete 17/04/2021
+# Task to complete 20/04
 
-+ [X] Create variable declaration -> add a box for variable declaration with a free text editable.
-All the variables will be visualized in the box.   
-+ [] Create hard constraint.   
-    > create a box for hard constraint.  
-    create states similar to rule creation
-        >> state cycle:  
-            1. select variable  
-            2. select operator  
-            3. select value.  
-    create modal with the buttons of the current state cycle.   
-+ [] Fix backend to include hard-constraint.  
+<ol>
+    <li><input type="checkbox" checked>Insert new traces on the backend</input></li>
+    <li><input type="checkbox" checked>Do some tests on new traces and test Giulio's constraints</li></input>
+    <li><input type="checkbox" checked>Write down what's wrong with the new tests</input></li>
+    <li><input type="checkbox">Create a new interface, to navigate trough traces: </input>
+     <ol>
+        <li><input type="checkbox">Create a class Result, in which rule synthetized, anomalies, and plots dataset are saved. </input></li>
+        <li><input type="checkbox">After the rule has been sent, create and display the blox which navigates trough the results</input></li>
+     </ol>
+     </li>
+</ol>
