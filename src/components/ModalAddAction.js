@@ -6,22 +6,16 @@ import RuleState from "../states/RuleState"
 import ButtonsName from "../states/ButtonsName"
 import RuleReady from "../states/RuleReady"
 import ActionState from "../states/ActionState"
+import ProblemState from "../states/ProblemState"
 
 export default function ModalAddAction() {
   const visible = ModalActionSelectionState(state => state.visible)
   const setVisible = ModalActionSelectionState(state => state.setVisible)
-  const actionToAdd = ActionMangament(state => state.actionToAdd)
-  const pushAction = ActionMangament(state => state.addActionToList)
-  const actionCounter = ActionMangament(state => state.actionCounter)
-  const setActionSelected = ActionMangament(state => state.setActionSelected)
-  const addRule = RuleState(state => state.addRule)
-  const attributes = RuleState(state => state.attributes)
-  const incrementActionCounter = ActionMangament(
-    state => state.incrementActionCounter
-  )
   const ruleReady = RuleReady()
-  const actionList = ActionState(state => state.actionList)
+  const actionState = ActionMangament()
   const buttonsName = ButtonsName()
+  const ruleState = RuleState()
+  const problemState = ProblemState()
 
   return (
     <>
@@ -63,21 +57,18 @@ export default function ModalAddAction() {
                     style={{ transition: "all 0.9s ease" }}
                     onClick={() => {
                       setVisible({ visible: false })
-                      pushAction({
-                        id: actionCounter,
-                        name: actionToAdd,
-                      })
-                      console.log(
-                        "Adding action with id: %i, name : %s",
-                        actionCounter,
-                        actionToAdd
+                      actionState.addAction(
+                        actionState.actionCounter,
+                        actionState.actionToAdd
                       )
-                      incrementActionCounter()
-                      setActionSelected({ actionSelected: actionCounter })
-                      addRule()
-                      buttonsName.addButtons(actionCounter, attributes)
+                      actionState.incrementActionCounter()
+                      actionState.setActionSelected(actionState.actionCounter)
+                      ruleState.addRule(actionState.actionCounter)
+                      buttonsName.addButtons(
+                        actionState.actionCounter,
+                        problemState.attributes
+                      )
                       ruleReady.setActionReady(true)
-                      console.log(actionList)
                     }}
                   >
                     Add Action

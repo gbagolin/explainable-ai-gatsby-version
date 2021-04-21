@@ -2,22 +2,21 @@ import React from "react"
 import "./dropdown.css"
 import ActionMangament from "../states/ActionState"
 import RuleState from "../states/RuleState"
+import ProblemState from "../states/ProblemState"
 
 export default function DropdownActionChoose() {
-  let actions = []
-  try {
-    actions = RuleState(state => state.attributes.actions)
-  } catch (e) {}
-
-  const actionToAdd = ActionMangament(state => state.actionToAdd)
-  const setActionToAdd = ActionMangament(state => state.setActionToAdd)
+  const problemState = ProblemState()
+  const actions = problemState.attributes.actions || []
+  const actionState = ActionMangament()
 
   return (
     <div className="flex justify-center">
       <div className="dropdown inline-block relative">
         <button className="bg-yellow-300 text-gray-700 font-semibold py-2 px-4 rounded inline-flex items-center">
           <span className="mr-1">
-            {actionToAdd === "" ? "Select action" : actionToAdd}
+            {actionState.actionToAdd === ""
+              ? "Select action"
+              : actionState.actionToAdd}
           </span>
           <svg
             className="fill-current h-4 w-4"
@@ -33,7 +32,7 @@ export default function DropdownActionChoose() {
               <li key={index} className="">
                 <button
                   className="w-full rounded-t bg-white hover:bg-yellow-200 py-2 px-4 block whitespace-no-wrap"
-                  onClick={() => setActionToAdd({ actionToAdd: actionString })}
+                  onClick={() => actionState.setActionToAdd(actionString)}
                 >
                   {actionString}
                 </button>

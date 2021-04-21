@@ -15,7 +15,6 @@ function returnArray(element, index) {
   }
 }
 
-
 /**
  * State for ModalAction component, set first to not visible.
  * @type {UseStore<{visibile: boolean, setVisibile: function(): *}>}
@@ -26,11 +25,10 @@ export const ButtonsName = create(set => ({
 
   addButtons: (actionSelected, problemAttributes) =>
     set(state => {
-      state.buttonsName.push([])
       state.buttonsName[actionSelected] = problemAttributes.states.map(
         returnArray
       )
-      state.currentState.push(VIEWS.STATE_BELIEF)
+      state.currentState[actionSelected] = VIEWS.STATE_BELIEF
       return {
         currentState: state.currentState,
         buttonsName: state.buttonsName,

@@ -11,12 +11,9 @@ export default function ActionSelection() {
   const setModalActionVisible = ModalActionSelectionState(
     state => state.setVisible
   )
-  const actions = ActionMangament(state => state.actionList)
-  const setActionSelected = ActionMangament(state => state.setActionSelected)
   const ruleReady = RuleReady()
   const isDisabled = !(ruleReady.isProblemReady && ruleReady.isTraceReady)
-  const actionSelected = ActionMangament(state => state.actionSelected)
-  const actionManagement = ActionMangament()
+  const actionState = ActionMangament()
   const removeConstraint = RuleState(state => state.removeConstraint)
   const buttonsName = ButtonsName()
   const ruleSynthetized = RuleSynthetizedState()
@@ -46,36 +43,33 @@ export default function ActionSelection() {
           </div>
         </div>
         <div className="m-3"> </div>
-        {actions.map((action, index) => {
+        {[...actionState.actions.keys()].map((key, index) => {
           const style =
-            actionSelected === index
+            actionState.actionSelected === key
               ? "font-semibold rounded-lg p-3 yellow-color"
               : "font-semibold rounded-lg p-3 bg-yellow-100"
           return (
-            <div key={index}>
+            <div key={key}>
               <div
-                key={index}
+                key={key}
                 className="flex w-auto h-auto justify-between items-center"
               >
                 <button
                   className={style}
                   onClick={() => {
-                    setActionSelected({
-                      actionSelected: index,
-                    })
-                    console.log("Clicking action with id: %i", action.id)
+                    actionState.setActionSelected(key)
                   }}
                 >
-                  {action.name}
+                  {actionState.actions.get(key)}
                 </button>
                 <button
                   className="rounded-full bg-yellow-300 h-8 w-8 flex items-center justify-center"
                   onClick={() => {
-                    actionManagement.deleteAction(index)
+                    actionState.deleteAction(key)
                     removeConstraint(index)
                     buttonsName.resetButtonsHavingSpecificId(index)
                     ruleSynthetized.deleteConstraints(index)
-                    if (actionManagement.actionList.length == 0) {
+                    if (actionState.actions.size === 0) {
                       buttonsName.resetButtonsName()
                       ruleReady.setActionReady(false)
                       return

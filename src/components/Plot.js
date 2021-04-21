@@ -231,12 +231,11 @@ const datasetKeyProvider = () => {
 export default function Plot() {
   const rule = RuleSynthetizedState(state => state.rule)
   const actionSelected = ActionMangament(state => state.actionSelected)
-  const actionString = ActionMangament(state => state.actionList)[
-    actionSelected
-  ]
+  const actionState = ActionMangament()
   const anomalyType = WhichAnomaly()
   const anomalies =
-    ((rule[anomalyType.type] || [])[actionSelected] || {}).anomalies || []
+    ((rule[anomalyType.type] || [])[actionState.actionSelected] || {})
+      .anomalies || []
   const runState = RunState()
   const scatterDataset = createScatterDataset(
     anomalies,
@@ -247,7 +246,7 @@ export default function Plot() {
   console.log(scatterDataset)
   return (
     <div className="m-5">
-      {((rule.rule[actionSelected] || {}).constraints || []).map(
+      {((rule.rule[actionState.actionSelected] || {}).constraints || []).map(
         (constraintInOr, index) => {
           const dataset = createDatasetFromStatesList(
             constraintInOr,
@@ -265,7 +264,9 @@ export default function Plot() {
                 Distribution of state beliefs of sub rule: {index + 1}
               </p>
               <Bar
-                key={actionString + index}
+                key={
+                  actionState.actions.get(actionState.actionSelected) + index
+                }
                 data={data}
                 options={OPTIONS}
                 datasetKeyProvider={datasetKeyProvider}

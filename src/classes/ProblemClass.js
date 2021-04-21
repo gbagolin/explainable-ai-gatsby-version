@@ -3,12 +3,14 @@
  */
 export default class ProblemClass {
   /**
-   * Strings parameter
+   *
    * @param {*} name
    * @param {*} trace
+   * @param {*} attributes
    */
-  constructor(name, trace) {
+  constructor(name, trace, attributes) {
     this.name = name
     this.trace = trace
+    this.attributes = attributes
   }
 }

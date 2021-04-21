@@ -48,7 +48,7 @@ export default function Anomalies() {
         <table className="table-auto text-left">
           <thead>
             <tr>
-              <th className="p-3"> # : ({anomaliesArray.length}) </th>
+              <th className="p-3 w-20"> # : ({anomaliesArray.length}) </th>
               <th className="p-3"> Run </th>
               <th className="p-3"> Step </th> <th className="p-3"> Action </th>
               <th className="p-3"> Beliefs </th>
