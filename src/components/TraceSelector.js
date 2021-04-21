@@ -4,17 +4,32 @@ import ProblemState from "../states/ProblemState"
 import { ResultStateCounter } from "../states/ResultStateCounter"
 import { ResultStatesStore } from "../states/ResultStatesStore"
 import RuleState from "../states/RuleState"
+import { clonedeep } from "lodash"
+import HardConstraintState from "../states/HardConstraintState"
+import ButtonsName from "../states/ButtonsName"
+import RuleSelectedState from "../states/RuleSelectedState"
+import RuleSynthetizedState from "../states/RuleSynthetizedState"
+import { RunState } from "../states/RunState"
+import VariablesState from "../states/VariablesState"
+import { WhichAnomaly } from "../states/WhichAnomaly"
 
 export default function TraceSelector() {
   const savedResults = ResultStatesStore()
-  const resultsCounter = ResultStateCounter().counter
+  const resultsCounter = ResultStateCounter()
   const actionState = ActionMangament()
-  const ruleStateOriginal = RuleState()
+  const ruleState = RuleState()
   const problemState = ProblemState()
+  const buttonsName = ButtonsName()
+  const hardConstraint = HardConstraintState()
+  const ruleSelected = RuleSelectedState()
+  const ruleSynthetizedState = RuleSynthetizedState()
+  const runState = RunState()
+  const variableState = VariablesState()
+  const whichAnomaly = WhichAnomaly()
 
   const dummyVar = () => {
     const arr = []
-    for (let i = 0; i < resultsCounter; i++) arr.push(i)
+    for (let i = 0; i < resultsCounter.counter; i++) arr.push(i)
     return arr
   }
 
@@ -22,6 +37,38 @@ export default function TraceSelector() {
     <div className="flex flex-row justify-start">
       <div className="flex flex-row border-2 rounded-lg shadow-lg m-5 p-3 text-lg">
         <p>Trace result selector: </p>
+        <div className="m-2"></div>
+        <button
+          className="rounded-full bg-yellow-300 h-8 w-8 flex items-center justify-center text-lg"
+          onClick={() => {
+            resultsCounter.increment()
+            const problemStateClone = clonedeep(problemState)
+            const actionStateClone = clonedeep(actionState)
+            const buttonsNameClone = clonedeep(buttonsName)
+            const hardConstraintClone = clonedeep(hardConstraint)
+            const ruleSelectedClone = clonedeep(ruleSelected)
+            const ruleStateClone = clonedeep(ruleState)
+            const ruleSynthetizedClone = clonedeep(ruleSynthetizedState)
+            const runStateClone = clonedeep(runState)
+            const variableStateClone = clonedeep(variableState)
+            const whichAnomalyClone = clonedeep(whichAnomaly)
+            savedResults.setResultStore({
+              id: resultsCounter.counter,
+              problemState: problemStateClone,
+              actionState: actionStateClone,
+              buttonsName: buttonsNameClone,
+              hardConstraint: hardConstraintClone,
+              ruleSelected: ruleSelectedClone,
+              ruleState: ruleStateClone,
+              ruleSynthetizedState: ruleSynthetizedClone,
+              runState: runStateClone,
+              variableState: variableStateClone,
+              whichAnomaly: whichAnomalyClone,
+            })
+          }}
+        >
+          +
+        </button>
         <div className="m-2"></div>
         {dummyVar().map((v, index) => {
           return (
@@ -33,10 +80,34 @@ export default function TraceSelector() {
                     index
                   )
                   const storedActionState = savedResults.actionState.get(index)
-                  console.log("Problem State: ", storedProblemState)
-                  console.log("Action State: ", storedActionState)
+                  const storedButtonsName = savedResults.buttonsName.get(index)
+                  const storedHardConstraint = savedResults.hardConstraint.get(
+                    index
+                  )
+                  const storedRuleSelected = savedResults.ruleSelected.get(
+                    index
+                  )
+                  const storedRuleState = savedResults.ruleState.get(index)
+                  const storedRuleSynthetizedState = savedResults.ruleSynthetizedState.get(
+                    index
+                  )
+                  const storedRunState = savedResults.runState.get(index)
+                  const storedVariableState = savedResults.variableState.get(
+                    index
+                  )
+                  const storedWhichAnomaly = savedResults.whichAnomaly.get(
+                    index
+                  )
                   problemState.setStore(storedProblemState)
                   actionState.setStore(storedActionState)
+                  buttonsName.setStore(storedButtonsName)
+                  hardConstraint.setStore(storedHardConstraint)
+                  ruleSelected.setStore(storedRuleSelected)
+                  ruleState.setStore(storedRuleState)
+                  ruleSynthetizedState.setStore(storedRuleSynthetizedState)
+                  runState.setStore(storedRunState)
+                  variableState.setStore(storedVariableState)
+                  whichAnomaly.setStore(storedWhichAnomaly)
                 }}
                 key={index}
               >

@@ -6,6 +6,7 @@ const HardConstraint = create(set => ({
    * List of class objects HardConstraintClass
    */
   hardConstraints: [],
+  setStore: store => set(() => store),
   /**
    * Add an hard constraint to the list.
    * @param {*} constraint new object of the class HardConstranintClass

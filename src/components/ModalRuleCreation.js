@@ -11,9 +11,11 @@ export default function ModalRuleCreation() {
   const visible = ModalRuleCreationState(state => state.visible)
   const setVisible = ModalRuleCreationState(state => state.setVisible)
   const actionSelected = ActionMangament(state => state.actionSelected)
-  const buttons = ButtonsName(state => state.buttonsName[actionSelected])
+  const buttons = ButtonsName(state => state.buttonsName.get(actionSelected))
   const setConstraint = RuleState(state => state.setConstraint)
-  const currentView = ButtonsName(state => state.currentState[actionSelected])
+  const currentView = ButtonsName(state =>
+    state.currentState.get(actionSelected)
+  )
   const goToNextState = ButtonsName(state => state.goToNextState)
   const attributes = RuleState(state => state.attributes)
   const ruleReady = RuleReady()

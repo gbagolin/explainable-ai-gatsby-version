@@ -66,10 +66,11 @@ export default function ActionSelection() {
                   className="rounded-full bg-yellow-300 h-8 w-8 flex items-center justify-center"
                   onClick={() => {
                     actionState.deleteAction(key)
-                    removeConstraint(index)
-                    buttonsName.resetButtonsHavingSpecificId(index)
-                    ruleSynthetized.deleteConstraints(index)
+                    removeConstraint(key)
+                    buttonsName.resetButtonsHavingSpecificId(key)
+                    ruleSynthetized.deleteConstraints(key)
                     if (actionState.actions.size === 0) {
+                      console.log("Sono dentro")
                       buttonsName.resetButtonsName()
                       ruleReady.setActionReady(false)
                       return

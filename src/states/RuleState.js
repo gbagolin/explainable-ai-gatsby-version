@@ -2,7 +2,6 @@ import create from "zustand"
 
 import VIEWS from "../util/VIEWS"
 import logicConnector from "../util/LOGIC_CONNECTORS"
-import ButtonsName from "./ButtonsName"
 
 const STATE_MAPPING = {
   tigerright: "tiger right",
@@ -20,10 +19,7 @@ const RuleState = create(set => ({
   subRuleCounter: new Map(),
   ruleIdCounter: new Map(),
 
-  setStore: store => {
-    set(() => store)
-  },
-
+  setStore: store => set(() => store),
   addRule: actionId =>
     set(state => {
       state.constraints.set(actionId, new Map())
@@ -153,6 +149,8 @@ const RuleState = create(set => ({
             let rule = state.ruleString.get(args.actionSelected).get(ruleId)
             rule += " " + args.element.toLowerCase()
             state.ruleString.get(args.actionSelected).set(ruleId, rule)
+          } else if (args.element.toLowerCase() === "or") {
+            state.ruleIdCounter.set(args.actionSelected, ruleId + 1)
           }
           switch (state.logicConnector.get(args.actionSelected)) {
             case logicConnector.OR:
@@ -190,9 +188,6 @@ const RuleState = create(set => ({
               ? logicConnector.OR
               : logicConnector.DONE
 
-          if (logic === logicConnector.OR) {
-            state.ruleIdCounter.set(args.actionSelected, ruleId + 1)
-          }
           state.logicConnector.set(args.actionSelected, logic)
           state.tempConstraint.set(args.actionSelected, {})
 

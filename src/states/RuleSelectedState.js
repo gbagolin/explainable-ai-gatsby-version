@@ -8,15 +8,19 @@ const RuleSelectedState = create(set => ({
   ruleString: "",
   ruleId: undefined,
   actionId: undefined,
-  setRuleString: newRuleString => set(() => ({
-    ruleString: newRuleString
-  })),
-  setRuleId: id => set(() => ({
-    ruleId: id
-  })),
-  setActionId: id => set(() => ({
-    actionId: id
-  }))
+  setStore: store => set(() => store),
+  setRuleString: newRuleString =>
+    set(() => ({
+      ruleString: newRuleString,
+    })),
+  setRuleId: id =>
+    set(() => ({
+      ruleId: id,
+    })),
+  setActionId: id =>
+    set(() => ({
+      actionId: id,
+    })),
 }))
 
 export default RuleSelectedState

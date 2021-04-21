@@ -5,7 +5,7 @@ const ProblemState = create(set => ({
   trace: "",
   attributes: {},
 
-  setStore: store => set(() => (store)), 
+  setStore: store => set(() => store),
 
   setProblem: problem =>
     set(() => ({

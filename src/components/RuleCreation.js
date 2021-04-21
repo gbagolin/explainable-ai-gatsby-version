@@ -44,6 +44,7 @@ export default function RuleCreation() {
   const variableState = VariablesState()
   const whichAnomaly = WhichAnomaly()
   const problemState = ProblemState()
+
   const ruleString = () => {
     try {
       return rule.ruleString.get(actionSelected).keys()
@@ -130,6 +131,7 @@ export default function RuleCreation() {
                 const resultId = resultCounter.counter
                 console.log("resultid: ", resultId)
                 console.log("Action State:", actionState)
+                
                 resultStore.setResultStore({
                   id: resultId,
                   actionState: actionState,
@@ -181,7 +183,10 @@ export default function RuleCreation() {
                     onClick={() => {
                       if (rule.constraints.get(actionSelected).size === 1) {
                         buttonsName.resetButtonsHavingSpecificId(actionSelected)
-                        buttonsName.addButtons(actionSelected, problemState.attributes)
+                        buttonsName.addButtons(
+                          actionSelected,
+                          problemState.attributes
+                        )
                         rule.removeConstraint(actionSelected)
                         rule.addRule(actionSelected)
                       } else {

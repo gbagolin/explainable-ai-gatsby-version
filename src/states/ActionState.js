@@ -6,8 +6,8 @@ const ActionMangament = create(set => ({
   actions: new Map(),
   actionCounter: 0,
 
-  setStore: store => set(() => (store)), 
-  
+  setStore: store => set(() => store),
+
   setActionSelected: action => set(() => ({ actionSelected: action })),
 
   addAction: (id, action) =>
