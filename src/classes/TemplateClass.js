@@ -3,10 +3,12 @@
  */
 export default class TemplateClass {
   /**
-   * List of string, representing actions
-   * @param {*} actions
+   *
+   * @param {*} id
+   * @param {*} name
    */
-  constructor(actions) {
-    this.actions = actions
+  constructor(id, name) {
+    this.id = id
+    this.name = name
   }
 }

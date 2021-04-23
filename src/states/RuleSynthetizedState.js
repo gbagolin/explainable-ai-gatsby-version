@@ -13,7 +13,6 @@ const RuleSynthetizedState = create(set => ({
   setRule: rule => set(() => ({ rule: rule })),
   deleteConstraints: actionId =>
     set(state => {
-      console.log(state.rule)
       if (
         state.rule.rule[actionId] != undefined &&
         state.rule.rule[actionId].constraints.length > 0

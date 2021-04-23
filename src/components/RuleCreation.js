@@ -17,6 +17,9 @@ import { RunState } from "../states/RunState"
 import VariablesState from "../states/VariablesState"
 import { WhichAnomaly } from "../states/WhichAnomaly"
 import ProblemState from "../states/ProblemState"
+import { CanAddResultState } from "../states/CanAddResultState"
+import { clonedeep } from "lodash"
+import TemplateClass from "../classes/TemplateClass"
 
 export default function RuleCreation() {
   const setVisible = ModalRuleCreationState(state => state.setVisible)
@@ -44,6 +47,7 @@ export default function RuleCreation() {
   const variableState = VariablesState()
   const whichAnomaly = WhichAnomaly()
   const problemState = ProblemState()
+  const canAddResult = CanAddResultState()
 
   const ruleString = () => {
     try {
@@ -59,7 +63,6 @@ export default function RuleCreation() {
    * @returns {boolean}
    */
   const isRuleReady = () => {
-    console.log(rule.constraints)
     for (const key of actionState.actions.keys()) {
       if (
         !(
@@ -97,7 +100,6 @@ export default function RuleCreation() {
               onClick={async () => {
                 setName("Rule Sent")
                 const ruleTemplate = []
-                let i = 0
                 for (const key of actionState.actions.keys()) {
                   const variables = new Set()
                   for (const constraints of rule.constraints
@@ -112,41 +114,51 @@ export default function RuleCreation() {
                     hard_constraint: [],
                     trace: problemState.trace,
                     problem: problemState.problem,
-                    action: actionState.actions.get(key),
+                    action: new TemplateClass(
+                      key,
+                      actionState.actions.get(key)
+                    ),
                     variables: [...variables],
                   }
                   ruleTemplate.push(atomicRule)
-                  i += 1
                 }
                 const data = {
                   hardConstraint: hardConstraint.hardConstraints,
                   ruleTemplate: ruleTemplate,
                 }
-                console.log("Data to send:", data)
-                console.log(ruleTemplate)
+
                 const response = await axios.post(
                   "http://localhost:8001/api/send_rule",
                   data
                 )
-                const resultId = resultCounter.counter
-                console.log("resultid: ", resultId)
-                console.log("Action State:", actionState)
-                
-                resultStore.setResultStore({
-                  id: resultId,
-                  actionState: actionState,
-                  buttonsName: buttonsName,
-                  hardConstraint: hardConstraint,
-                  ruleSelected: ruleSelected,
-                  ruleState: rule,
-                  ruleSynthetizedState: ruleSynthetized,
-                  runState: runState,
-                  variableState: variableState,
-                  whichAnomaly: whichAnomaly,
-                })
-                resultCounter.increment()
-                console.log(response)
+                ruleSynthetized.rule = response.data
                 ruleSynthetized.setRule(response.data)
+                console.log("Rule synthetized: ", ruleSynthetized)
+                const problemStateClone = clonedeep(problemState)
+                const actionStateClone = clonedeep(actionState)
+                const buttonsNameClone = clonedeep(buttonsName)
+                const hardConstraintClone = clonedeep(hardConstraint)
+                const ruleSelectedClone = clonedeep(ruleSelected)
+                const ruleStateClone = clonedeep(rule)
+                const ruleSynthetizedClone = clonedeep(ruleSynthetized)
+                const runStateClone = clonedeep(runState)
+                const variableStateClone = clonedeep(variableState)
+                const whichAnomalyClone = clonedeep(whichAnomaly)
+                console.log("Selected result: ", resultCounter.selected)
+                resultStore.setResultStore({
+                  id: resultCounter.selected,
+                  problemState: problemStateClone,
+                  actionState: actionStateClone,
+                  buttonsName: buttonsNameClone,
+                  hardConstraint: hardConstraintClone,
+                  ruleSelected: ruleSelectedClone,
+                  ruleState: ruleStateClone,
+                  ruleSynthetizedState: ruleSynthetizedClone,
+                  runState: runStateClone,
+                  variableState: variableStateClone,
+                  whichAnomaly: whichAnomalyClone,
+                })
+                canAddResult.setBool(true)
                 setName("Rule Sent")
               }}
               disabled={!isRuleReady()}
@@ -168,12 +180,14 @@ export default function RuleCreation() {
                     className="rounded-full bg-yellow-300 h-8 w-8 flex items-center justify-center"
                     onClick={() => {
                       editState.setVisible({ visible: true })
-                      editRule.setRuleId(index)
+                      editRule.setRuleId(key)
                       editRule.setActionId(actionSelected)
-                      editRule.setRuleString(ruleString.get(key))
+                      editRule.setRuleString(
+                        rule.ruleString.get(actionSelected).get(key)
+                      )
                     }}
                     disabled={
-                      ruleEditable[actionSelected] !== VIEWS.LOGIC_CONNECTOR
+                      ruleEditable.get(actionSelected) !== VIEWS.LOGIC_CONNECTOR
                     }
                   >
                     ✎
@@ -194,7 +208,7 @@ export default function RuleCreation() {
                       }
                     }}
                     disabled={
-                      ruleEditable[actionSelected] !== VIEWS.LOGIC_CONNECTOR
+                      ruleEditable.get(actionSelected) !== VIEWS.LOGIC_CONNECTOR
                     }
                   >
                     X

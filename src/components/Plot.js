@@ -231,11 +231,13 @@ const datasetKeyProvider = () => {
 export default function Plot() {
   const rule = RuleSynthetizedState(state => state.rule)
   const actionSelected = ActionMangament(state => state.actionSelected)
-  const actionState = ActionMangament()
+  const actionString = ActionMangament(state => state.actions).get(
+    actionSelected
+  )
   const anomalyType = WhichAnomaly()
   const anomalies =
-    ((rule[anomalyType.type] || [])[actionState.actionSelected] || {})
-      .anomalies || []
+    ((rule[anomalyType.type] || [])[actionSelected] || {}).anomalies || []
+
   const runState = RunState()
   const scatterDataset = createScatterDataset(
     anomalies,
@@ -243,38 +245,46 @@ export default function Plot() {
     runState.run
   )
 
-  console.log(scatterDataset)
-  return (
-    <div className="m-5">
-      {((rule.rule[actionState.actionSelected] || {}).constraints || []).map(
-        (constraintInOr, index) => {
-          const dataset = createDatasetFromStatesList(
-            constraintInOr,
-            rule.states
-          )
+  const getConstraintByActionId = id => {
+    if (rule.rule === undefined) return []
+    for (const tmpRule of rule.rule) {
+      if (tmpRule.action === undefined) return []
+      if (tmpRule.action.id === id) {
+        return tmpRule.constraints
+      }
+    }
+    return []
+  }
 
-          console.log(dataset)
-          const data = {
-            labels: rule.states,
-            datasets: dataset.concat(scatterDataset),
-          }
-          return (
-            <>
-              <p className="text-center">
-                Distribution of state beliefs of sub rule: {index + 1}
-              </p>
-              <Bar
-                key={
-                  actionState.actions.get(actionState.actionSelected) + index
-                }
-                data={data}
-                options={OPTIONS}
-                datasetKeyProvider={datasetKeyProvider}
-              />
-            </>
-          )
+  console.log(scatterDataset)
+  console.log(rule.rule)
+  const constraints = getConstraintByActionId(actionSelected)
+  console.log("Constraints: ", constraints)
+
+  return (
+    <>
+      {constraints.map((constraintInOr, index) => {
+        const dataset = createDatasetFromStatesList(constraintInOr, rule.states)
+
+        console.log(dataset)
+        const data = {
+          labels: rule.states,
+          datasets: dataset.concat(scatterDataset),
         }
-      )}
-    </div>
+        return (
+          <>
+            <p className="text-center">
+              Distribution of state beliefs of sub rule: {index + 1}
+            </p>
+            <Bar
+              key={actionString + index}
+              data={data}
+              options={OPTIONS}
+              datasetKeyProvider={datasetKeyProvider}
+            />
+          </>
+        )
+      })}
+    </>
   )
 }

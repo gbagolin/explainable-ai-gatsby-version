@@ -70,7 +70,6 @@ export default function ActionSelection() {
                     buttonsName.resetButtonsHavingSpecificId(key)
                     ruleSynthetized.deleteConstraints(key)
                     if (actionState.actions.size === 0) {
-                      console.log("Sono dentro")
                       buttonsName.resetButtonsName()
                       ruleReady.setActionReady(false)
                       return

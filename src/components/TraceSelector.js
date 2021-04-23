@@ -12,6 +12,7 @@ import RuleSynthetizedState from "../states/RuleSynthetizedState"
 import { RunState } from "../states/RunState"
 import VariablesState from "../states/VariablesState"
 import { WhichAnomaly } from "../states/WhichAnomaly"
+import { CanAddResultState } from "../states/CanAddResultState"
 
 export default function TraceSelector() {
   const savedResults = ResultStatesStore()
@@ -26,7 +27,7 @@ export default function TraceSelector() {
   const runState = RunState()
   const variableState = VariablesState()
   const whichAnomaly = WhichAnomaly()
-
+  const canAddResultState = CanAddResultState()
   const dummyVar = () => {
     const arr = []
     for (let i = 0; i < resultsCounter.counter; i++) arr.push(i)
@@ -36,12 +37,15 @@ export default function TraceSelector() {
   return (
     <div className="flex flex-row justify-start">
       <div className="flex flex-row border-2 rounded-lg shadow-lg m-5 p-3 text-lg">
-        <p>Trace result selector: </p>
+        <p>Result selector: </p>
         <div className="m-2"></div>
         <button
-          className="rounded-full bg-yellow-300 h-8 w-8 flex items-center justify-center text-lg"
+          className={
+            "rounded-full bg-yellow-300 h-8 w-8 flex items-center justify-center text-lg disabled:opacity-50"
+          }
           onClick={() => {
             resultsCounter.increment()
+            resultsCounter.setSelected(resultsCounter.counter)
             const problemStateClone = clonedeep(problemState)
             const actionStateClone = clonedeep(actionState)
             const buttonsNameClone = clonedeep(buttonsName)
@@ -66,16 +70,22 @@ export default function TraceSelector() {
               whichAnomaly: whichAnomalyClone,
             })
           }}
+          disabled={!canAddResultState.bool}
         >
           +
         </button>
         <div className="m-2"></div>
         {dummyVar().map((v, index) => {
+          const selectedClass =
+            resultsCounter.selected === index
+              ? "rounded-full bg-yellow-300 h-8 w-8 flex items-center justify-center"
+              : "rounded-full bg-yellow-100 h-8 w-8 flex items-center justify-center"
           return (
             <>
               <button
-                className="rounded-full bg-yellow-300 h-8 w-8 flex items-center justify-center"
+                className={selectedClass}
                 onClick={() => {
+                  resultsCounter.setSelected(index)
                   const storedProblemState = savedResults.problemState.get(
                     index
                   )

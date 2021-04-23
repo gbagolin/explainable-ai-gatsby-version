@@ -116,7 +116,6 @@ const RuleState = create(set => ({
               .set(ruleId, tempRuleString)
           }
           state.tempConstraint.get(args.actionSelected)["state"] = args.element
-          console.log("Rule String: ", state.ruleString)
           return {
             ruleString: state.ruleString,
             tempConstraint: state.tempConstraint,
