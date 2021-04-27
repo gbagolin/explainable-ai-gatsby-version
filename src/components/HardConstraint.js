@@ -35,16 +35,30 @@ export default function HardConstraint() {
          * body
          */}
         <div className="flex flex-col">
-          {hardConstraint.hardConstraints.map((element, index) => {
+          {[...hardConstraint.hardConstraints].map((element, index) => {
             return (
-              <p>
-                {index + 1}. {element.toString()}
-              </p>
+              <div className="flex w-auto h-auto justify-between items-center">
+                <div>
+                  <p>
+                    {index + 1}. {element.toString()}
+                  </p>
+                </div>
+                <div>
+                  <button
+                    className="rounded-full bg-yellow-300 h-8 w-8 flex items-center justify-center"
+                    onClick={() => {
+                      hardConstraint.removeHardConstraint(element)
+                    }}
+                  >
+                    X
+                  </button>
+                </div>
+              </div>
             )
           })}
         </div>
+        <div className="mb-5"> </div>
       </div>
-      <div className="mb-5"> </div>
     </div>
   )
 }

@@ -1,11 +1,10 @@
 import create from "zustand"
-import HardConstraintClass from "../classes/HardConstraintClass"
 
 const HardConstraint = create(set => ({
   /**
-   * List of class objects HardConstraintClass
+   * Set of HardConstraints
    */
-  hardConstraints: [],
+  hardConstraints: new Set(),
   setStore: store => set(() => store),
   /**
    * Add an hard constraint to the list.
@@ -14,7 +13,19 @@ const HardConstraint = create(set => ({
    */
   addHardConstraint: constraint =>
     set(state => {
-      state.hardConstraints.push(constraint)
+      state.hardConstraints.add(constraint)
+      return {
+        hardConstraints: state.hardConstraints,
+      }
+    }),
+  /**
+   * Remove an hardconstraint from the list
+   * @param {*} constraint new object of the class HardConstranintClass
+   * @returns
+   */
+  removeHardConstraint: constraint =>
+    set(state => {
+      state.hardConstraints.delete(constraint)
       return {
         hardConstraints: state.hardConstraints,
       }

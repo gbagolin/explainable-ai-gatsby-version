@@ -34,27 +34,6 @@ export default function Home() {
       <div className="flex flex-wrap justify-start 2xl:justify-around flex-row">
         <div className="flex flex-col flex-shrink m-5">
           <ProblemSelection></ProblemSelection>
-          <button
-            onClick={() => {
-              const actionStateClone = clonedeep(actionState)
-              resultStore.setResultStore({
-                id: resultCounter.counter,
-                problemState: problemState,
-                actionState: actionStateClone,
-                // buttonsName: buttonsName,
-                // hardConstraint: hardConstraint,
-                // ruleSelected: ruleSelected,
-                // ruleState: rule,
-                // ruleSynthetizedState: ruleSynthetized,
-                // runState: runState,
-                // variableState: variableState,
-                // whichAnomaly: whichAnomaly,
-              })
-              resultCounter.increment()
-            }}
-          >
-            Save problem
-          </button>
           <ActionSelection></ActionSelection>
           <VariableDeclaration></VariableDeclaration>
           <RuleCreation></RuleCreation>

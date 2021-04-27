@@ -24,7 +24,7 @@ export default function ActionSelection() {
         <div className="flex flex-row justify-between">
           <div>
             <p className="inline text-center font-bold text-2xl ">
-              Action Selections:
+              Template selection:
             </p>
           </div>
           <div>
@@ -32,7 +32,7 @@ export default function ActionSelection() {
               className="w-9 h-9 disabled:opacity-50"
               type="image"
               src={add}
-              alt="Add ActionSelection"
+              alt="Add a new action"
               onClick={() =>
                 setModalActionVisible({
                   visible: true,

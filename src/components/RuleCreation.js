@@ -83,7 +83,7 @@ export default function RuleCreation() {
           <div>
             <p className="inline text-center font-bold text-2xl ">
               {" "}
-              Rule creation:
+              Template creation:
             </p>
           </div>
           <div className="flex items-center">
@@ -123,14 +123,15 @@ export default function RuleCreation() {
                   ruleTemplate.push(atomicRule)
                 }
                 const data = {
-                  hardConstraint: hardConstraint.hardConstraints,
+                  hardConstraint: [...hardConstraint.hardConstraints],
                   ruleTemplate: ruleTemplate,
                 }
-
+                setName("Rule Sent")
                 const response = await axios.post(
                   "http://localhost:8001/api/send_rule",
                   data
                 )
+                setName("Send Rule")
                 ruleSynthetized.rule = response.data
                 ruleSynthetized.setRule(response.data)
                 console.log("Rule synthetized: ", ruleSynthetized)
@@ -159,7 +160,6 @@ export default function RuleCreation() {
                   whichAnomaly: whichAnomalyClone,
                 })
                 canAddResult.setBool(true)
-                setName("Rule Sent")
               }}
               disabled={!isRuleReady()}
             >
