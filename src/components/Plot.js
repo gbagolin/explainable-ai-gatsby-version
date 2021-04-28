@@ -178,30 +178,15 @@ function createScatterDatasetForAnomalies(anomalies, stateList) {
         ) || {}
       const label =
         anomalies[indexAnomaly].run + " step " + anomalies[indexAnomaly].step
-      if (indexState > 0) {
-        const data = []
-        for (let i = 0; i < indexState; i++) {
-          data.push(0)
-        }
-        data.push(stateBelief.belief)
-        dataset.push({
-          data: data,
-          type: "scatter",
-          radius: 3,
-          label: label,
-          backgroundColor: "rgba(251, 191, 36, 1)",
-        })
-      } else {
-        const data = []
-        data.push(stateBelief.belief)
-        dataset.push({
-          data: data,
-          type: "scatter",
-          radius: 3,
-          label: label,
-          backgroundColor: "rgba(251, 191, 36, 1)",
-        })
-      }
+      const data = []
+      data[indexState] = stateBelief.belief
+      dataset.push({
+        data: data,
+        type: "scatter",
+        radius: 3,
+        label: label,
+        backgroundColor: "rgba(251, 191, 36, 1)",
+      })
     }
   }
   return dataset
@@ -256,17 +241,18 @@ export default function Plot() {
     return []
   }
 
-  console.log(scatterDataset)
+  console.log("Scatter dataset: ", scatterDataset)
   console.log(rule.rule)
   const constraints = getConstraintByActionId(actionSelected)
   console.log("Constraints: ", constraints)
 
   return (
     <>
+      {" "}
       {constraints.map((constraintInOr, index) => {
         const dataset = createDatasetFromStatesList(constraintInOr, rule.states)
 
-        console.log(dataset)
+        console.log("Plot dataset: ", dataset)
         const data = {
           labels: rule.states,
           datasets: dataset.concat(scatterDataset),
@@ -274,17 +260,17 @@ export default function Plot() {
         return (
           <>
             <p className="text-center">
-              Distribution of state beliefs of sub rule: {index + 1}
-            </p>
+              Distribution of state beliefs of sub rule: {index + 1}{" "}
+            </p>{" "}
             <Bar
               key={actionString + index}
               data={data}
               options={OPTIONS}
               datasetKeyProvider={datasetKeyProvider}
-            />
+            />{" "}
           </>
         )
-      })}
+      })}{" "}
     </>
   )
 }
