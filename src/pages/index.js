@@ -13,7 +13,7 @@ import VariableDeclaration from "../components/VariableDeclaration"
 import ModalVariableDeclaration from "../components/ModalVariableDeclaration"
 import HardConstraint from "../components/HardConstraint"
 import ModalHardConstraint from "../components/ModalHardConstraint"
-import TraceSelector from "../components/TraceSelector"
+import ResultSelector from "../components/ResultSelector"
 import { ResultStatesStore } from "../states/ResultStatesStore"
 import { ResultStateCounter } from "../states/ResultStateCounter"
 import RuleState from "../states/RuleState"
@@ -40,7 +40,7 @@ export default function Home() {
           <HardConstraint></HardConstraint>
         </div>
         <div className="flex flex-col flex-shrink">
-          <TraceSelector></TraceSelector>
+          <ResultSelector></ResultSelector>
           <RuleSynthetized></RuleSynthetized>
           <Plot></Plot>
         </div>

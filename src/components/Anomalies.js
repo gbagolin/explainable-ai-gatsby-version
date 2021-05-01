@@ -101,7 +101,7 @@ export default function Anomalies() {
                   ? element.hellinger_distance
                   : undefined
               const background =
-                runState.run === element ? "rounded-lg bg-yellow-10" : ""
+                runState.run === element ? "rounded-lg bg-yellow-100" : ""
 
               return (
                 <tr className={background}>

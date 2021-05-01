@@ -14,7 +14,7 @@ import VariablesState from "../states/VariablesState"
 import { WhichAnomaly } from "../states/WhichAnomaly"
 import { CanAddResultState } from "../states/CanAddResultState"
 
-export default function TraceSelector() {
+export default function ResultSelector() {
   const savedResults = ResultStatesStore()
   const resultsCounter = ResultStateCounter()
   const actionState = ActionMangament()
@@ -69,6 +69,16 @@ export default function TraceSelector() {
               variableState: variableStateClone,
               whichAnomaly: whichAnomalyClone,
             })
+            problemState.setStore(problemStateClone)
+            actionState.setStore(actionStateClone)
+            buttonsName.setStore(buttonsNameClone)
+            hardConstraint.setStore(hardConstraintClone)
+            ruleSelected.setStore(ruleSelectedClone)
+            ruleState.setStore(ruleStateClone)
+            ruleSynthetizedState.setStore(ruleSynthetizedClone)
+            runState.setStore(runStateClone)
+            variableState.setStore(variableStateClone)
+            whichAnomaly.setStore(whichAnomalyClone)
           }}
           disabled={!canAddResultState.bool}
         >
