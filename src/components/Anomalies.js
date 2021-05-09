@@ -62,10 +62,10 @@ export default function Anomalies() {
           Anomalies different action
         </button>
       </div>
-      <div className="flex overflow-auto h-96">
+      <div className="flex overflow-y-auto items-start h-96">
         <table className="table-auto text-left">
           <thead>
-            <tr>
+            <tr className="">
               <th className="p-3 w-50"> # : ({anomaliesLength}) </th>
               <th className="p-3 w-50"> Run </th>
               <th className="p-3 w-50"> Step </th>

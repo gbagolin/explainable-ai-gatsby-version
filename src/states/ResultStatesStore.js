@@ -12,6 +12,27 @@ export const ResultStatesStore = create(set => ({
   variableState: new Map(),
   whichAnomaly: new Map(),
 
+  setStore : maps => set(() => {
+    return {
+        problemState: maps.problemState,
+        actionState: maps.actionState,
+        buttonsName: maps.buttonsName,
+        hardConstraint: v.hardConstraint,
+        ruleSelected: maps.ruleSelected,
+        ruleState: maps.ruleState,
+        ruleSynthetizedState: maps.ruleSynthetizedState,
+        runState: maps.runState,
+        variableState: maps.variableState,
+        whichAnomaly: maps.whichAnomaly,
+    }
+  }), 
+
+  setActionStore : actionMap => set(() => {
+    return {
+      actionState : actionMap
+    }
+  }), 
+
   setResultStore: args =>
     set(state => {
       state.problemState.set(args.id, args.problemState)
