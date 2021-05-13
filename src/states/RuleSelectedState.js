@@ -6,8 +6,8 @@ import create from "zustand"
  */
 const RuleSelectedState = create(set => ({
   ruleString: "",
-  ruleId: undefined,
-  actionId: undefined,
+  ruleId: 0,
+  actionId: 0,
   setStore: store => set(() => store),
   setRuleString: newRuleString =>
     set(() => ({

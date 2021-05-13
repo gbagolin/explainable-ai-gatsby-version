@@ -25,7 +25,7 @@ export default function Anomalies() {
     if (anomalies === undefined) return []
     for (const anomalyObject of anomalies) {
       if (anomalyObject.actions === undefined) return []
-      if (anomalyObject.actions.id === id) {
+      if (anomalyObject.actions.id == id) {
         return anomalyObject.anomalies
       }
     }

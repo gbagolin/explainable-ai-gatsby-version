@@ -9,13 +9,13 @@ export default function RuleSynthetized() {
   const getActionById = id => {
     for (const tmpRule of rule.rule.rule) {
       if (tmpRule.action === undefined) return undefined
-      if (tmpRule.action.id === actionSelected) {
+      if (tmpRule.action.id == id) {
         return tmpRule
       }
     }
     return undefined
   }
-
+  console.log("Action selected : ", actionSelected)
   return (
     <div className="flex-wrap border-2 rounded-lg shadow-lg w-96 h-auto m-5 p-5 text-lg">
       <p className="text-left font-bold text-2xl"> Rule synthetized:</p>

@@ -16,6 +16,7 @@ import { CanAddResultState } from "../states/CanAddResultState"
 import download from "../images/download.png"
 import upload from "../images/upload.png"
 import { saveAs } from "file-saver"
+import RuleReady from "../states/RuleReady"
 
 export default function ResultSelector() {
   const savedResults = ResultStatesStore()
@@ -31,6 +32,7 @@ export default function ResultSelector() {
   const variableState = VariablesState()
   const whichAnomaly = WhichAnomaly()
   const canAddResultState = CanAddResultState()
+  const ruleReady = RuleReady()
 
   const dummyVar = () => {
     const arr = []
@@ -53,8 +55,74 @@ export default function ResultSelector() {
     }
   }
 
+  function isInt(number) {
+    return parseInt(number) == number
+  }
+
+  function parseIntObjectUploaded(obj) {
+    const newObject = {}
+    for (const key in obj) {
+      if (obj.hasOwnProperty(key)) {
+        if (isInt(key)) {
+          const newKey = parseInt(key, 10)
+          newObject[newKey] = obj[key]
+        } else {
+          newObject[key] = obj[key]
+        }
+        if (typeof obj[key] === "object") {
+          parseIntObjectUploaded(obj[key])
+        }
+      }
+    }
+    return newObject
+  }
+
   function parseObjectUploaded(objectUploaded) {
     objectUploaded.problemState = objectUploaded.problemState
+    objectUploaded.ruleReady = objectUploaded.ruleReady
+    objectUploaded.actionState.actions = new Map(
+      Object.entries(objectUploaded.actionState.actions)
+    )
+    objectUploaded.buttonsName.currentState = new Map(
+      Object.entries(objectUploaded.buttonsName.currentState)
+    )
+    objectUploaded.buttonsName.buttonsName = new Map(
+      Object.entries(objectUploaded.buttonsName.buttonsName)
+    )
+    objectUploaded.hardConstraint.hardConstraints = new Set(
+      objectUploaded.hardConstraint.hardConstraints
+    )
+    objectUploaded.ruleState.constraints = new Map(
+      Object.entries(objectUploaded.ruleState.constraints)
+    )
+    for (const key of objectUploaded.ruleState.constraints.keys()) {
+      const constraint = objectUploaded.ruleState.constraints.get(key)
+      const newConstraint = new Map(Object.entries(constraint))
+      objectUploaded.ruleState.constraints.set(key, newConstraint)
+    }
+    objectUploaded.ruleState.logicConnector = new Map(
+      Object.entries(objectUploaded.ruleState.logicConnector)
+    )
+    objectUploaded.ruleState.tempConstraint = new Map(
+      Object.entries(objectUploaded.ruleState.tempConstraint)
+    )
+    objectUploaded.ruleState.ruleString = new Map(
+      Object.entries(objectUploaded.ruleState.ruleString)
+    )
+    for (const key of objectUploaded.ruleState.ruleString.keys()) {
+      const string = objectUploaded.ruleState.ruleString.get(key)
+      const newString = new Map(Object.entries(string))
+      objectUploaded.ruleState.ruleString.set(key, newString)
+    }
+    objectUploaded.ruleState.subRuleCounter = new Map(
+      Object.entries(objectUploaded.ruleState.subRuleCounter)
+    )
+    objectUploaded.ruleState.ruleIdCounter = new Map(
+      Object.entries(objectUploaded.ruleState.ruleIdCounter)
+    )
+    objectUploaded.variableState.variables = new Set(
+      objectUploaded.variableState.variables
+    )
   }
 
   return (
@@ -75,10 +143,28 @@ export default function ResultSelector() {
                   const fileReader = new FileReader()
                   fileReader.onload = function (fileLoadedEvent) {
                     var textFromFileLoaded = fileLoadedEvent.target.result
-                    const objectsInFile = JSON.parse(textFromFileLoaded)
+
+                    let objectsInFile = JSON.parse(textFromFileLoaded)
+
+                    console.log("original object:", objectsInFile)
+
+                    objectsInFile = parseIntObjectUploaded(objectsInFile)
+
+                    console.log("object after parsing to int:", objectsInFile)
+
                     parseObjectUploaded(objectsInFile)
-                    console.log(objectsInFile.problemState)
+
                     problemState.setStore(objectsInFile.problemState)
+                    ruleReady.setStore(objectsInFile.ruleReady)
+                    actionState.setStore(objectsInFile.actionState)
+                    buttonsName.setStore(objectsInFile.buttonsName)
+                    hardConstraint.setStore(objectsInFile.hardConstraint)
+                    ruleSelected.setStore(objectsInFile.ruleSelected)
+                    ruleState.setStore(objectsInFile.ruleState)
+                    ruleSynthetizedState.setStore(objectsInFile.ruleSynthetized)
+                    runState.setStore(objectsInFile.runState)
+                    variableState.setStore(objectsInFile.variableState)
+                    whichAnomaly.setStore(objectsInFile.whichAnomaly)
                   }
                   fileReader.readAsText(file, "UTF-8")
                 }}
@@ -94,13 +180,13 @@ export default function ResultSelector() {
                     actionState: clonedeep(actionState),
                     buttonsName: clonedeep(buttonsName),
                     hardConstraint: clonedeep(hardConstraint),
-                    hardConstraint: clonedeep(hardConstraint),
                     ruleSelected: clonedeep(ruleSelected),
                     ruleState: clonedeep(ruleState),
                     ruleSynthetized: clonedeep(ruleSynthetizedState),
                     runState: clonedeep(runState),
                     variableState: clonedeep(variableState),
                     whichAnomaly: clonedeep(whichAnomaly),
+                    ruleReady: clonedeep(ruleReady),
                   }
                   parseSavedResult(objectToSave)
 
@@ -108,7 +194,7 @@ export default function ResultSelector() {
                     type: "application/JSON",
                     name: "result.json",
                   })
-                  saveAs(fileToSave, 'result.json')
+                  saveAs(fileToSave, "result.json")
                 }}
               ></img>
             </button>
@@ -122,8 +208,6 @@ export default function ResultSelector() {
           onClick={() => {
             resultsCounter.increment()
             resultsCounter.setSelected(resultsCounter.counter)
-
-            console.log("original problem state: ", problemState)
             const problemStateClone = clonedeep(problemState)
             const actionStateClone = clonedeep(actionState)
             const buttonsNameClone = clonedeep(buttonsName)
@@ -134,6 +218,7 @@ export default function ResultSelector() {
             const runStateClone = clonedeep(runState)
             const variableStateClone = clonedeep(variableState)
             const whichAnomalyClone = clonedeep(whichAnomaly)
+
             savedResults.setResultStore({
               id: resultsCounter.counter,
               problemState: problemStateClone,

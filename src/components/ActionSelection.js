@@ -45,7 +45,7 @@ export default function ActionSelection() {
         <div className="m-3"> </div>
         {[...actionState.actions.keys()].map((key, index) => {
           const style =
-            actionState.actionSelected === key
+            actionState.actionSelected == key
               ? "font-semibold rounded-lg p-3 yellow-color"
               : "font-semibold rounded-lg p-3 bg-yellow-100"
           return (
@@ -57,6 +57,7 @@ export default function ActionSelection() {
                 <button
                   className={style}
                   onClick={() => {
+                    console.log("Selecting action with key: ", key)
                     actionState.setActionSelected(key)
                   }}
                 >

@@ -215,9 +215,11 @@ const datasetKeyProvider = () => {
 export default function Plot() {
   const rule = RuleSynthetizedState(state => state.rule)
   const actionSelected = ActionMangament(state => state.actionSelected)
+
   const actionString = ActionMangament(state => state.actions).get(
     actionSelected
   )
+
   const anomalyType = WhichAnomaly()
   const anomalies =
     ((rule[anomalyType.type] || [])[actionSelected] || {}).anomalies || []
@@ -233,7 +235,7 @@ export default function Plot() {
     if (rule.rule === undefined) return []
     for (const tmpRule of rule.rule) {
       if (tmpRule.action === undefined) return []
-      if (tmpRule.action.id === id) {
+      if (tmpRule.action.id == id) {
         return tmpRule.constraints
       }
     }
