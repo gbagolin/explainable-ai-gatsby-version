@@ -28,7 +28,6 @@ function createDatasetFromStatesList(stateList, states) {
     //get all the object which are of the same state
     const stateBeliefs = stateList.filter(e => e.state === state)
     stateBeliefs.sort((a, b) => a.value - b.value)
-    console.log("State beliefs: ", stateBeliefs)
     //for each object
     let sum = 0
     //no analysis on this state, so a gray bar is added.
@@ -241,10 +240,7 @@ export default function Plot() {
     return []
   }
 
-  console.log("Scatter dataset: ", scatterDataset)
-  console.log(rule.rule)
   const constraints = getConstraintByActionId(actionSelected)
-  console.log("Constraints: ", constraints)
 
   return (
     <>
@@ -252,7 +248,6 @@ export default function Plot() {
       {constraints.map((constraintInOr, index) => {
         const dataset = createDatasetFromStatesList(constraintInOr, rule.states)
 
-        console.log("Plot dataset: ", dataset)
         const data = {
           labels: rule.states,
           datasets: dataset.concat(scatterDataset),

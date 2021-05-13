@@ -21,3 +21,8 @@ input[type="range"]::-webkit-slider-thumb {
     box-shadow: -405px 0 0 400px darkgrey;
     border-radius: 50%;
 }
+
+.image-upload > input {
+    display: none;
+    cursor: pointer;  
+  }

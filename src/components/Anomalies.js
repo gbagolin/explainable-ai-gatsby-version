@@ -35,8 +35,6 @@ export default function Anomalies() {
     rule[anomalyTypeState.type],
     actionSelected
   )
-  console.log("Hmm: ", rule[anomalyTypeState.type])
-  console.log("Anomalies: ", anomalies)
 
   const anomaliesLength = anomalies != undefined ? anomalies.length : 0
 

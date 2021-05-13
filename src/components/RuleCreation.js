@@ -134,7 +134,6 @@ export default function RuleCreation() {
                 setName("Send Rule")
                 ruleSynthetized.rule = response.data
                 ruleSynthetized.setRule(response.data)
-                console.log("Rule synthetized: ", ruleSynthetized)
                 const problemStateClone = clonedeep(problemState)
                 const actionStateClone = clonedeep(actionState)
                 const buttonsNameClone = clonedeep(buttonsName)
@@ -145,7 +144,6 @@ export default function RuleCreation() {
                 const runStateClone = clonedeep(runState)
                 const variableStateClone = clonedeep(variableState)
                 const whichAnomalyClone = clonedeep(whichAnomaly)
-                console.log("Selected result: ", resultCounter.selected)
                 resultStore.setResultStore({
                   id: resultCounter.selected,
                   problemState: problemStateClone,

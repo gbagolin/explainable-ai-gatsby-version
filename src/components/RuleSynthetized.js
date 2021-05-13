@@ -6,7 +6,6 @@ export default function RuleSynthetized() {
   const rule = RuleSynthetizedState()
   const actionSelected = ActionMangament(state => state.actionSelected)
 
-  console.log("Rule: ", rule)
   const getActionById = id => {
     for (const tmpRule of rule.rule.rule) {
       if (tmpRule.action === undefined) return undefined

@@ -14,6 +14,7 @@ import VariablesState from "../states/VariablesState"
 import { WhichAnomaly } from "../states/WhichAnomaly"
 import { CanAddResultState } from "../states/CanAddResultState"
 import download from "../images/download.png"
+import upload from "../images/upload.png"
 import { saveAs } from "file-saver"
 
 export default function ResultSelector() {
@@ -52,13 +53,8 @@ export default function ResultSelector() {
     }
   }
 
-  function parseObjectUploaded(objectUploaded){
-    objectUploaded.actionState = new Map(Object.entries(objectUploaded.actionState))
-    for(const key of objectUploaded.actionState.keys()){
-      const element = objectUploaded.actionState.get(key)
-      element.actions = new Map(Object.entries(element.actions))
-      objectUploaded.actionState.set(key, element)
-    }
+  function parseObjectUploaded(objectUploaded) {
+    objectUploaded.problemState = objectUploaded.problemState
   }
 
   return (
@@ -66,25 +62,57 @@ export default function ResultSelector() {
       <div className="flex flex-row border-2 rounded-lg shadow-lg m-5 p-3 text-lg">
         <div className="flex flex-col">
           <p>Result selector: </p>
-          {/* <input
-            className="w-9 h-9 disabled:opacity-50"
-            type="file"
-            src={download}
-            onChange={e => {
-              const file = e.target.files[0]
-              const fileReader = new FileReader()
-              fileReader.onload = function (fileLoadedEvent) {
-                var textFromFileLoaded = fileLoadedEvent.target.result
-                const objectsInFile = JSON.parse(textFromFileLoaded)
-                parseObjectUploaded(objectsInFile)
-                savedResults.setActionStore(objectsInFile.actionState)
-                console.log(objectsInFile.actionState)
-                actionState.setStore(objectsInFile.actionState)
-                console.log(actionState)
-              }
-              fileReader.readAsText(file, "UTF-8")
-            }}
-          /> */}
+          <div className="flex flex-row">
+            <div className="image-upload">
+              <label htmlFor="file-input">
+                <img src={upload} className="h-9 w-9" />
+              </label>
+              <input
+                id="file-input"
+                type="file"
+                onChange={e => {
+                  const file = e.target.files[0]
+                  const fileReader = new FileReader()
+                  fileReader.onload = function (fileLoadedEvent) {
+                    var textFromFileLoaded = fileLoadedEvent.target.result
+                    const objectsInFile = JSON.parse(textFromFileLoaded)
+                    parseObjectUploaded(objectsInFile)
+                    console.log(objectsInFile.problemState)
+                    problemState.setStore(objectsInFile.problemState)
+                  }
+                  fileReader.readAsText(file, "UTF-8")
+                }}
+              ></input>
+            </div>
+            <button>
+              <img
+                src={download}
+                className="h-9 w-9"
+                onClick={() => {
+                  const objectToSave = {
+                    problemState: clonedeep(problemState),
+                    actionState: clonedeep(actionState),
+                    buttonsName: clonedeep(buttonsName),
+                    hardConstraint: clonedeep(hardConstraint),
+                    hardConstraint: clonedeep(hardConstraint),
+                    ruleSelected: clonedeep(ruleSelected),
+                    ruleState: clonedeep(ruleState),
+                    ruleSynthetized: clonedeep(ruleSynthetizedState),
+                    runState: clonedeep(runState),
+                    variableState: clonedeep(variableState),
+                    whichAnomaly: clonedeep(whichAnomaly),
+                  }
+                  parseSavedResult(objectToSave)
+
+                  const fileToSave = new Blob([JSON.stringify(objectToSave)], {
+                    type: "application/JSON",
+                    name: "result.json",
+                  })
+                  saveAs(fileToSave, 'result.json')
+                }}
+              ></img>
+            </button>
+          </div>
         </div>
         <div className="m-2"></div>
         <button
@@ -92,32 +120,10 @@ export default function ResultSelector() {
             "rounded-full bg-yellow-300 h-8 w-8 flex items-center justify-center text-lg disabled:opacity-50"
           }
           onClick={() => {
-            const tempObjectToSave = clonedeep(savedResults)
-            console.log("Prima: ", tempObjectToSave)
-            parseSavedResult(tempObjectToSave)
-            console.log("Dopo:", tempObjectToSave)
-
-            const objectToSave = {
-              problemState: tempObjectToSave.problemState,
-              actionState: tempObjectToSave.actionState,
-              buttonsName: tempObjectToSave.buttonsName,
-              hardConstraint: tempObjectToSave.hardConstraint,
-              ruleSelected: tempObjectToSave.ruleSelected,
-              ruleState: tempObjectToSave.ruleState,
-              ruleSynthetizedState: tempObjectToSave.ruleSynthetizedState,
-              runState: tempObjectToSave.runState,
-              variableState: tempObjectToSave.variableState,
-              whichAnomaly: tempObjectToSave.whichAnomaly,
-            }
-            console.log("object to save: ", objectToSave)
-            const fileToSave = new Blob([JSON.stringify(objectToSave)], {
-              type: "application/JSON",
-              name: "prova.json",
-            })
-            saveAs(fileToSave, "prova.json")
-
             resultsCounter.increment()
             resultsCounter.setSelected(resultsCounter.counter)
+
+            console.log("original problem state: ", problemState)
             const problemStateClone = clonedeep(problemState)
             const actionStateClone = clonedeep(actionState)
             const buttonsNameClone = clonedeep(buttonsName)
@@ -164,7 +170,7 @@ export default function ResultSelector() {
               ? "rounded-full bg-yellow-300 h-8 w-8 flex items-center justify-center"
               : "rounded-full bg-yellow-100 h-8 w-8 flex items-center justify-center"
           return (
-            <>
+            <div key={v}>
               <button
                 className={selectedClass}
                 onClick={() => {
@@ -207,7 +213,7 @@ export default function ResultSelector() {
                 {index + 1}
               </button>
               <div className="m-2"></div>
-            </>
+            </div>
           )
         })}
       </div>
