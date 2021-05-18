@@ -57,7 +57,6 @@ export default function ActionSelection() {
                 <button
                   className={style}
                   onClick={() => {
-                    console.log("Selecting action with key: ", key)
                     actionState.setActionSelected(key)
                   }}
                 >

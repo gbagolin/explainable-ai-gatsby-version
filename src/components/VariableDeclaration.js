@@ -30,7 +30,7 @@ export default function VariableDeclaration() {
         <div className="flex flex-col">
           {[...variablesState.variables].map((element, index) => {
             return (
-              <>
+              <div key={index}>
                 <div className="flex flex-row justify-between">
                   <p>
                     {index + 1}. {element}
@@ -44,8 +44,8 @@ export default function VariableDeclaration() {
                     X
                   </button>
                 </div>
-                <div className="mt-2"></div>
-              </>
+                <div className="mt-2" key={index}></div>
+              </div>
             )
           })}
         </div>

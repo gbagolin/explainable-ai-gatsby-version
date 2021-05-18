@@ -221,8 +221,21 @@ export default function Plot() {
   )
 
   const anomalyType = WhichAnomaly()
-  const anomalies =
-    ((rule[anomalyType.type] || [])[actionSelected] || {}).anomalies || []
+
+  function getAnomaliesByActionSelected() {
+    if (rule[anomalyType.type] === undefined) return []
+    for (const anomalyObject of rule[anomalyType.type]) {
+      if (anomalyObject.actions === undefined) {
+        return []
+      }
+      if (anomalyObject.actions.id === actionSelected) {
+        return anomalyObject.anomalies
+      }
+    }
+    return []
+  }
+
+  const anomalies = getAnomaliesByActionSelected()
 
   const runState = RunState()
   const scatterDataset = createScatterDataset(
@@ -245,7 +258,7 @@ export default function Plot() {
   const constraints = getConstraintByActionId(actionSelected)
 
   return (
-    <>
+    <div>
       {" "}
       {constraints.map((constraintInOr, index) => {
         const dataset = createDatasetFromStatesList(constraintInOr, rule.states)
@@ -255,7 +268,7 @@ export default function Plot() {
           datasets: dataset.concat(scatterDataset),
         }
         return (
-          <>
+          <div key={index}>
             <p className="text-center">
               Distribution of state beliefs of sub rule: {index + 1}{" "}
             </p>{" "}
@@ -265,9 +278,9 @@ export default function Plot() {
               options={OPTIONS}
               datasetKeyProvider={datasetKeyProvider}
             />{" "}
-          </>
+          </div>
         )
       })}{" "}
-    </>
+    </div>
   )
 }

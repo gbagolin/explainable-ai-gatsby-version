@@ -102,7 +102,7 @@ export default function Anomalies() {
                 runState.run === element ? "rounded-lg bg-yellow-100" : ""
 
               return (
-                <tr className={background}>
+                <tr className={background} key={index}>
                   <td className="p-3 w-50"> {index + 1} </td>
                   <td className="p-3 w-50">
                     <button
@@ -115,9 +115,9 @@ export default function Anomalies() {
                   <td className="p-3 w-50"> {element.step} </td>
                   <td className="p-3 w-50"> {element.action} </td>
                   <td className="p-3 w-50">
-                    {element.beliefs.map(belief => {
+                    {element.beliefs.map((belief, key) => {
                       return (
-                        <p>
+                        <p key={key}>
                           {belief.state}: {belief.belief.toFixed(2)}
                         </p>
                       )

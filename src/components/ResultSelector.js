@@ -4,7 +4,7 @@ import ProblemState from "../states/ProblemState"
 import { ResultStateCounter } from "../states/ResultStateCounter"
 import { ResultStatesStore } from "../states/ResultStatesStore"
 import RuleState from "../states/RuleState"
-import { clonedeep, entries } from "lodash"
+import { clone, clonedeep, entries } from "lodash"
 import HardConstraintState from "../states/HardConstraintState"
 import ButtonsName from "../states/ButtonsName"
 import RuleSelectedState from "../states/RuleSelectedState"
@@ -60,66 +60,108 @@ export default function ResultSelector() {
   }
 
   function parseIntObjectUploaded(obj) {
-    const newObject = {}
     for (const key in obj) {
       if (obj.hasOwnProperty(key)) {
         if (isInt(key)) {
           const newKey = parseInt(key, 10)
-          newObject[newKey] = obj[key]
+          obj[newKey] = obj[key]
         } else {
-          newObject[key] = obj[key]
+          obj[key] = obj[key]
         }
         if (typeof obj[key] === "object") {
           parseIntObjectUploaded(obj[key])
         }
       }
     }
-    return newObject
   }
 
   function parseObjectUploaded(objectUploaded) {
     objectUploaded.problemState = objectUploaded.problemState
     objectUploaded.ruleReady = objectUploaded.ruleReady
-    objectUploaded.actionState.actions = new Map(
-      Object.entries(objectUploaded.actionState.actions)
-    )
-    objectUploaded.buttonsName.currentState = new Map(
-      Object.entries(objectUploaded.buttonsName.currentState)
-    )
-    objectUploaded.buttonsName.buttonsName = new Map(
-      Object.entries(objectUploaded.buttonsName.buttonsName)
-    )
+
+    const actionEntries = Object.entries(
+      objectUploaded.actionState.actions
+    ).map(([key, value]) => [parseInt(key), value])
+
+    // console.log("Action entries: ", actionEntries)
+
+    objectUploaded.actionState.actions = new Map(actionEntries)
+
+    const currentState = Object.entries(
+      objectUploaded.buttonsName.currentState
+    ).map(([key, value]) => [parseInt(key), value])
+
+    // console.log("Current state: ", currentState)
+    objectUploaded.buttonsName.currentState = new Map(currentState)
+
+    const buttonsName = Object.entries(
+      objectUploaded.buttonsName.buttonsName
+    ).map(([key, value]) => [parseInt(key), value])
+
+    objectUploaded.buttonsName.buttonsName = new Map(buttonsName)
+
     objectUploaded.hardConstraint.hardConstraints = new Set(
       objectUploaded.hardConstraint.hardConstraints
     )
-    objectUploaded.ruleState.constraints = new Map(
-      Object.entries(objectUploaded.ruleState.constraints)
-    )
+
+    const constraints = Object.entries(
+      objectUploaded.ruleState.constraints
+    ).map(([key, value]) => [parseInt(key), value])
+
+    objectUploaded.ruleState.constraints = new Map(constraints)
+
     for (const key of objectUploaded.ruleState.constraints.keys()) {
       const constraint = objectUploaded.ruleState.constraints.get(key)
-      const newConstraint = new Map(Object.entries(constraint))
+      const tempConstraint = Object.entries(constraint).map(([key, value]) => [
+        parseInt(key),
+        value,
+      ])
+      const newConstraint = new Map(tempConstraint)
       objectUploaded.ruleState.constraints.set(key, newConstraint)
     }
-    objectUploaded.ruleState.logicConnector = new Map(
-      Object.entries(objectUploaded.ruleState.logicConnector)
-    )
-    objectUploaded.ruleState.tempConstraint = new Map(
-      Object.entries(objectUploaded.ruleState.tempConstraint)
-    )
-    objectUploaded.ruleState.ruleString = new Map(
-      Object.entries(objectUploaded.ruleState.ruleString)
-    )
+
+    const logicConnector = Object.entries(
+      objectUploaded.ruleState.logicConnector
+    ).map(([key, value]) => [parseInt(key), value])
+
+    objectUploaded.ruleState.logicConnector = new Map(logicConnector)
+
+    const tempConstraint = Object.entries(
+      objectUploaded.ruleState.tempConstraint
+    ).map(([key, value]) => [parseInt(key), value])
+
+    objectUploaded.ruleState.tempConstraint = new Map(tempConstraint)
+
+    const ruleString = Object.entries(
+      objectUploaded.ruleState.ruleString
+    ).map(([key, value]) => [parseInt(key), value])
+
+    objectUploaded.ruleState.ruleString = new Map(ruleString)
+
     for (const key of objectUploaded.ruleState.ruleString.keys()) {
       const string = objectUploaded.ruleState.ruleString.get(key)
-      const newString = new Map(Object.entries(string))
+
+      const tempString = Object.entries(string).map(([key, value]) => [
+        parseInt(key),
+        value,
+      ])
+
+      const newString = new Map(tempString)
       objectUploaded.ruleState.ruleString.set(key, newString)
     }
-    objectUploaded.ruleState.subRuleCounter = new Map(
-      Object.entries(objectUploaded.ruleState.subRuleCounter)
-    )
-    objectUploaded.ruleState.ruleIdCounter = new Map(
-      Object.entries(objectUploaded.ruleState.ruleIdCounter)
-    )
+
+    const subRuleCounter = Object.entries(
+      objectUploaded.ruleState.subRuleCounter
+    ).map(([key, value]) => [parseInt(key), value])
+
+    objectUploaded.ruleState.subRuleCounter = new Map(subRuleCounter)
+
+    const ruleIdCounter = Object.entries(
+      objectUploaded.ruleState.ruleIdCounter
+    ).map(([key, value]) => [parseInt(key), value])
+
+    objectUploaded.ruleState.ruleIdCounter = new Map(ruleIdCounter)
+
     objectUploaded.variableState.variables = new Set(
       objectUploaded.variableState.variables
     )
@@ -142,29 +184,50 @@ export default function ResultSelector() {
                   const file = e.target.files[0]
                   const fileReader = new FileReader()
                   fileReader.onload = function (fileLoadedEvent) {
-                    var textFromFileLoaded = fileLoadedEvent.target.result
+                    const textFromFileLoaded = fileLoadedEvent.target.result
 
-                    let objectsInFile = JSON.parse(textFromFileLoaded)
+                    const originalObject = JSON.parse(textFromFileLoaded)
 
-                    console.log("original object:", objectsInFile)
 
-                    objectsInFile = parseIntObjectUploaded(objectsInFile)
+                    const copyOfOriginalObject = clonedeep(originalObject)
 
-                    console.log("object after parsing to int:", objectsInFile)
+                    parseIntObjectUploaded(copyOfOriginalObject)
 
-                    parseObjectUploaded(objectsInFile)
 
-                    problemState.setStore(objectsInFile.problemState)
-                    ruleReady.setStore(objectsInFile.ruleReady)
-                    actionState.setStore(objectsInFile.actionState)
-                    buttonsName.setStore(objectsInFile.buttonsName)
-                    hardConstraint.setStore(objectsInFile.hardConstraint)
-                    ruleSelected.setStore(objectsInFile.ruleSelected)
-                    ruleState.setStore(objectsInFile.ruleState)
-                    ruleSynthetizedState.setStore(objectsInFile.ruleSynthetized)
-                    runState.setStore(objectsInFile.runState)
-                    variableState.setStore(objectsInFile.variableState)
-                    whichAnomaly.setStore(objectsInFile.whichAnomaly)
+                    const objectFinalParsed = clonedeep(copyOfOriginalObject)
+
+                    parseObjectUploaded(objectFinalParsed)
+
+
+                    savedResults.setResultStore({
+                      id: resultsCounter.selected,
+                      problemState: objectFinalParsed.problemState,
+                      actionState: objectFinalParsed.actionState,
+                      buttonsName: objectFinalParsed.buttonsName,
+                      hardConstraint: objectFinalParsed.hardConstraint,
+                      ruleSelected: objectFinalParsed.ruleSelected,
+                      ruleState: objectFinalParsed.ruleState,
+                      ruleSynthetizedState: objectFinalParsed.ruleSynthetized,
+                      runState: objectFinalParsed.runState,
+                      variableState: objectFinalParsed.variableState,
+                      whichAnomaly: objectFinalParsed.whichAnomaly,
+                    })
+
+                    problemState.setStore(objectFinalParsed.problemState)
+                    ruleReady.setStore(objectFinalParsed.ruleReady)
+                    actionState.setStore(objectFinalParsed.actionState)
+                    buttonsName.setStore(objectFinalParsed.buttonsName)
+                    hardConstraint.setStore(objectFinalParsed.hardConstraint)
+                    ruleSelected.setStore(objectFinalParsed.ruleSelected)
+                    ruleState.setStore(objectFinalParsed.ruleState)
+                    ruleSynthetizedState.setStore(
+                      objectFinalParsed.ruleSynthetized
+                    )
+                    runState.setStore(objectFinalParsed.runState)
+                    variableState.setStore(objectFinalParsed.variableState)
+                    whichAnomaly.setStore(objectFinalParsed.whichAnomaly)
+
+                    canAddResultState.setBool(true)
                   }
                   fileReader.readAsText(file, "UTF-8")
                 }}
