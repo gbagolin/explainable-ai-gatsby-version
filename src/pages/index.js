@@ -20,6 +20,7 @@ import RuleState from "../states/RuleState"
 import ProblemState from "../states/ProblemState"
 import ActionMangament from "../states/ActionState"
 import { clonedeep } from "lodash"
+import { GraphVisualization } from "../components/GraphVisualization"
 
 export default function Home() {
   const resultStore = ResultStatesStore()
@@ -46,6 +47,7 @@ export default function Home() {
         </div>
         <div className="flex flex-col flex-shrink">
           <Anomalies></Anomalies>
+          <GraphVisualization></GraphVisualization>
         </div>
         <ModalProblemSelection></ModalProblemSelection>
         <ModalAddAction></ModalAddAction>
