@@ -11,7 +11,7 @@ export default function HardConstraint() {
   const isButtonDisabled = variables.size > 0 ? false : true
 
   return (
-    <div className="border-2 rounded-lg shadow-lg w-96 h-auto m-1 p-5 text-lg">
+    <div className="border-2 rounded-lg shadow-lg w-96 h-auto mt-2 p-5 text-lg">
       <div className="flex flex-col flex-initial justify-items-start">
         <div className="flex flex-row justify-between items-center">
           <div>
@@ -35,16 +35,30 @@ export default function HardConstraint() {
          * body
          */}
         <div className="flex flex-col">
-          {hardConstraint.hardConstraints.map((element, index) => {
+          {[...hardConstraint.hardConstraints].map((element, index) => {
             return (
-              <p>
-                {index + 1}. {element.toString()}
-              </p>
+              <div className="flex w-auto h-auto justify-between items-center">
+                <div>
+                  <p>
+                    {index + 1}. {element.toString()}
+                  </p>
+                </div>
+                <div>
+                  <button
+                    className="rounded-full bg-yellow-300 h-8 w-8 flex items-center justify-center"
+                    onClick={() => {
+                      hardConstraint.removeHardConstraint(element)
+                    }}
+                  >
+                    X
+                  </button>
+                </div>
+              </div>
             )
           })}
         </div>
+        <div className="mb-5"> </div>
       </div>
-      <div className="mb-5"> </div>
     </div>
   )
 }

@@ -2,7 +2,6 @@ import create from "zustand"
 
 import VIEWS from "../util/VIEWS"
 import logicConnector from "../util/LOGIC_CONNECTORS"
-import ButtonsName from "./ButtonsName"
 
 const STATE_MAPPING = {
   tigerright: "tiger right",
@@ -13,81 +12,71 @@ const STATE_MAPPING = {
  * @type {UseStore<{setVisible: function(*): *, visible: boolean}>}
  */
 const RuleState = create(set => ({
-  problemName: "",
-  traceName: "",
-  attributes: undefined,
-  variables: [],
-  constraints: [],
-  logicConnector: [],
-  tempConstraint: [],
-  ruleString: [],
-  subRuleCounter: [],
+  constraints: new Map(),
+  logicConnector: new Map(),
+  tempConstraint: new Map(),
+  ruleString: new Map(),
+  subRuleCounter: new Map(),
+  ruleIdCounter: new Map(),
 
-  addRule: () =>
-    set(state => ({
-      constraints: [...state.constraints, []],
-      variables: [...state.variables, []],
-      logicConnector: [...state.logicConnector, logicConnector.OR],
-      tempConstraint: [...state.tempConstraint, {}],
-      ruleString: [...state.ruleString, []],
-      subRuleCounter: [...state.subRuleCounter, 1],
-    })),
+  setStore: store => set(() => store),
+  addRule: actionId =>
+    set(state => {
+      state.constraints.set(actionId, new Map())
+      state.logicConnector.set(actionId, logicConnector.OR)
+      state.tempConstraint.set(actionId, {})
+      state.ruleString.set(actionId, new Map())
+      state.subRuleCounter.set(actionId, 0)
+      state.ruleIdCounter.set(actionId, 0)
 
-  setProblemName: state =>
-    set(() => {
       return {
-        attributes: state.attributes,
-        problemName: state.problemName,
+        constraints: state.constraints,
+        ruleString: state.ruleString,
       }
     }),
 
   resetRuleState: () =>
     set(() => ({
-      problemName: "",
-      traceName: "",
-      attributes: undefined,
-      variables: [],
-      constraints: [],
-      logicConnector: [],
-      tempConstraint: [],
-      ruleString: [],
-      subRuleCounter: [],
+      constraints: new Map(),
+      logicConnector: new Map(),
+      tempConstraint: new Map(),
+      ruleString: new Map(),
+      subRuleCounter: new Map(),
     })),
 
   setRuleString: (actionId, ruleId, newRuleString) =>
     set(state => {
-      state.ruleString[actionId][ruleId] = newRuleString
+      state.ruleString.get(actionId).set(ruleId, newRuleString)
+      return {
+        ruleString: state.ruleString,
+      }
     }),
 
   removeConstraint: actionId =>
     set(state => {
-      state.constraints.splice(actionId, 1)
-      state.ruleString.splice(actionId, 1)
-      state.logicConnector.splice(actionId, 1)
-      state.tempConstraint.splice(actionId, 1)
-      state.subRuleCounter.splice(actionId, 1)
+      state.constraints.delete(actionId)
+      state.ruleString.delete(actionId)
+      state.logicConnector.delete(actionId)
+      state.tempConstraint.delete(actionId)
+      state.subRuleCounter.delete(actionId)
     }),
 
   removeSubRule: (actionId, ruleId) =>
     set(state => {
-      state.constraints[actionId].splice(ruleId, 1)
-      state.ruleString[actionId].splice(ruleId, 1)
-      if (ruleId === state.ruleString[actionId].length - 1) {
-        state.tempConstraint[actionId] = {}
-        state.logicConnector[actionId] = logicConnector.OR
+      state.constraints.get(actionId).delete(ruleId)
+      state.ruleString.get(actionId).delete(ruleId)
+      //may not work, check it out later.
+      if (ruleId === state.ruleString.get(actionId).size - 1) {
+        state.tempConstraint.set(actionId, {})
+        state.logicConnector.set(actionId, logicConnector.OR)
       }
     }),
+
   editRule: (actionId, ruleId, ruleString) =>
     set(state => {
-      console.log(state.constraints)
-      console.log({
-        action: actionId,
-        ruleId: ruleId,
-        ruleString: ruleString.split(" ").join(""),
-      })
       const REGEX = /(tigerleft|tigerright){1}(<|>|<=|>=){1}([a-z][0-9]+){1}(and){0,1}/g
       const matches = [...ruleString.split(" ").join("").matchAll(REGEX)]
-      //the rule insert is not correct.
+      //the rule inserted is not correct.
       if (matches.length === 0) {
         //TODO: ADD AN ERROR MESSAGE HERE
         return
@@ -100,72 +89,81 @@ const RuleState = create(set => ({
           variable: match[3],
         }
         subRulesInAnd.push(subRule)
-        console.log(match)
       }
-      state.constraints[actionId][ruleId] = subRulesInAnd
-      console.log(state.variables, state.ruleString, state.constraints)
+      state.constraints.get(actionId).set(ruleId, subRulesInAnd)
     }),
-
-  setTraceName: state => set(() => ({ traceName: state.traceName })),
 
   setConstraint: args =>
     set(state => {
+      const ruleId = state.ruleIdCounter.get(args.actionSelected)
       switch (+args.view) {
         case VIEWS.STATE_BELIEF: {
           //Edit rule String.
-          if (state.logicConnector[args.actionSelected] === logicConnector.OR) {
-            state.ruleString[args.actionSelected].push(args.element)
+          if (
+            state.logicConnector.get(args.actionSelected) === logicConnector.OR
+          ) {
+            state.ruleString.get(args.actionSelected).set(ruleId, args.element)
           } else {
-            if (state.ruleString[args.actionSelected].length === 0) {
-              state.ruleString[args.actionSelected].push("")
+            if (state.ruleString.get(args.actionSelected).size === 0) {
+              state.ruleString.get(args.actionSelected).set(ruleId, "")
             }
-            let tempRuleString = state.ruleString[args.actionSelected].pop()
+            let tempRuleString = state.ruleString
+              .get(args.actionSelected)
+              .get(ruleId)
             tempRuleString += " " + args.element
-            state.ruleString[args.actionSelected].push(tempRuleString)
+            state.ruleString
+              .get(args.actionSelected)
+              .set(ruleId, tempRuleString)
           }
-          state.tempConstraint[args.actionSelected]["state"] = args.element
+          state.tempConstraint.get(args.actionSelected)["state"] = args.element
           return {
-            ruleString: [...state.ruleString],
+            ruleString: state.ruleString,
             tempConstraint: state.tempConstraint,
           }
         }
         case VIEWS.OPERATOR: {
-          let rule = state.ruleString[args.actionSelected].pop()
+          let rule = state.ruleString.get(args.actionSelected).get(ruleId)
           rule += " " + args.element
-          state.ruleString[args.actionSelected].push(rule)
-          state.tempConstraint[args.actionSelected]["operator"] = args.element
+          state.ruleString.get(args.actionSelected).set(ruleId, rule)
+          state.tempConstraint.get(args.actionSelected)["operator"] =
+            args.element
           return {
-            ruleString: [...state.ruleString],
+            ruleString: state.ruleString,
             tempConstraint: state.tempConstraint,
           }
         }
         case VIEWS.VARIABLE: {
-          let rule = state.ruleString[args.actionSelected].pop()
+          let rule = state.ruleString.get(args.actionSelected).get(ruleId)
           rule += " " + args.element
-          state.ruleString[args.actionSelected].push(rule)
-          state.tempConstraint[args.actionSelected]["variable"] = args.element
+          state.ruleString.get(args.actionSelected).set(ruleId, rule)
+          state.tempConstraint.get(args.actionSelected)["variable"] =
+            args.element
           return {
-            ruleString: [...state.ruleString],
+            ruleString: state.ruleString,
             tempConstraint: state.tempConstraint,
           }
         }
         case VIEWS.LOGIC_CONNECTOR: {
           if (args.element.toLowerCase() === "and") {
-            let rule = state.ruleString[args.actionSelected].pop()
+            let rule = state.ruleString.get(args.actionSelected).get(ruleId)
             rule += " " + args.element.toLowerCase()
-            state.ruleString[args.actionSelected].push(rule)
+            state.ruleString.get(args.actionSelected).set(ruleId, rule)
+          } else if (args.element.toLowerCase() === "or") {
+            state.ruleIdCounter.set(args.actionSelected, ruleId + 1)
           }
-          switch (state.logicConnector[args.actionSelected]) {
+          switch (state.logicConnector.get(args.actionSelected)) {
             case logicConnector.OR:
               //no need to add the constraint, in case
-              state.constraints[args.actionSelected].push([
-                state.tempConstraint[args.actionSelected],
-              ])
+              state.constraints
+                .get(args.actionSelected)
+                .set(ruleId, [state.tempConstraint.get(args.actionSelected)])
               break
             case logicConnector.AND:
-              const subRule = state.constraints[args.actionSelected].pop()
-              subRule.push(state.tempConstraint[args.actionSelected])
-              state.constraints[args.actionSelected].push(subRule)
+              const subRule = state.constraints
+                .get(args.actionSelected)
+                .get(ruleId)
+              subRule.push(state.tempConstraint.get(args.actionSelected))
+              state.constraints.get(args.actionSelected).set(ruleId, subRule)
               break
             case logicConnector.DONE:
               const logic =
@@ -174,7 +172,7 @@ const RuleState = create(set => ({
                   : args.element.toLowerCase() === "or"
                   ? logicConnector.OR
                   : logicConnector.DONE
-              state.logicConnector[args.actionSelected] = logic
+              state.logicConnector.set(args.actionSelected, logic)
               return {
                 logicConnector: state.logicConnector,
               }
@@ -189,14 +187,15 @@ const RuleState = create(set => ({
               ? logicConnector.OR
               : logicConnector.DONE
 
-          state.logicConnector[args.actionSelected] = logic
-          state.tempConstraint[args.actionSelected] = {}
+          state.logicConnector.set(args.actionSelected, logic)
+          state.tempConstraint.set(args.actionSelected, {})
 
           return {
-            ruleString: [...state.ruleString],
+            ruleString: state.ruleString,
             constraints: state.constraints,
             tempConstraint: state.tempConstraint,
             logicConnector: state.logicConnector,
+            ruleIdCounter: state.ruleIdCounter,
           }
         }
         default:

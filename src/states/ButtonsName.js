@@ -15,22 +15,23 @@ function returnArray(element, index) {
   }
 }
 
-
 /**
  * State for ModalAction component, set first to not visible.
  * @type {UseStore<{visibile: boolean, setVisibile: function(): *}>}
  */
 export const ButtonsName = create(set => ({
-  currentState: [], //initial state
-  buttonsName: [],
+  currentState: new Map(), //initial state
+  buttonsName: new Map(),
+
+  setStore: store => set(() => store),
 
   addButtons: (actionSelected, problemAttributes) =>
     set(state => {
-      state.buttonsName.push([])
-      state.buttonsName[actionSelected] = problemAttributes.states.map(
-        returnArray
+      state.buttonsName.set(
+        actionSelected,
+        problemAttributes.states.map(returnArray)
       )
-      state.currentState.push(VIEWS.STATE_BELIEF)
+      state.currentState.set(actionSelected, VIEWS.STATE_BELIEF)
       return {
         currentState: state.currentState,
         buttonsName: state.buttonsName,
@@ -39,22 +40,26 @@ export const ButtonsName = create(set => ({
 
   resetButtonsName: () =>
     set(() => ({
-      currentState: [], //initial state
-      buttonsName: [],
+      currentState: new Map(), //initial state
+      buttonsName: new Map(),
     })),
 
   resetCurrentState: actionId =>
     set(state => {
-      state.currentState[actionId] = VIEWS.STATE_BELIEF
+      state.currentState.set(actionId, VIEWS.STATE_BELIEF)
       return {
-        currentState: [...state.currentState],
+        currentState: state.currentState,
       }
     }),
 
   resetButtonsHavingSpecificId: actionId =>
     set(state => {
-      state.currentState.splice(actionId, 1)
-      state.buttonsName.splice(actionId, 1)
+      state.currentState.delete(actionId)
+      state.buttonsName.delete(actionId)
+      return {
+        currentState: state.currentState,
+        buttonsName: state.buttonsName,
+      }
     }),
 
   goToNextState: (actionSelected, problemAttributes, variables, args) =>
@@ -62,49 +67,51 @@ export const ButtonsName = create(set => ({
       if (problemAttributes === undefined) {
         return
       }
-      switch (+state.currentState[actionSelected]) {
+      switch (+state.currentState.get(actionSelected)) {
         case VIEWS.LOGIC_CONNECTOR: {
-          state.buttonsName[actionSelected] = problemAttributes.states.map(
-            returnArray
+          state.buttonsName.set(
+            actionSelected,
+            problemAttributes.states.map(returnArray)
           )
-          state.currentState[actionSelected] = VIEWS.STATE_BELIEF
+          state.currentState.set(actionSelected, VIEWS.STATE_BELIEF)
           return {
-            buttonsName: [...state.buttonsName],
-            currentState: [...state.currentState],
+            buttonsName: state.buttonsName,
+            currentState: state.currentState,
           }
         }
 
         case VIEWS.STATE_BELIEF: {
-          state.buttonsName[actionSelected] = ["<", "<=", ">=", ">"].map(
-            returnArray
+          state.buttonsName.set(
+            actionSelected,
+            ["<", "<=", ">=", ">"].map(returnArray)
           )
-          state.currentState[actionSelected] = VIEWS.OPERATOR
+          state.currentState.set(actionSelected, VIEWS.OPERATOR)
           return {
-            buttonsName: [...state.buttonsName],
-            currentState: [...state.currentState],
+            buttonsName: state.buttonsName,
+            currentState: state.currentState,
           }
         }
         case VIEWS.OPERATOR: {
           const variablesObjects = variables.map((element, index) => {
             return { id: index, name: element }
           })
-          state.buttonsName[actionSelected] = variablesObjects
-          console.log(variables)
-          state.currentState[actionSelected] = VIEWS.VARIABLE
+          state.buttonsName.set(actionSelected, variablesObjects)
+          state.currentState.set(actionSelected, VIEWS.VARIABLE)
           return {
-            buttonsName: [...state.buttonsName],
-            currentState: [...state.currentState],
+            buttonsName: state.buttonsName,
+            currentState: state.currentState,
           }
         }
 
         case VIEWS.VARIABLE: {
-          state.buttonsName[actionSelected] = Object.keys(logicConnector).map(
-            returnArray
+          state.buttonsName.set(
+            actionSelected,
+            Object.keys(logicConnector).map(returnArray)
           )
-          state.currentState[actionSelected] = VIEWS.LOGIC_CONNECTOR
+          state.currentState.set(actionSelected, VIEWS.LOGIC_CONNECTOR)
           return {
-            buttonsName: [...state.buttonsName],
-            currentState: [...state.currentState],
+            buttonsName: state.buttonsName,
+            currentState: state.currentState,
           }
         }
 

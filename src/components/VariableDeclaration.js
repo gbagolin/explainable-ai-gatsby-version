@@ -7,7 +7,7 @@ export default function VariableDeclaration() {
   const modalVariableState = ModalVariableDeclarationState()
   const variablesState = VariablesState()
   return (
-    <div className="border-2 rounded-lg shadow-lg w-96 h-auto m-1 p-5 text-lg">
+    <div className="border-2 rounded-lg shadow-lg w-96 h-auto mt-2 p-5 text-lg">
       <div className="flex flex-col flex-initial justify-items-start">
         <div className="flex flex-row justify-between items-center">
           <div>
@@ -30,7 +30,7 @@ export default function VariableDeclaration() {
         <div className="flex flex-col">
           {[...variablesState.variables].map((element, index) => {
             return (
-              <>
+              <div key={index}>
                 <div className="flex flex-row justify-between">
                   <p>
                     {index + 1}. {element}
@@ -44,8 +44,8 @@ export default function VariableDeclaration() {
                     X
                   </button>
                 </div>
-                <div className="mt-2"></div>
-              </>
+                <div className="mt-2" key={index}></div>
+              </div>
             )
           })}
         </div>

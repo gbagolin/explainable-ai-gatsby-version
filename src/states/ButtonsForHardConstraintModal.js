@@ -48,7 +48,6 @@ export const ButtonsForHardConstraintModal = create(set => ({
    */
   goToNextState: (buttonPressed, variables) =>
     set(state => {
-      console.log("Inside gotonextstate: ", state.currentState)
       switch (+state.currentState) {
         case HARD_CONSTRAINT_STATE_CYCLE.TERM: {
           state.tempConstraint.term = buttonPressed

@@ -11,17 +11,33 @@ export default function Anomalies() {
   const actionSelected = ActionMangament(state => state.actionSelected)
   const runState = RunState()
   const [severityValue, setSeverity] = useState(0)
+
   const anomalyClassSameAction =
     anomalyTypeState.type === ANOMALIES.SAME_ACTION
       ? "m-5 font-semibold  yellow-color rounded-lg p-3"
-      : "m-5 font-semibold  bg-yellow-200 rounded-lg p-3"
+      : "m-5 font-semibold  bg-yellow-100 rounded-lg p-3"
   const anomalyClassDifferentAction =
     anomalyTypeState.type === ANOMALIES.DIFFERENT_ACTION
       ? "m-5 font-semibold  yellow-color rounded-lg p-3"
-      : "m-5 font-semibold  bg-yellow-200 rounded-lg p-3"
-  const anomaliesArray =
-    ((rule[anomalyTypeState.type] || [])[actionSelected] || []).anomalies || []
-  const anomaliesLength = anomaliesArray.length
+      : "m-5 font-semibold  bg-yellow-100 rounded-lg p-3"
+
+  const getAnomaliesByActionId = (anomalies, id) => {
+    if (anomalies === undefined) return []
+    for (const anomalyObject of anomalies) {
+      if (anomalyObject.actions === undefined) return []
+      if (anomalyObject.actions.id == id) {
+        return anomalyObject.anomalies
+      }
+    }
+    return []
+  }
+  const anomalies = getAnomaliesByActionId(
+    rule[anomalyTypeState.type],
+    actionSelected
+  )
+
+  const anomaliesLength = anomalies != undefined ? anomalies.length : 0
+
   return (
     <div className="border-2 rounded-lg shadow-lg w-auto h-auto m-5 p-3 text-lg">
       <div className="flex flex-row">
@@ -44,17 +60,18 @@ export default function Anomalies() {
           Anomalies different action
         </button>
       </div>
-      <div className="flex overflow-auto h-96">
+      <div className="flex overflow-y-auto items-start h-96">
         <table className="table-auto text-left">
           <thead>
-            <tr>
-              <th className="p-3"> # : ({anomaliesArray.length}) </th>{" "}
-              <th className="p-3"> Run </th>
-              <th className="p-3"> Step </th> <th className="p-3"> Action </th>
-              <th className="p-3"> Beliefs </th>
-              <th className="p-3">
+            <tr className="">
+              <th className="p-3 w-50"> # : ({anomaliesLength}) </th>
+              <th className="p-3 w-50"> Run </th>
+              <th className="p-3 w-50"> Step </th>
+              <th className="p-3 w-50"> Action </th>
+              <th className="p-3 w-50"> Beliefs </th>
+              <th className="p-3 w-50">
                 <div className="flex flex-col items-start">
-                  <div className="w-32">Severity: {severityValue} </div>
+                  <div className="">Severity: {severityValue} </div>
                   <div>
                     <input
                       className="rounded-lg overflow-hidden appearance-none bg-yellow-300 h-3 w-16"
@@ -70,7 +87,7 @@ export default function Anomalies() {
             </tr>
           </thead>
           <tbody>
-            {anomaliesArray.map((element, index) => {
+            {anomalies.map((element, index) => {
               let anomaly = false
               if (element.hellinger_distance != undefined)
                 anomaly =
@@ -82,12 +99,12 @@ export default function Anomalies() {
                   ? element.hellinger_distance
                   : undefined
               const background =
-                runState.run === element ? "rounded-lg bg-yellow-200" : ""
+                runState.run === element ? "rounded-lg bg-yellow-100" : ""
 
               return (
-                <tr className={background}>
-                  <td className="p-3"> {index + 1} </td>
-                  <td className="p-3">
+                <tr className={background} key={index}>
+                  <td className="p-3 w-50"> {index + 1} </td>
+                  <td className="p-3 w-50">
                     <button
                       className="underline text-color-yellow"
                       onClick={() => runState.setRun(element)}
@@ -95,18 +112,18 @@ export default function Anomalies() {
                       {element.run}
                     </button>
                   </td>
-                  <td className="p-3"> {element.step} </td>
-                  <td className="p-3"> {element.action} </td>
-                  <td className="p-3">
-                    {element.beliefs.map(belief => {
+                  <td className="p-3 w-50"> {element.step} </td>
+                  <td className="p-3 w-50"> {element.action} </td>
+                  <td className="p-3 w-50">
+                    {element.beliefs.map((belief, key) => {
                       return (
-                        <p>
+                        <p key={key}>
                           {belief.state}: {belief.belief.toFixed(2)}
                         </p>
                       )
                     })}
                   </td>
-                  <td className="p-3">
+                  <td className="p-3 w-50">
                     <div className={anomaly ? "bg-red-300 rounded" : ""}>
                       <p className="text-center">
                         {severity === undefined ? "" : severity.toFixed(2)}

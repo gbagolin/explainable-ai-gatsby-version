@@ -5,18 +5,23 @@ import RuleState from "../states/RuleState"
 import ActionMangament from "../states/ActionState"
 import RuleReady from "../states/RuleReady"
 import VariablesState from "../states/VariablesState"
+import ProblemState from "../states/ProblemState"
 
 export default function ModalRuleCreation() {
   const visible = ModalRuleCreationState(state => state.visible)
   const setVisible = ModalRuleCreationState(state => state.setVisible)
   const actionSelected = ActionMangament(state => state.actionSelected)
-  const buttons = ButtonsName(state => state.buttonsName[actionSelected])
+  const buttons = ButtonsName(state => state.buttonsName.get(actionSelected))
   const setConstraint = RuleState(state => state.setConstraint)
-  const currentView = ButtonsName(state => state.currentState[actionSelected])
+  const currentView = ButtonsName(state =>
+    state.currentState.get(actionSelected)
+  )
   const goToNextState = ButtonsName(state => state.goToNextState)
   const attributes = RuleState(state => state.attributes)
   const ruleReady = RuleReady()
   const variablesState = VariablesState()
+  const problemState = ProblemState()
+
   return (
     <>
       {visible ? (
@@ -63,7 +68,7 @@ export default function ModalRuleCreation() {
                             })
                             goToNextState(
                               actionSelected,
-                              attributes,
+                              problemState.attributes,
                               [...variablesState.variables],
                               button
                             )

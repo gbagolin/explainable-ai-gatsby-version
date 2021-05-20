@@ -17,6 +17,7 @@ const VariablesState = create(set => ({
         variables: new Set([...state.variables]),
       }
     }),
+  setStore: store => set(() => store),
   /**
    * Delete the variable in the set.
    * @param {*} variable String
