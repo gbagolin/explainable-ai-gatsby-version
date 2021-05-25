@@ -127,7 +127,7 @@ export function GraphVisualization() {
       console.log(node.position())
     })
     cy.userZoomingEnabled(false)
-    cy.userPanningEnabled(false)
+    cy.userPanningEnabled(true)
   }
   useEffect(() => {
     createGraph()
