@@ -1,8 +1,11 @@
 import React, { useEffect } from "react"
 import cytoscape from "cytoscape"
-
+import ProblemState from "../states/ProblemState"
+import axios from "axios"
 export function GraphVisualization() {
-  function createGraph() {
+  const trace = ProblemState(state => state.trace)
+
+  function createGraph(graph) {
     let cy = cytoscape({
       container: document.getElementById("graph"), // container to render in
 
@@ -73,65 +76,121 @@ export function GraphVisualization() {
       },
     })
 
-    cy.add([
-      {
-        group: "nodes",
-        data: { id: "n1", name: "n11" },
-        position: { x: 50, y: 200 },
-      },
-      { group: "nodes", data: { id: "n2" }, position: { x: 131, y: 226 } },
-      { group: "nodes", data: { id: "n3" }, position: { x: 128, y: 143 } },
-      { group: "nodes", data: { id: "n4" }, position: { x: 249, y: 142 } },
-      { group: "nodes", data: { id: "n5" }, position: { x: 191, y: 62 } },
-      { group: "nodes", data: { id: "n6" }, position: { x: 66, y: 83 } },
-      {
-        group: "edges",
-        data: { id: "e0", source: "n1", target: "n2", label: 7 },
-      },
-      {
-        group: "edges",
-        data: { id: "e1", source: "n2", target: "n3", label: 10 },
-      },
-      {
-        group: "edges",
-        data: { id: "e2", source: "n1", target: "n6", label: 14 },
-      },
-      {
-        group: "edges",
-        data: { id: "e3", source: "n1", target: "n3", label: 9 },
-      },
-      {
-        group: "edges",
-        data: { id: "e4", source: "n2", target: "n4", label: 15 },
-      },
-      {
-        group: "edges",
-        data: { id: "e5", source: "n3", target: "n4", label: 11 },
-      },
-      {
-        group: "edges",
-        data: { id: "e6", source: "n3", target: "n6", label: 2 },
-      },
-      {
-        group: "edges",
-        data: { id: "e7", source: "n6", target: "n5", label: 9 },
-      },
-      {
-        group: "edges",
-        data: { id: "e8", source: "n5", target: "n4", label: 6 },
-      },
-    ])
+    const graphRendered = []
+    let tmpNode = {}
+    for(const node of graph.nodes){
+      tmpNode = {}
+      tmpNode['group'] = "nodes"
+      tmpNode['data'] = {
+        'id' : node.id
+      }
+      tmpNode['position'] = {
+        'x' : (node['x']*50),
+        'y' : (node['y']*50)
+      }
+      // console.log(node)
+      graphRendered.push(tmpNode)
+    }
+
+    for(const edge of graph.edges){
+      tmpNode = {}
+      tmpNode['group'] = "edges"
+      tmpNode['data'] = {
+        'id' : edge.start+edge.stop, 
+        'source': edge.start, 
+        'target': edge.stop, 
+      }
+      // console.log(node)
+      graphRendered.push(tmpNode)
+    }
+
+    console.log(graphRendered)
+
+    cy.add(graphRendered)
+    // cy.add([
+    //   {
+    //     group: "nodes",
+    //     data: { id: "n1", name: "n11" },
+    //     position: { x: 50, y: 200 },
+    //   },
+    //   { group: "nodes", data: { id: "n2" },  },
+    //   { group: "nodes", data: { id: "n3" },  },
+    //   { group: "nodes", data: { id: "n4" },  },
+    //   { group: "nodes", data: { id: "n5" },  },
+    //   { group: "nodes", data: { id: "n6" },  },
+    //   {
+    //     group: "edges",
+    //     data: { id: "e0", source: "n1", target: "n2"},
+    //   },
+    //   {
+    //     group: "edges",
+    //     data: { id: "e1", source: "n2", target: "n3", label: 10 },
+    //   },
+    //   {
+    //     group: "edges",
+    //     data: { id: "e2", source: "n1", target: "n6", label: 14 },
+    //   },
+    //   {
+    //     group: "edges",
+    //     data: { id: "e3", source: "n1", target: "n3", label: 9 },
+    //   },
+    //   {
+    //     group: "edges",
+    //     data: { id: "e4", source: "n2", target: "n4", label: 15 },
+    //   },
+    //   {
+    //     group: "edges",
+    //     data: { id: "e5", source: "n3", target: "n4", label: 11 },
+    //   },
+    //   {
+    //     group: "edges",
+    //     data: { id: "e6", source: "n3", target: "n6", label: 2 },
+    //   },
+    //   {
+    //     group: "edges",
+    //     data: { id: "e7", source: "n6", target: "n5", label: 9 },
+    //   },
+    //   {
+    //     group: "edges",
+    //     data: { id: "e8", source: "n5", target: "n4", label: 6 },
+    //   },
+    // ])
     cy.on("click", "node", function (evt) {
       var node = evt.target
       console.clear()
       console.log(node.position())
     })
-    cy.userZoomingEnabled(false)
+    cy.userZoomingEnabled(true)
     cy.userPanningEnabled(true)
+    cy.fit();
   }
-  useEffect(() => {
-    createGraph()
-  }, [])
+
+  async function fetchGraph() {
+    const payload = {
+      name: "velocity regulation 10 with graph",
+    }
+    try {
+      const response = await axios.post(
+        "http://localhost:8001/api/get_graph_from_trace/",
+        payload
+      )
+      return response.data
+    } catch (e) {
+      console.log(e)
+    }
+    return undefined
+  }
+
+  useEffect(async () => {
+    console.log(trace)
+    const graph = await fetchGraph()
+    if(graph == undefined){
+      console.log("There were problems in fetching graph information")
+      return 
+    }
+    // console.log(graph)
+    createGraph(graph)
+  }, [trace])
 
   return (
     <div
