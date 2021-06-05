@@ -40,101 +40,103 @@ export default function Anomalies() {
 
   return (
     <div className="border-2 rounded-lg shadow-lg w-auto h-auto m-5 p-3 text-lg">
-      <div className="flex flex-row">
-        <button
-          className={anomalyClassSameAction}
-          onClick={() => {
-            anomalyTypeState.setType(ANOMALIES.SAME_ACTION)
-            runState.setRun(undefined)
-          }}
-        >
-          Anomalies same action
-        </button>
-        <button
-          className={anomalyClassDifferentAction}
-          onClick={() => {
-            anomalyTypeState.setType(ANOMALIES.DIFFERENT_ACTION)
-            runState.setRun(undefined)
-          }}
-        >
-          Anomalies different action
-        </button>
-      </div>
-      <div className="flex overflow-y-auto items-start h-96">
-        <table className="table-auto text-left">
-          <thead>
-            <tr className="">
-              <th className="p-3 w-50"> # : ({anomaliesLength}) </th>
-              <th className="p-3 w-50"> Run </th>
-              <th className="p-3 w-50"> Step </th>
-              <th className="p-3 w-50"> Action </th>
-              <th className="p-3 w-50"> Beliefs </th>
-              <th className="p-3 w-50">
-                <div className="flex flex-col items-start">
-                  <div className="">Severity: {severityValue} </div>
-                  <div>
-                    <input
-                      className="rounded-lg overflow-hidden appearance-none bg-yellow-300 h-3 w-16"
-                      type="range"
-                      min="0.0"
-                      max="1.0"
-                      step="0.01"
-                      onChange={e => setSeverity(e.target.value)}
-                    ></input>
-                  </div>
-                </div>
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {anomalies.map((element, index) => {
-              let anomaly = false
-              if (element.hellinger_distance != undefined)
-                anomaly =
-                  element.hellinger_distance.toFixed(2) >= severityValue
-                    ? true
-                    : false
-              const severity =
-                element.hellinger_distance != undefined
-                  ? element.hellinger_distance
-                  : undefined
-              const background =
-                runState.run === element ? "rounded-lg bg-yellow-100" : ""
-
-              return (
-                <tr className={background} key={index}>
-                  <td className="p-3 w-50"> {index + 1} </td>
-                  <td className="p-3 w-50">
-                    <button
-                      className="underline text-color-yellow"
-                      onClick={() => runState.setRun(element)}
-                    >
-                      {element.run}
-                    </button>
-                  </td>
-                  <td className="p-3 w-50"> {element.step} </td>
-                  <td className="p-3 w-50"> {element.action} </td>
-                  <td className="p-3 w-50">
-                    {element.beliefs.map((belief, key) => {
-                      return (
-                        <p key={key}>
-                          {belief.state}: {belief.belief.toFixed(2)}
-                        </p>
-                      )
-                    })}
-                  </td>
-                  <td className="p-3 w-50">
-                    <div className={anomaly ? "bg-red-300 rounded" : ""}>
-                      <p className="text-center">
-                        {severity === undefined ? "" : severity.toFixed(2)}
-                      </p>
+      <div class="">
+        <div className="">
+          <button
+            className={anomalyClassSameAction}
+            onClick={() => {
+              anomalyTypeState.setType(ANOMALIES.SAME_ACTION)
+              runState.setRun(undefined)
+            }}
+          >
+            Anomalies same action
+          </button>
+          <button
+            className={anomalyClassDifferentAction}
+            onClick={() => {
+              anomalyTypeState.setType(ANOMALIES.DIFFERENT_ACTION)
+              runState.setRun(undefined)
+            }}
+          >
+            Anomalies different action
+          </button>
+        </div>
+        <div className=" overflow-y-auto items-start h-96">
+          <table className="table-auto text-left">
+            <thead>
+              <tr className="">
+                <th className="p-3 w-50"> # : ({anomaliesLength}) </th>
+                <th className="p-3 w-50"> Run </th>
+                <th className="p-3 w-50"> Step </th>
+                <th className="p-3 w-50"> Action </th>
+                <th className="p-3 w-50"> Beliefs </th>
+                <th className="p-3 w-50">
+                  <div className="flex flex-col items-start">
+                    <div className="">Severity: {severityValue} </div>
+                    <div>
+                      <input
+                        className="rounded-lg overflow-hidden appearance-none bg-yellow-300 h-3 w-16"
+                        type="range"
+                        min="0.0"
+                        max="1.0"
+                        step="0.01"
+                        onChange={e => setSeverity(e.target.value)}
+                      ></input>
                     </div>
-                  </td>
-                </tr>
-              )
-            })}
-          </tbody>
-        </table>
+                  </div>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {anomalies.map((element, index) => {
+                let anomaly = false
+                if (element.hellinger_distance != undefined)
+                  anomaly =
+                    element.hellinger_distance.toFixed(2) >= severityValue
+                      ? true
+                      : false
+                const severity =
+                  element.hellinger_distance != undefined
+                    ? element.hellinger_distance
+                    : undefined
+                const background =
+                  runState.run === element ? "rounded-lg bg-yellow-100" : ""
+
+                return (
+                  <tr className={background} key={index}>
+                    <td className="p-3 w-50"> {index + 1} </td>
+                    <td className="p-3 w-50">
+                      <button
+                        className="underline text-color-yellow"
+                        onClick={() => runState.setRun(element)}
+                      >
+                        {element.run}
+                      </button>
+                    </td>
+                    <td className="p-3 w-50"> {element.step} </td>
+                    <td className="p-3 w-50"> {element.action} </td>
+                    <td className="p-3 w-50">
+                      {element.beliefs.map((belief, key) => {
+                        return (
+                          <p key={key}>
+                            {belief.state}: {belief.belief.toFixed(2)}
+                          </p>
+                        )
+                      })}
+                    </td>
+                    <td className="p-3 w-50">
+                      <div className={anomaly ? "bg-red-300 rounded" : ""}>
+                        <p className="text-center">
+                          {severity === undefined ? "" : severity.toFixed(2)}
+                        </p>
+                      </div>
+                    </td>
+                  </tr>
+                )
+              })}
+            </tbody>
+          </table>
+        </div>
       </div>
       <div className="mb-5"> </div>
     </div>

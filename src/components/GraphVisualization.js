@@ -196,6 +196,10 @@ export function GraphVisualization() {
     <div
       id="graph"
       className="border-2 rounded-lg shadow-lg w-auto h-auto m-5 p-3 text-lg"
+      style={{
+        width: "50rem",
+        display: "block",
+      }}
     >
       <p className="text-center font-bold text-2xl">
         Graph state problem visualization
