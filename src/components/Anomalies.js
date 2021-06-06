@@ -4,6 +4,7 @@ import { WhichAnomaly } from "../states/WhichAnomaly"
 import { ANOMALIES } from "../util/ANOMALIES_TYPE"
 import ActionMangament from "../states/ActionState"
 import { RUN_TYPES, RunState } from "../states/RunState"
+import NodePressed from "../states/NodePressed"
 
 export default function Anomalies() {
   const rule = RuleSynthetizedState(state => state.rule)
@@ -11,6 +12,8 @@ export default function Anomalies() {
   const actionSelected = ActionMangament(state => state.actionSelected)
   const runState = RunState()
   const [severityValue, setSeverity] = useState(0)
+
+  const nodePressed = NodePressed()
 
   const anomalyClassSameAction =
     anomalyTypeState.type === ANOMALIES.SAME_ACTION
@@ -35,6 +38,8 @@ export default function Anomalies() {
     rule[anomalyTypeState.type],
     actionSelected
   )
+
+  console.log(anomalies)
 
   const anomaliesLength = anomalies != undefined ? anomalies.length : 0
 
@@ -108,7 +113,10 @@ export default function Anomalies() {
                     <td className="p-3 w-50">
                       <button
                         className="underline text-color-yellow"
-                        onClick={() => runState.setRun(element)}
+                        onClick={() => {
+                          console.log(element)
+                          runState.setRun(element)
+                        }}
                       >
                         {element.run}
                       </button>

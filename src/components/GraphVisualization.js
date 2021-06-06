@@ -2,8 +2,18 @@ import React, { useEffect } from "react"
 import cytoscape from "cytoscape"
 import ProblemState from "../states/ProblemState"
 import axios from "axios"
+import { RunState } from "../states/RunState"
+import { useState } from "react"
 export function GraphVisualization() {
   const trace = ProblemState(state => state.trace)
+  const run = RunState()
+  let nodeSelected = undefined
+  const [cy, setCy] = useState(undefined)
+  if (run.run != undefined) {
+    nodeSelected = run.run.step
+  }
+
+  console.log(nodeSelected)
 
   function createGraph(graph) {
     let cy = cytoscape({
@@ -78,27 +88,27 @@ export function GraphVisualization() {
 
     const graphRendered = []
     let tmpNode = {}
-    for(const node of graph.nodes){
+    for (const node of graph.nodes) {
       tmpNode = {}
-      tmpNode['group'] = "nodes"
-      tmpNode['data'] = {
-        'id' : node.id
+      tmpNode["group"] = "nodes"
+      tmpNode["data"] = {
+        id: node.id,
       }
-      tmpNode['position'] = {
-        'x' : (node['x']*50),
-        'y' : (node['y']*50)
+      tmpNode["position"] = {
+        x: node["x"] * 50,
+        y: node["y"] * 50,
       }
       // console.log(node)
       graphRendered.push(tmpNode)
     }
 
-    for(const edge of graph.edges){
+    for (const edge of graph.edges) {
       tmpNode = {}
-      tmpNode['group'] = "edges"
-      tmpNode['data'] = {
-        'id' : edge.start+edge.stop, 
-        'source': edge.start, 
-        'target': edge.stop, 
+      tmpNode["group"] = "edges"
+      tmpNode["data"] = {
+        id: edge.start + edge.stop,
+        source: edge.start,
+        target: edge.stop,
       }
       // console.log(node)
       graphRendered.push(tmpNode)
@@ -107,54 +117,7 @@ export function GraphVisualization() {
     console.log(graphRendered)
 
     cy.add(graphRendered)
-    // cy.add([
-    //   {
-    //     group: "nodes",
-    //     data: { id: "n1", name: "n11" },
-    //     position: { x: 50, y: 200 },
-    //   },
-    //   { group: "nodes", data: { id: "n2" },  },
-    //   { group: "nodes", data: { id: "n3" },  },
-    //   { group: "nodes", data: { id: "n4" },  },
-    //   { group: "nodes", data: { id: "n5" },  },
-    //   { group: "nodes", data: { id: "n6" },  },
-    //   {
-    //     group: "edges",
-    //     data: { id: "e0", source: "n1", target: "n2"},
-    //   },
-    //   {
-    //     group: "edges",
-    //     data: { id: "e1", source: "n2", target: "n3", label: 10 },
-    //   },
-    //   {
-    //     group: "edges",
-    //     data: { id: "e2", source: "n1", target: "n6", label: 14 },
-    //   },
-    //   {
-    //     group: "edges",
-    //     data: { id: "e3", source: "n1", target: "n3", label: 9 },
-    //   },
-    //   {
-    //     group: "edges",
-    //     data: { id: "e4", source: "n2", target: "n4", label: 15 },
-    //   },
-    //   {
-    //     group: "edges",
-    //     data: { id: "e5", source: "n3", target: "n4", label: 11 },
-    //   },
-    //   {
-    //     group: "edges",
-    //     data: { id: "e6", source: "n3", target: "n6", label: 2 },
-    //   },
-    //   {
-    //     group: "edges",
-    //     data: { id: "e7", source: "n6", target: "n5", label: 9 },
-    //   },
-    //   {
-    //     group: "edges",
-    //     data: { id: "e8", source: "n5", target: "n4", label: 6 },
-    //   },
-    // ])
+
     cy.on("click", "node", function (evt) {
       var node = evt.target
       console.clear()
@@ -162,12 +125,14 @@ export function GraphVisualization() {
     })
     cy.userZoomingEnabled(true)
     cy.userPanningEnabled(true)
-    cy.fit();
+    cy.fit()
+
+    setCy(cy)
   }
 
   async function fetchGraph() {
     const payload = {
-      name: "velocity regulation 10 with graph",
+      name: trace,
     }
     try {
       const response = await axios.post(
@@ -184,20 +149,29 @@ export function GraphVisualization() {
   useEffect(async () => {
     console.log(trace)
     const graph = await fetchGraph()
-    if(graph == undefined){
+    if (graph == undefined) {
       console.log("There were problems in fetching graph information")
-      return 
+      return
     }
     // console.log(graph)
     createGraph(graph)
   }, [trace])
+
+  useEffect(() => {
+    if (cy != undefined && nodeSelected != undefined) {
+      cy.nodes().style("background-color", "white")
+      cy.nodes()[nodeSelected - 1].style("background-color", "red")
+    } else {
+      console.log("cy undefined")
+    }
+  }, [nodeSelected])
 
   return (
     <div
       id="graph"
       className="border-2 rounded-lg shadow-lg w-auto h-auto m-5 p-3 text-lg"
       style={{
-        width: "50rem",
+        width: "40rem",
         display: "block",
       }}
     >
