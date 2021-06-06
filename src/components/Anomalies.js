@@ -34,6 +34,7 @@ export default function Anomalies() {
     }
     return []
   }
+
   const anomalies = getAnomaliesByActionId(
     rule[anomalyTypeState.type],
     actionSelected
