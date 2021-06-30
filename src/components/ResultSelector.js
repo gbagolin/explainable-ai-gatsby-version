@@ -13,10 +13,12 @@ import { RunState } from "../states/RunState"
 import VariablesState from "../states/VariablesState"
 import { WhichAnomaly } from "../states/WhichAnomaly"
 import { CanAddResultState } from "../states/CanAddResultState"
-import download from "../images/download.png"
+import download2 from "../images/download.png"
 import upload from "../images/upload.png"
 import { saveAs } from "file-saver"
 import RuleReady from "../states/RuleReady"
+import axios from "axios"
+import download from "downloadjs"
 
 export default function ResultSelector() {
   const savedResults = ResultStatesStore()
@@ -114,7 +116,7 @@ export default function ResultSelector() {
       const constraint = objectUploaded.ruleState.constraints.get(key)
       const tempConstraint = Object.entries(constraint).map(([key, value]) => [
         parseInt(key),
-        value,
+        value
       ])
       const newConstraint = new Map(tempConstraint)
       objectUploaded.ruleState.constraints.set(key, newConstraint)
@@ -143,7 +145,7 @@ export default function ResultSelector() {
 
       const tempString = Object.entries(string).map(([key, value]) => [
         parseInt(key),
-        value,
+        value
       ])
 
       const newString = new Map(tempString)
@@ -171,7 +173,113 @@ export default function ResultSelector() {
     <div className="flex flex-row justify-start">
       <div className="flex flex-row border-2 rounded-lg shadow-lg m-5 p-3 text-lg">
         <div className="flex flex-col">
-          <p>Result selector: </p>
+          <div className={"flex flex-row"}>
+            <p>Result selector: </p>
+            <div className={"m-2"} />
+            <button
+              className={
+                "rounded-full bg-yellow-300 h-8 w-8 flex items-center justify-center text-lg disabled:opacity-50"
+              }
+              onClick={() => {
+                resultsCounter.increment()
+                resultsCounter.setSelected(resultsCounter.counter)
+                const problemStateClone = clonedeep(problemState)
+                const actionStateClone = clonedeep(actionState)
+                const buttonsNameClone = clonedeep(buttonsName)
+                const hardConstraintClone = clonedeep(hardConstraint)
+                const ruleSelectedClone = clonedeep(ruleSelected)
+                const ruleStateClone = clonedeep(ruleState)
+                const ruleSynthetizedClone = clonedeep(ruleSynthetizedState)
+                const runStateClone = clonedeep(runState)
+                const variableStateClone = clonedeep(variableState)
+                const whichAnomalyClone = clonedeep(whichAnomaly)
+
+                savedResults.setResultStore({
+                  id: resultsCounter.counter,
+                  problemState: problemStateClone,
+                  actionState: actionStateClone,
+                  buttonsName: buttonsNameClone,
+                  hardConstraint: hardConstraintClone,
+                  ruleSelected: ruleSelectedClone,
+                  ruleState: ruleStateClone,
+                  ruleSynthetizedState: ruleSynthetizedClone,
+                  runState: runStateClone,
+                  variableState: variableStateClone,
+                  whichAnomaly: whichAnomalyClone
+                })
+
+                problemState.setStore(problemStateClone)
+                actionState.setStore(actionStateClone)
+                buttonsName.setStore(buttonsNameClone)
+                hardConstraint.setStore(hardConstraintClone)
+                ruleSelected.setStore(ruleSelectedClone)
+                ruleState.setStore(ruleStateClone)
+                ruleSynthetizedState.setStore(ruleSynthetizedClone)
+                runState.setStore(runStateClone)
+                variableState.setStore(variableStateClone)
+                whichAnomaly.setStore(whichAnomalyClone)
+              }
+              }
+              disabled={
+                !canAddResultState.bool
+              }
+            >
+              +
+            </button>
+            {dummyVar().map((v, index) => {
+              const selectedClass =
+                resultsCounter.selected === index
+                  ? "rounded-full bg-yellow-300 h-8 w-8 flex items-center justify-center"
+                  : "rounded-full bg-yellow-100 h-8 w-8 flex items-center justify-center"
+              return (
+                <div className={"ml-2"} key={v}>
+                  <button
+                    className={selectedClass}
+                    onClick={() => {
+                      resultsCounter.setSelected(index)
+                      const storedProblemState = savedResults.problemState.get(
+                        index
+                      )
+                      const storedActionState = savedResults.actionState.get(index)
+                      const storedButtonsName = savedResults.buttonsName.get(index)
+                      const storedHardConstraint = savedResults.hardConstraint.get(
+                        index
+                      )
+                      const storedRuleSelected = savedResults.ruleSelected.get(
+                        index
+                      )
+                      const storedRuleState = savedResults.ruleState.get(index)
+                      const storedRuleSynthetizedState = savedResults.ruleSynthetizedState.get(
+                        index
+                      )
+                      const storedRunState = savedResults.runState.get(index)
+                      const storedVariableState = savedResults.variableState.get(
+                        index
+                      )
+                      const storedWhichAnomaly = savedResults.whichAnomaly.get(
+                        index
+                      )
+                      problemState.setStore(storedProblemState)
+                      actionState.setStore(storedActionState)
+                      buttonsName.setStore(storedButtonsName)
+                      hardConstraint.setStore(storedHardConstraint)
+                      ruleSelected.setStore(storedRuleSelected)
+                      ruleState.setStore(storedRuleState)
+                      ruleSynthetizedState.setStore(storedRuleSynthetizedState)
+                      runState.setStore(storedRunState)
+                      variableState.setStore(storedVariableState)
+                      whichAnomaly.setStore(storedWhichAnomaly)
+                    }}
+                    key={index}
+                  >
+                    {index + 1}
+                  </button>
+                </div>
+
+              )
+            })}
+          </div>
+          <div className={"m-2"} />
           <div className="flex flex-row">
             <div className="image-upload">
               <label htmlFor="file-input">
@@ -183,21 +291,18 @@ export default function ResultSelector() {
                 onChange={e => {
                   const file = e.target.files[0]
                   const fileReader = new FileReader()
-                  fileReader.onload = function (fileLoadedEvent) {
+                  fileReader.onload = function(fileLoadedEvent) {
                     const textFromFileLoaded = fileLoadedEvent.target.result
 
                     const originalObject = JSON.parse(textFromFileLoaded)
-
 
                     const copyOfOriginalObject = clonedeep(originalObject)
 
                     parseIntObjectUploaded(copyOfOriginalObject)
 
-
                     const objectFinalParsed = clonedeep(copyOfOriginalObject)
 
                     parseObjectUploaded(objectFinalParsed)
-
 
                     savedResults.setResultStore({
                       id: resultsCounter.selected,
@@ -210,7 +315,7 @@ export default function ResultSelector() {
                       ruleSynthetizedState: objectFinalParsed.ruleSynthetized,
                       runState: objectFinalParsed.runState,
                       variableState: objectFinalParsed.variableState,
-                      whichAnomaly: objectFinalParsed.whichAnomaly,
+                      whichAnomaly: objectFinalParsed.whichAnomaly
                     })
 
                     problemState.setStore(objectFinalParsed.problemState)
@@ -231,11 +336,11 @@ export default function ResultSelector() {
                   }
                   fileReader.readAsText(file, "UTF-8")
                 }}
-              ></input>
+              />
             </div>
             <button>
               <img
-                src={download}
+                src={download2}
                 className="h-9 w-9"
                 onClick={() => {
                   const objectToSave = {
@@ -249,121 +354,64 @@ export default function ResultSelector() {
                     runState: clonedeep(runState),
                     variableState: clonedeep(variableState),
                     whichAnomaly: clonedeep(whichAnomaly),
-                    ruleReady: clonedeep(ruleReady),
+                    ruleReady: clonedeep(ruleReady)
                   }
                   parseSavedResult(objectToSave)
 
                   const fileToSave = new Blob([JSON.stringify(objectToSave)], {
                     type: "application/JSON",
-                    name: "result.json",
+                    name: "result.json"
                   })
                   saveAs(fileToSave, "result.json")
                 }}
-              ></img>
+              />
+            </button>
+            <button className={"ml-1 p-1 rounded bg-yellow-300"}
+                    onClick={async () => {
+                      const plots = document.getElementsByClassName("chartjs-render-monitor")
+                      const base64Plots = []
+                      for (const plot of plots) {
+                        plot.toBlob(function(blob) {
+                            // saveAs(blob, "testing.png")
+                            console.log(blob)
+                            const reader = new FileReader()
+                            reader.readAsDataURL(blob)
+                            reader.onloadend = function() {
+                              const base64String = reader.result
+                              // console.log("Base64 String - ", base64String)
+                              base64Plots.push(base64String.substr(base64String.indexOf(",") + 1))
+                            }
+                          }
+                        )
+                      }
+
+                      console.log("Rule synthethized:", ruleSynthetizedState)
+                      //flat the ruleString map
+                      const ruleStringArr = []
+                      for (const key of ruleState.ruleString.keys()) {
+                        ruleStringArr[key] = [...ruleState.ruleString.get(key)]
+                      }
+                      console.log(ruleStringArr)
+
+                      const report = {
+                        rule: ruleSynthetizedState.rule,
+                        plots: base64Plots,
+                        ruleString: ruleStringArr
+                      }
+
+                      console.log("Data to post:", report)
+                      const response = await axios.post("http://localhost:8001/api/send_file",
+                        report)
+                      const content = response.headers["content-type"]
+                      download(response.data, "report.pdf", content)
+                      const data = response.data
+                      console.log(data)
+                    }
+                    }>Download report
             </button>
           </div>
         </div>
-        <div className="m-2"></div>
-        <button
-          className={
-            "rounded-full bg-yellow-300 h-8 w-8 flex items-center justify-center text-lg disabled:opacity-50"
-          }
-          onClick={() => {
-            resultsCounter.increment()
-            resultsCounter.setSelected(resultsCounter.counter)
-            const problemStateClone = clonedeep(problemState)
-            const actionStateClone = clonedeep(actionState)
-            const buttonsNameClone = clonedeep(buttonsName)
-            const hardConstraintClone = clonedeep(hardConstraint)
-            const ruleSelectedClone = clonedeep(ruleSelected)
-            const ruleStateClone = clonedeep(ruleState)
-            const ruleSynthetizedClone = clonedeep(ruleSynthetizedState)
-            const runStateClone = clonedeep(runState)
-            const variableStateClone = clonedeep(variableState)
-            const whichAnomalyClone = clonedeep(whichAnomaly)
 
-            savedResults.setResultStore({
-              id: resultsCounter.counter,
-              problemState: problemStateClone,
-              actionState: actionStateClone,
-              buttonsName: buttonsNameClone,
-              hardConstraint: hardConstraintClone,
-              ruleSelected: ruleSelectedClone,
-              ruleState: ruleStateClone,
-              ruleSynthetizedState: ruleSynthetizedClone,
-              runState: runStateClone,
-              variableState: variableStateClone,
-              whichAnomaly: whichAnomalyClone,
-            })
-
-            problemState.setStore(problemStateClone)
-            actionState.setStore(actionStateClone)
-            buttonsName.setStore(buttonsNameClone)
-            hardConstraint.setStore(hardConstraintClone)
-            ruleSelected.setStore(ruleSelectedClone)
-            ruleState.setStore(ruleStateClone)
-            ruleSynthetizedState.setStore(ruleSynthetizedClone)
-            runState.setStore(runStateClone)
-            variableState.setStore(variableStateClone)
-            whichAnomaly.setStore(whichAnomalyClone)
-          }}
-          disabled={!canAddResultState.bool}
-        >
-          +
-        </button>
-        <div className="m-2"></div>
-        {dummyVar().map((v, index) => {
-          const selectedClass =
-            resultsCounter.selected === index
-              ? "rounded-full bg-yellow-300 h-8 w-8 flex items-center justify-center"
-              : "rounded-full bg-yellow-100 h-8 w-8 flex items-center justify-center"
-          return (
-            <div key={v}>
-              <button
-                className={selectedClass}
-                onClick={() => {
-                  resultsCounter.setSelected(index)
-                  const storedProblemState = savedResults.problemState.get(
-                    index
-                  )
-                  const storedActionState = savedResults.actionState.get(index)
-                  const storedButtonsName = savedResults.buttonsName.get(index)
-                  const storedHardConstraint = savedResults.hardConstraint.get(
-                    index
-                  )
-                  const storedRuleSelected = savedResults.ruleSelected.get(
-                    index
-                  )
-                  const storedRuleState = savedResults.ruleState.get(index)
-                  const storedRuleSynthetizedState = savedResults.ruleSynthetizedState.get(
-                    index
-                  )
-                  const storedRunState = savedResults.runState.get(index)
-                  const storedVariableState = savedResults.variableState.get(
-                    index
-                  )
-                  const storedWhichAnomaly = savedResults.whichAnomaly.get(
-                    index
-                  )
-                  problemState.setStore(storedProblemState)
-                  actionState.setStore(storedActionState)
-                  buttonsName.setStore(storedButtonsName)
-                  hardConstraint.setStore(storedHardConstraint)
-                  ruleSelected.setStore(storedRuleSelected)
-                  ruleState.setStore(storedRuleState)
-                  ruleSynthetizedState.setStore(storedRuleSynthetizedState)
-                  runState.setStore(storedRunState)
-                  variableState.setStore(storedVariableState)
-                  whichAnomaly.setStore(storedWhichAnomaly)
-                }}
-                key={index}
-              >
-                {index + 1}
-              </button>
-              <div className="m-2"></div>
-            </div>
-          )
-        })}
       </div>
     </div>
   )

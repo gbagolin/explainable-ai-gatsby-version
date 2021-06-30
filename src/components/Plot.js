@@ -8,7 +8,7 @@ import {
   GREEN_COLOR,
   GREEN_BACKGROUND,
   GREY_BACKGROUND,
-  GREY_COLOR,
+  GREY_COLOR
 } from "../util/PLOT_OPTIONS"
 import ActionMangament from "../states/ActionState"
 import { WhichAnomaly } from "../states/WhichAnomaly"
@@ -41,7 +41,7 @@ function createDatasetFromStatesList(stateList, states) {
         data: data,
         backgroundColor: GREY_BACKGROUND,
         label: "",
-        borderColor: GREY_COLOR,
+        borderColor: GREY_COLOR
       })
     }
     for (let i = 0; i < stateBeliefs.length; i++) {
@@ -69,7 +69,7 @@ function createDatasetFromStatesList(stateList, states) {
             stateBeliefs[i].operator === "<" ||
             stateBeliefs[i].operator === "<="
               ? GREEN_COLOR
-              : RED_COLOR,
+              : RED_COLOR
         })
       } else {
         dataset.push({
@@ -84,7 +84,7 @@ function createDatasetFromStatesList(stateList, states) {
             stateBeliefs[i].operator === "<" ||
             stateBeliefs[i].operator === "<="
               ? GREEN_COLOR
-              : RED_COLOR,
+              : RED_COLOR
         })
       }
 
@@ -114,7 +114,7 @@ function createDatasetFromStatesList(stateList, states) {
               stateBeliefs[i].operator === "<="
             )
               ? GREEN_COLOR
-              : RED_COLOR,
+              : RED_COLOR
           })
         } else {
           dataset.push({
@@ -131,7 +131,7 @@ function createDatasetFromStatesList(stateList, states) {
               stateBeliefs[i].operator === "<="
             )
               ? GREEN_COLOR
-              : RED_COLOR,
+              : RED_COLOR
           })
         }
       }
@@ -158,7 +158,7 @@ function createScatterForRun(run, stateList) {
     type: "scatter",
     radius: 3,
     label: label,
-    backgroundColor: "rgba(251, 191, 36, 1)",
+    backgroundColor: "rgba(251, 191, 36, 1)"
   })
   return dataset
 }
@@ -184,7 +184,7 @@ function createScatterDatasetForAnomalies(anomalies, stateList) {
         type: "scatter",
         radius: 3,
         label: label,
-        backgroundColor: "rgba(251, 191, 36, 1)",
+        backgroundColor: "rgba(251, 191, 36, 1)"
       })
     }
   }
@@ -265,7 +265,7 @@ export default function Plot() {
 
         const data = {
           labels: rule.states,
-          datasets: dataset.concat(scatterDataset),
+          datasets: dataset.concat(scatterDataset)
         }
         return (
           <div key={index}>
@@ -273,6 +273,7 @@ export default function Plot() {
               Distribution of state beliefs of sub rule: {index + 1}{" "}
             </p>{" "}
             <Bar
+              id={"myChart"}
               key={actionString + index}
               data={data}
               options={OPTIONS}
