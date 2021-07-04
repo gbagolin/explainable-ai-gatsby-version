@@ -366,7 +366,7 @@ export default function ResultSelector() {
                 }}
               />
             </button>
-            <button className={"ml-1 p-1 rounded bg-yellow-300"}
+            <button className={"ml-1 p-3 font-bold rounded-lg bg-yellow-300"}
                     onClick={async () => {
                       const plots = document.getElementsByClassName("chartjs-render-monitor")
                       const base64Plots = []
