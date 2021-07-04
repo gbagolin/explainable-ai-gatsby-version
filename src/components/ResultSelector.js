@@ -400,15 +400,24 @@ export default function ResultSelector() {
                       }
 
                       console.log("Data to post:", report)
-                      const response = await axios.post("http://localhost:8001/api/send_file",
-                        report)
+                      const response = await axios({
+                        url: "http://localhost:8001/api/send_file",
+                        data: report,
+                        responseType: "blob",
+                        method: "POST"
+                      })
                       const content = response.headers["content-type"]
-                      download(response.data, "report.pdf", content)
-                      const data = response.data
-                      console.log(data)
+                      const url = window.URL.createObjectURL(new Blob([response.data], { type: content }))
+                      const link = document.createElement("a")
+                      link.href = url
+                      link.setAttribute("download", "report.pdf")
+                      document.body.appendChild(link)
+                      link.click()
                     }
-                    }>Download report
-            </button>
+                    }>
+              Download
+              report
+            < /button>
           </div>
         </div>
 
