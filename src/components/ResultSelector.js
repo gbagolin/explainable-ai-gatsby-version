@@ -116,7 +116,7 @@ export default function ResultSelector() {
       const constraint = objectUploaded.ruleState.constraints.get(key)
       const tempConstraint = Object.entries(constraint).map(([key, value]) => [
         parseInt(key),
-        value,
+        value
       ])
       const newConstraint = new Map(tempConstraint)
       objectUploaded.ruleState.constraints.set(key, newConstraint)
@@ -145,7 +145,7 @@ export default function ResultSelector() {
 
       const tempString = Object.entries(string).map(([key, value]) => [
         parseInt(key),
-        value,
+        value
       ])
 
       const newString = new Map(tempString)
@@ -205,7 +205,7 @@ export default function ResultSelector() {
                   ruleSynthetizedState: ruleSynthetizedClone,
                   runState: runStateClone,
                   variableState: variableStateClone,
-                  whichAnomaly: whichAnomalyClone,
+                  whichAnomaly: whichAnomalyClone
                 })
 
                 problemState.setStore(problemStateClone)
@@ -294,7 +294,7 @@ export default function ResultSelector() {
                 onChange={e => {
                   const file = e.target.files[0]
                   const fileReader = new FileReader()
-                  fileReader.onload = function (fileLoadedEvent) {
+                  fileReader.onload = function(fileLoadedEvent) {
                     const textFromFileLoaded = fileLoadedEvent.target.result
 
                     const originalObject = JSON.parse(textFromFileLoaded)
@@ -318,7 +318,7 @@ export default function ResultSelector() {
                       ruleSynthetizedState: objectFinalParsed.ruleSynthetized,
                       runState: objectFinalParsed.runState,
                       variableState: objectFinalParsed.variableState,
-                      whichAnomaly: objectFinalParsed.whichAnomaly,
+                      whichAnomaly: objectFinalParsed.whichAnomaly
                     })
 
                     problemState.setStore(objectFinalParsed.problemState)
@@ -356,13 +356,13 @@ export default function ResultSelector() {
                   runState: clonedeep(runState),
                   variableState: clonedeep(variableState),
                   whichAnomaly: clonedeep(whichAnomaly),
-                  ruleReady: clonedeep(ruleReady),
+                  ruleReady: clonedeep(ruleReady)
                 }
                 parseSavedResult(objectToSave)
 
                 const fileToSave = new Blob([JSON.stringify(objectToSave)], {
                   type: "application/JSON",
-                  name: "result.json",
+                  name: "result.json"
                 })
                 saveAs(fileToSave, "result.json")
               }}
@@ -378,12 +378,12 @@ export default function ResultSelector() {
                 )
                 const base64Plots = []
                 for (const plot of plots) {
-                  plot.toBlob(function (blob) {
+                  plot.toBlob(function(blob) {
                     // saveAs(blob, "testing.png")
                     console.log(blob)
                     const reader = new FileReader()
                     reader.readAsDataURL(blob)
-                    reader.onloadend = function () {
+                    reader.onloadend = function() {
                       const base64String = reader.result
                       // console.log("Base64 String - ", base64String)
                       base64Plots.push(
@@ -395,16 +395,19 @@ export default function ResultSelector() {
 
                 console.log("Rule synthethized:", ruleSynthetizedState)
                 //flat the ruleString map
-                const ruleStringArr = []
+                let ruleStringArr = []
                 for (const key of ruleState.ruleString.keys()) {
-                  ruleStringArr[key] = [...ruleState.ruleString.get(key)]
+                  console.log("String: ", ruleState.ruleString.get(key))
+                  if ([...ruleState.ruleString.get(key)].length !== 0) {
+                    ruleStringArr.push([...ruleState.ruleString.get(key)])
+                  }
                 }
-                console.log(ruleStringArr)
 
+                console.log(ruleStringArr)
                 const report = {
                   rule: ruleSynthetizedState.rule,
                   plots: base64Plots,
-                  ruleString: ruleStringArr,
+                  ruleString: ruleStringArr
                 }
 
                 console.log("Data to post:", report)
@@ -412,7 +415,7 @@ export default function ResultSelector() {
                   url: "http://localhost:8001/api/send_file",
                   data: report,
                   responseType: "blob",
-                  method: "POST",
+                  method: "POST"
                 })
                 const content = response.headers["content-type"]
                 const url = window.URL.createObjectURL(
