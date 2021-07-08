@@ -116,7 +116,7 @@ export default function ResultSelector() {
       const constraint = objectUploaded.ruleState.constraints.get(key)
       const tempConstraint = Object.entries(constraint).map(([key, value]) => [
         parseInt(key),
-        value
+        value,
       ])
       const newConstraint = new Map(tempConstraint)
       objectUploaded.ruleState.constraints.set(key, newConstraint)
@@ -145,7 +145,7 @@ export default function ResultSelector() {
 
       const tempString = Object.entries(string).map(([key, value]) => [
         parseInt(key),
-        value
+        value,
       ])
 
       const newString = new Map(tempString)
@@ -205,7 +205,7 @@ export default function ResultSelector() {
                   ruleSynthetizedState: ruleSynthetizedClone,
                   runState: runStateClone,
                   variableState: variableStateClone,
-                  whichAnomaly: whichAnomalyClone
+                  whichAnomaly: whichAnomalyClone,
                 })
 
                 problemState.setStore(problemStateClone)
@@ -218,11 +218,8 @@ export default function ResultSelector() {
                 runState.setStore(runStateClone)
                 variableState.setStore(variableStateClone)
                 whichAnomaly.setStore(whichAnomalyClone)
-              }
-              }
-              disabled={
-                !canAddResultState.bool
-              }
+              }}
+              disabled={!canAddResultState.bool}
             >
               +
             </button>
@@ -240,8 +237,12 @@ export default function ResultSelector() {
                       const storedProblemState = savedResults.problemState.get(
                         index
                       )
-                      const storedActionState = savedResults.actionState.get(index)
-                      const storedButtonsName = savedResults.buttonsName.get(index)
+                      const storedActionState = savedResults.actionState.get(
+                        index
+                      )
+                      const storedButtonsName = savedResults.buttonsName.get(
+                        index
+                      )
                       const storedHardConstraint = savedResults.hardConstraint.get(
                         index
                       )
@@ -275,7 +276,6 @@ export default function ResultSelector() {
                     {index + 1}
                   </button>
                 </div>
-
               )
             })}
           </div>
@@ -283,7 +283,10 @@ export default function ResultSelector() {
           <div className="flex flex-row">
             <div className="image-upload">
               <label htmlFor="file-input">
-                <img src={upload} className="h-9 w-9" />
+                {/* <img src={upload} className="h-9 w-9" /> */}
+                <p className={"ml-1 p-2 font-bold rounded-lg bg-yellow-300"}>
+                  Upload Result
+                </p>
               </label>
               <input
                 id="file-input"
@@ -291,7 +294,7 @@ export default function ResultSelector() {
                 onChange={e => {
                   const file = e.target.files[0]
                   const fileReader = new FileReader()
-                  fileReader.onload = function(fileLoadedEvent) {
+                  fileReader.onload = function (fileLoadedEvent) {
                     const textFromFileLoaded = fileLoadedEvent.target.result
 
                     const originalObject = JSON.parse(textFromFileLoaded)
@@ -315,7 +318,7 @@ export default function ResultSelector() {
                       ruleSynthetizedState: objectFinalParsed.ruleSynthetized,
                       runState: objectFinalParsed.runState,
                       variableState: objectFinalParsed.variableState,
-                      whichAnomaly: objectFinalParsed.whichAnomaly
+                      whichAnomaly: objectFinalParsed.whichAnomaly,
                     })
 
                     problemState.setStore(objectFinalParsed.problemState)
@@ -338,89 +341,94 @@ export default function ResultSelector() {
                 }}
               />
             </div>
-            <button>
-              <img
-                src={download2}
-                className="h-9 w-9"
-                onClick={() => {
-                  const objectToSave = {
-                    problemState: clonedeep(problemState),
-                    actionState: clonedeep(actionState),
-                    buttonsName: clonedeep(buttonsName),
-                    hardConstraint: clonedeep(hardConstraint),
-                    ruleSelected: clonedeep(ruleSelected),
-                    ruleState: clonedeep(ruleState),
-                    ruleSynthetized: clonedeep(ruleSynthetizedState),
-                    runState: clonedeep(runState),
-                    variableState: clonedeep(variableState),
-                    whichAnomaly: clonedeep(whichAnomaly),
-                    ruleReady: clonedeep(ruleReady)
-                  }
-                  parseSavedResult(objectToSave)
+            <button
+              src={download2}
+              className="ml-2 p-2 font-bold rounded-lg bg-yellow-300"
+              onClick={() => {
+                const objectToSave = {
+                  problemState: clonedeep(problemState),
+                  actionState: clonedeep(actionState),
+                  buttonsName: clonedeep(buttonsName),
+                  hardConstraint: clonedeep(hardConstraint),
+                  ruleSelected: clonedeep(ruleSelected),
+                  ruleState: clonedeep(ruleState),
+                  ruleSynthetized: clonedeep(ruleSynthetizedState),
+                  runState: clonedeep(runState),
+                  variableState: clonedeep(variableState),
+                  whichAnomaly: clonedeep(whichAnomaly),
+                  ruleReady: clonedeep(ruleReady),
+                }
+                parseSavedResult(objectToSave)
 
-                  const fileToSave = new Blob([JSON.stringify(objectToSave)], {
-                    type: "application/JSON",
-                    name: "result.json"
-                  })
-                  saveAs(fileToSave, "result.json")
-                }}
-              />
+                const fileToSave = new Blob([JSON.stringify(objectToSave)], {
+                  type: "application/JSON",
+                  name: "result.json",
+                })
+                saveAs(fileToSave, "result.json")
+              }}
+            >
+              {" "}
+              Download Result
             </button>
-            <button className={"ml-1 p-3 font-bold rounded-lg bg-yellow-300"}
-                    onClick={async () => {
-                      const plots = document.getElementsByClassName("chartjs-render-monitor")
-                      const base64Plots = []
-                      for (const plot of plots) {
-                        plot.toBlob(function(blob) {
-                            // saveAs(blob, "testing.png")
-                            console.log(blob)
-                            const reader = new FileReader()
-                            reader.readAsDataURL(blob)
-                            reader.onloadend = function() {
-                              const base64String = reader.result
-                              // console.log("Base64 String - ", base64String)
-                              base64Plots.push(base64String.substr(base64String.indexOf(",") + 1))
-                            }
-                          }
-                        )
-                      }
-
-                      console.log("Rule synthethized:", ruleSynthetizedState)
-                      //flat the ruleString map
-                      const ruleStringArr = []
-                      for (const key of ruleState.ruleString.keys()) {
-                        ruleStringArr[key] = [...ruleState.ruleString.get(key)]
-                      }
-                      console.log(ruleStringArr)
-
-                      const report = {
-                        rule: ruleSynthetizedState.rule,
-                        plots: base64Plots,
-                        ruleString: ruleStringArr
-                      }
-
-                      console.log("Data to post:", report)
-                      const response = await axios({
-                        url: "http://localhost:8001/api/send_file",
-                        data: report,
-                        responseType: "blob",
-                        method: "POST"
-                      })
-                      const content = response.headers["content-type"]
-                      const url = window.URL.createObjectURL(new Blob([response.data], { type: content }))
-                      const link = document.createElement("a")
-                      link.href = url
-                      link.setAttribute("download", "report.pdf")
-                      document.body.appendChild(link)
-                      link.click()
+            <button
+              className={"ml-2 p-2 font-bold rounded-lg bg-yellow-300"}
+              onClick={async () => {
+                const plots = document.getElementsByClassName(
+                  "chartjs-render-monitor"
+                )
+                const base64Plots = []
+                for (const plot of plots) {
+                  plot.toBlob(function (blob) {
+                    // saveAs(blob, "testing.png")
+                    console.log(blob)
+                    const reader = new FileReader()
+                    reader.readAsDataURL(blob)
+                    reader.onloadend = function () {
+                      const base64String = reader.result
+                      // console.log("Base64 String - ", base64String)
+                      base64Plots.push(
+                        base64String.substr(base64String.indexOf(",") + 1)
+                      )
                     }
-                    }>
-              Download
-              report
-            < /button>
+                  })
+                }
+
+                console.log("Rule synthethized:", ruleSynthetizedState)
+                //flat the ruleString map
+                const ruleStringArr = []
+                for (const key of ruleState.ruleString.keys()) {
+                  ruleStringArr[key] = [...ruleState.ruleString.get(key)]
+                }
+                console.log(ruleStringArr)
+
+                const report = {
+                  rule: ruleSynthetizedState.rule,
+                  plots: base64Plots,
+                  ruleString: ruleStringArr,
+                }
+
+                console.log("Data to post:", report)
+                const response = await axios({
+                  url: "http://localhost:8001/api/send_file",
+                  data: report,
+                  responseType: "blob",
+                  method: "POST",
+                })
+                const content = response.headers["content-type"]
+                const url = window.URL.createObjectURL(
+                  new Blob([response.data], { type: content })
+                )
+                const link = document.createElement("a")
+                link.href = url
+                link.setAttribute("download", "report.pdf")
+                document.body.appendChild(link)
+                link.click()
+              }}
+            >
+              Download report
+            </button>
           </div>
         </div>
-
       </div>
     </div>
   )
