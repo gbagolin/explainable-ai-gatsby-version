@@ -8,6 +8,8 @@ import RuleSynthetizedState from "../states/RuleSynthetizedState"
 import { useState } from "react"
 import { WhichAnomaly } from "../states/WhichAnomaly"
 import { ANOMALIES } from "../util/ANOMALIES_TYPE"
+import KeepAnomaliesOnGraph from "../states/KeepAnomaliesOnGraph"
+
 export function GraphVisualization() {
   const trace = ProblemState(state => state.trace)
   const rule = RuleSynthetizedState(state => state.rule)
@@ -15,6 +17,7 @@ export function GraphVisualization() {
   const run = RunState()
   let nodeSelected = undefined
   const [cy, setCy] = useState(undefined)
+  const keepAnomaliesSameGraph = KeepAnomaliesOnGraph()
 
   if (run.run != undefined) {
     nodeSelected = run.run.step
@@ -58,8 +61,8 @@ export function GraphVisualization() {
             "background-color": "white",
             "border-color": "black",
             "border-width": "2px",
-            "font-size": "12px",
-          },
+            "font-size": "12px"
+          }
         },
 
         {
@@ -71,10 +74,10 @@ export function GraphVisualization() {
             "target-arrow-shape": "triangle",
             label: "data(label)",
             "font-size": "16px",
-            color: "black",
-          },
-        },
-      ],
+            color: "black"
+          }
+        }
+      ]
     })
 
     const graphRendered = []
@@ -83,11 +86,11 @@ export function GraphVisualization() {
       tmpNode = {}
       tmpNode["group"] = "nodes"
       tmpNode["data"] = {
-        id: node.id,
+        id: node.id
       }
       tmpNode["position"] = {
         x: node["x"] * 70,
-        y: node["y"] * 100,
+        y: node["y"] * 100
       }
       graphRendered.push(tmpNode)
     }
@@ -99,14 +102,14 @@ export function GraphVisualization() {
         id: edge.start + edge.stop,
         source: edge.start,
         target: edge.stop,
-        label: "",
+        label: ""
       }
       graphRendered.push(tmpNode)
     }
 
     cy.add(graphRendered)
 
-    cy.on("click", "node", function (evt) {
+    cy.on("click", "node", function(evt) {
       var node = evt.target
       console.clear()
     })
@@ -119,7 +122,7 @@ export function GraphVisualization() {
 
   async function fetchGraph() {
     const payload = {
-      name: trace,
+      name: trace
     }
     try {
       const response = await axios.post(
@@ -144,22 +147,24 @@ export function GraphVisualization() {
 
   useEffect(() => {
     if (cy != undefined && nodeSelected != undefined) {
-      cy.nodes().style("background-color", "white")
-      cy.edges().style("line-color", "black")
-      cy.edges().style("label", "")
+
+      if (!keepAnomaliesSameGraph.keepAnomaliesOnGraph) {
+        cy.nodes().style("background-color", "white")
+        cy.edges().style("line-color", "black")
+        cy.edges().style("label", "")
+      }
 
       cy.nodes()[nodeSelected - 1].style("background-color", "red")
 
       let idNodeSelected = cy.nodes()[nodeSelected - 1].id()
       //check for last node HARD_CODED, FIX THIS. 
       let idNextNode = 0
-      if(nodeSelected == 36){
+      if (nodeSelected == 36) {
         idNextNode = cy.nodes()[0].id()
-      }
-      else{
+      } else {
         idNextNode = cy.nodes()[nodeSelected].id()
       }
-      
+
       const edgeId = idNodeSelected + idNextNode
       const StringId = "[id='" + edgeId + "']"
 
@@ -185,13 +190,14 @@ export function GraphVisualization() {
       style={{
         width: "50rem",
         height: "30rem",
-        display: "block",
+        display: "block"
       }}
     >
       <p className="text-center font-bold text-2xl">
         Graph state problem visualization
       </p>
       <p className="text-center font-bold text-2xl">{getGraphTitle()}</p>
+
     </div>
   )
 }
