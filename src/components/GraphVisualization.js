@@ -9,6 +9,7 @@ import { useState } from "react"
 import { WhichAnomaly } from "../states/WhichAnomaly"
 import { ANOMALIES } from "../util/ANOMALIES_TYPE"
 import KeepAnomaliesOnGraph from "../states/KeepAnomaliesOnGraph"
+import GraphInstance from "../states/GraphInstance"
 
 export function GraphVisualization() {
   const trace = ProblemState(state => state.trace)
@@ -18,6 +19,7 @@ export function GraphVisualization() {
   let nodeSelected = undefined
   const [cy, setCy] = useState(undefined)
   const keepAnomaliesSameGraph = KeepAnomaliesOnGraph()
+  const graphInstance = GraphInstance()
 
   if (run.run != undefined) {
     nodeSelected = run.run.step
@@ -118,6 +120,7 @@ export function GraphVisualization() {
     cy.fit()
 
     setCy(cy)
+    graphInstance.setGraph(cy)
   }
 
   async function fetchGraph() {
@@ -147,7 +150,6 @@ export function GraphVisualization() {
 
   useEffect(() => {
     if (cy != undefined && nodeSelected != undefined) {
-
       if (!keepAnomaliesSameGraph.keepAnomaliesOnGraph) {
         cy.nodes().style("background-color", "white")
         cy.edges().style("line-color", "black")
@@ -157,7 +159,7 @@ export function GraphVisualization() {
       cy.nodes()[nodeSelected - 1].style("background-color", "red")
 
       let idNodeSelected = cy.nodes()[nodeSelected - 1].id()
-      //check for last node HARD_CODED, FIX THIS. 
+      //check for last node HARD_CODED, FIX THIS.
       let idNextNode = 0
       if (nodeSelected == 36) {
         idNextNode = cy.nodes()[0].id()
@@ -179,7 +181,7 @@ export function GraphVisualization() {
 
       cy.edges(StringId).style("line-color", "red")
       cy.edges(StringId).style("label", edgeLabel)
-    } else {
+
     }
   }, [nodeSelected])
 

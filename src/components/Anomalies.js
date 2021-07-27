@@ -6,6 +6,7 @@ import ActionMangament from "../states/ActionState"
 import { RUN_TYPES, RunState } from "../states/RunState"
 import NodePressed from "../states/NodePressed"
 import KeepAnomaliesOnGraph from "../states/KeepAnomaliesOnGraph"
+import GraphInstance from "../states/GraphInstance"
 
 export default function Anomalies() {
   const rule = RuleSynthetizedState(state => state.rule)
@@ -17,6 +18,11 @@ export default function Anomalies() {
   const nodePressed = NodePressed()
 
   const keepAnomaliesSameGraph = KeepAnomaliesOnGraph()
+  /**
+   * An instance of the Cytoscape graph
+   * @type {{setGraph: function(*=): *, graph: *}}
+   */
+  const graphInstance = GraphInstance()
 
   const anomalyClassSameAction =
     anomalyTypeState.type === ANOMALIES.SAME_ACTION
@@ -47,7 +53,28 @@ export default function Anomalies() {
     actionSelected
   )
 
-  console.log(anomalies)
+  const anomaliesSameAction = getAnomaliesByActionId(
+    rule[ANOMALIES.SAME_ACTION],
+    actionSelected
+  )
+
+  function drawAllAnomaliesOnGraph() {
+    console.log("Anomalies same action: ", anomaliesSameAction)
+    const anomaliesWithHellLessEqual = anomaliesSameAction.filter(anomaly => anomaly.hellinger_distance >= severityValue)
+    console.log("Anomalies to display: ", anomaliesWithHellLessEqual)
+
+    if(!keepAnomaliesSameGraph.keepAnomaliesOnGraph){
+      keepAnomaliesSameGraph.changeToOpposite()
+    }
+    const cy = graphInstance.graph
+    cy.nodes().style("background-color", "white")
+    cy.edges().style("line-color", "black")
+    cy.edges().style("label", "")
+    for(const anomaly of anomaliesWithHellLessEqual){
+      cy.nodes()[anomaly.step - 1].style("background-color", "red")
+    }
+
+  }
 
   const anomaliesLength = anomalies != undefined ? anomalies.length : 0
 
@@ -99,7 +126,10 @@ export default function Anomalies() {
                       min="0.0"
                       max="1.0"
                       step="0.01"
-                      onChange={e => setSeverity(e.target.value)}
+                      onChange={e => {
+                        setSeverity(e.target.value)
+                        drawAllAnomaliesOnGraph()
+                      }}
                     ></input>
                   </div>
                 </div>
