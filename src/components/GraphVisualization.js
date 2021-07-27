@@ -151,8 +151,15 @@ export function GraphVisualization() {
       cy.nodes()[nodeSelected - 1].style("background-color", "red")
 
       let idNodeSelected = cy.nodes()[nodeSelected - 1].id()
-      let idNextNode = cy.nodes()[nodeSelected].id()
-
+      //check for last node HARD_CODED, FIX THIS. 
+      let idNextNode = 0
+      if(nodeSelected == 36){
+        idNextNode = cy.nodes()[0].id()
+      }
+      else{
+        idNextNode = cy.nodes()[nodeSelected].id()
+      }
+      
       const edgeId = idNodeSelected + idNextNode
       const StringId = "[id='" + edgeId + "']"
 
